@@ -60,7 +60,7 @@ namespace Test_04
         private void Button3_Click(object sender, EventArgs e)
         {
             var engine = new TesseractEngine("./tessdata", "chi_sim", EngineMode.TesseractOnly);
-            var page = engine.Process(this.pictureBox1.Image as Bitmap,PageSegMode.SingleWord);
+            var page = engine.Process(this.pictureBox1.Image as Bitmap,PageSegMode.SingleLine);
             string str = page.GetText();
         }
     }

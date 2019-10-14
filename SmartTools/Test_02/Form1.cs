@@ -5,11 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -28,7 +30,7 @@ namespace Test_02
         private void Button1_Click(object sender, EventArgs e)
         {
             driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory + "\\Resources");
-            driver.Url = "https://98613p.com/";
+            driver.Url = "http://gci.epda866.com:81/agingame/pcv1/index.jsp?";
             driver.Manage().Window.Position = new Point(0, 0);
             driver.Manage().Window.Size = new Size(1200, 1000);
         }
@@ -138,13 +140,16 @@ namespace Test_02
             ((ITakesScreenshot)driver).GetScreenshot().SaveAsFile("Test.png", ScreenshotImageFormat.Png);
             MessageBox.Show("保存成功!");
         }
-
+        int pageindex = 0;
         private void Button15_Click(object sender, EventArgs e)
         {
             using (var engine = new TesseractEngine("./tessdata", "chi_sim", EngineMode.Default))
             {
+                Stopwatch sw = new Stopwatch();
                 while (true)
                 {
+                    sw.Restart();
+                    sw.Start();
                     var picBuffer = ((ITakesScreenshot)driver).GetScreenshot().AsByteArray;
                     if (picBuffer.Length == 0)
                     {
@@ -153,25 +158,44 @@ namespace Test_02
                         continue;
                     }
 
+                    string strReadPic;
                     using (MemoryStream stream = new MemoryStream(picBuffer))
                     {
                         Bitmap bitmap_In = new Bitmap(stream);
                         Bitmap bitmap_Out = new Bitmap(371, 110, PixelFormat.Format24bppRgb);
 
                         Graphics g = Graphics.FromImage(bitmap_Out);
-                        g.DrawImage(bitmap_In, new Rectangle(0, 0, 371, 110), new Rectangle(609, 362, 371, 110), GraphicsUnit.Pixel);
+                        g.DrawImage(bitmap_In, new Rectangle(0, 0, 371, 110), new Rectangle(609, 392, 371, 100), GraphicsUnit.Pixel);
 
+                        bitmap_In.Save($"C:\\Users\\NGPONG\\Desktop\\SmartTools\\SmartTools\\Test_02\\Image\\image_{pageindex.ToString()}.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                        bitmap_Out.Save($"C:\\Users\\NGPONG\\Desktop\\SmartTools\\SmartTools\\Test_02\\Image\\image_{pageindex.ToString()}_{pageindex.ToString()}.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
 
-                        using (var page = engine.Process(bitmap_Out, PageSegMode.Auto))
+                        using (var page = engine.Process(bitmap_Out))
                         {
-                            string strReadPic = page.GetText();
-                            if (strReadPic.Contains("已开局"))
+                            strReadPic = page.GetText();
+                            if (Regex.IsMatch(strReadPic, "己开局"))
                             {
+                                using (FileStream writer = new FileStream("C:\\Users\\NGPONG\\Desktop\\SmartTools\\SmartTools\\Test_02\\log.txt", FileMode.Append, FileAccess.Write))
+                                {
+                                    byte[] bytes = Encoding.Default.GetBytes($"time：{sw.Elapsed.TotalSeconds.ToString()} content：{strReadPic} pageIndex：{pageindex} \r\n");
+                                    writer.Write(bytes, 0, bytes.Length);
+                                }
                                 break;
                             }
                         }
                     }
+                    pageindex++;
+                    sw.Stop();
+                    using (FileStream writer = new FileStream("C:\\Users\\NGPONG\\Desktop\\SmartTools\\SmartTools\\Test_02\\log.txt",FileMode.Append,FileAccess.Write))
+                    {
+                        byte[] bytes = Encoding.Default.GetBytes($"time：{sw.Elapsed.TotalSeconds.ToString()} content：{strReadPic} pageIndex：{pageindex} \r\n");
+                        writer.Write(bytes, 0, bytes.Length);
+                    }
                 }
+
+                Console.WriteLine($"start pageIndex{pageindex.ToString()}");
+
+                Thread.Sleep(5000);
 
                 Actions action1 = new Actions(driver);
                 action1.MoveToElement(driver.FindElement(By.TagName("canvas")), 718, 432);

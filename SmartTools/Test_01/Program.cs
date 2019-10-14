@@ -60,7 +60,7 @@ namespace Test_01
                                         Graphics g = Graphics.FromImage(bitmap_Out);
                                         g.DrawImage(bitmap_In, new Rectangle(0, 0, 371, 110), new Rectangle(609, 362, 371, 110), GraphicsUnit.Pixel);
 
-                                        using (var page = engine.Process(bitmap_Out))
+                                        using (var page = engine.Process(bitmap_Out,PageSegMode.SingleLine))
                                         {
                                             string strReadPic = page.GetText();
                                             if (strReadPic.Contains("已开局"))
@@ -69,6 +69,8 @@ namespace Test_01
                                             }
                                         }
                                     }
+
+                                    Thread.Sleep(1000);
                                 }
 
                                 Console.WriteLine("开始下注");

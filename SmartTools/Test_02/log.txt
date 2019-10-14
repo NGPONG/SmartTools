@@ -1,0 +1,423 @@
+time：0.7794255 content： pageIndex：1 
+time：0.6488484 content： pageIndex：2 
+time：0.6541852 content： pageIndex：3 
+time：0.66985 content： pageIndex：4 
+time：0.6458799 content： pageIndex：5 
+time：0.6385888 content： pageIndex：6 
+time：0.6442418 content： pageIndex：7 
+time：0.6361125 content： pageIndex：8 
+time：0.6442785 content： pageIndex：9 
+time：0.6433871 content： 
+
+ pageIndex：10 
+time：0.6283714 content： pageIndex：11 
+time：0.6442233 content： pageIndex：12 
+time：0.6488894 content： pageIndex：13 
+time：0.6424019 content： pageIndex：14 
+time：0.6556269 content： pageIndex：15 
+time：0.9827657 content：-~'、〈^二三 唰 ′′′′
+
+ pageIndex：16 
+time：0.6489728 content： pageIndex：17 
+time：0.6612918 content： pageIndex：18 
+time：0.6420809 content： pageIndex：19 
+time：0.637567 content： pageIndex：20 
+time：0.6445768 content： pageIndex：21 
+time：0.6398068 content： pageIndex：22 
+time：0.648032 content： pageIndex：23 
+time：0.6507033 content： pageIndex：24 
+time：0.6546932 content： pageIndex：25 
+time：0.6517504 content： 
+
+ pageIndex：26 
+time：0.6474812 content： pageIndex：27 
+time：0.6729583 content： pageIndex：28 
+time：0.6464112 content： 
+
+ pageIndex：29 
+time：0.7160435 content：停止下注
+
+ pageIndex：30 
+time：0.7456236 content：停止下注
+
+ pageIndex：31 
+time：0.7581497 content：停止下注
+
+ pageIndex：32 
+time：0.632518 content： 
+
+ pageIndex：33 
+time：0.6423877 content： pageIndex：34 
+time：0.666777 content： 
+
+ pageIndex：35 
+time：0.6617292 content： 
+
+ pageIndex：36 
+time：0.6548007 content： pageIndex：37 
+time：0.6447055 content： 
+
+ pageIndex：38 
+time：0.6496828 content： pageIndex：39 
+time：0.6423141 content： pageIndex：40 
+time：0.6170842 content： pageIndex：41 
+time：0.6404016 content： 
+
+ pageIndex：42 
+time：0.6304925 content： pageIndex：43 
+time：0.6308593 content： pageIndex：44 
+time：0.6257755 content： 
+
+ pageIndex：45 
+time：0.6331049 content： 
+
+ pageIndex：46 
+time：0.6293468 content： 
+
+ pageIndex：47 
+time：0.6259486 content： pageIndex：48 
+time：0.6341671 content： 
+
+ pageIndex：49 
+time：0.6472786 content： 
+
+ pageIndex：50 
+time：0.6212109 content： 
+
+ pageIndex：51 
+time：0.6294781 content： pageIndex：52 
+time：0.6099767 content： 
+
+ pageIndex：53 
+time：0.6335856 content： 
+
+ pageIndex：54 
+time：0.6332963 content： 
+
+ pageIndex：55 
+time：0.6294358 content： 
+
+ pageIndex：56 
+time：0.7241736 content：己开局′ 请下注
+
+ pageIndex：56 
+time：0.8300366 content：停止下注
+
+ pageIndex：57 
+time：0.716426 content：停止下注
+
+ pageIndex：58 
+time：0.6205533 content： 
+
+ pageIndex：59 
+time：0.6255766 content： pageIndex：60 
+time：0.6353597 content： 
+
+ pageIndex：61 
+time：0.6321193 content： 
+
+ pageIndex：62 
+time：0.6211327 content： 
+
+ pageIndex：63 
+time：0.63953 content： 
+
+ pageIndex：64 
+time：0.632154 content： 
+
+ pageIndex：65 
+time：0.6140506 content： pageIndex：66 
+time：0.6334308 content： 
+
+ pageIndex：67 
+time：0.6219569 content： pageIndex：68 
+time：0.6418958 content： pageIndex：69 
+time：0.627304 content： 
+
+ pageIndex：70 
+time：0.6137248 content： pageIndex：71 
+time：0.6368288 content： pageIndex：72 
+time：0.6232537 content： 
+
+ pageIndex：73 
+time：0.6238962 content： pageIndex：74 
+time：0.6430556 content： pageIndex：75 
+time：0.6446952 content： pageIndex：76 
+time：0.6251923 content： pageIndex：77 
+time：0.6401566 content： pageIndex：78 
+time：0.6241069 content： pageIndex：79 
+time：0.640819 content： pageIndex：80 
+time：0.6584557 content： pageIndex：81 
+time：0.6477354 content： pageIndex：82 
+time：0.6271938 content： pageIndex：83 
+time：0.6377292 content： pageIndex：84 
+time：0.6414696 content： pageIndex：85 
+time：0.622849 content： pageIndex：86 
+time：0.6341566 content： pageIndex：87 
+time：0.6216768 content： pageIndex：88 
+time：0.6323134 content： pageIndex：89 
+time：0.6431985 content： pageIndex：90 
+time：0.6155792 content： pageIndex：91 
+time：0.6310685 content： pageIndex：92 
+time：0.6307383 content： pageIndex：93 
+time：0.6516661 content： 
+
+ pageIndex：94 
+time：0.65196 content： 
+
+ pageIndex：95 
+time：0.6254052 content： 
+
+ pageIndex：96 
+time：0.6423986 content： pageIndex：97 
+time：0.6849255 content：【嚼】 ′
+
+ pageIndex：98 
+time：0.6426885 content：】」
+
+ pageIndex：99 
+time：0.6284965 content： pageIndex：100 
+time：0.6475935 content： 
+
+ pageIndex：101 
+time：0.6324519 content： 
+
+ pageIndex：102 
+time：0.6462965 content： pageIndex：103 
+time：0.6449581 content： 
+
+ pageIndex：104 
+time：0.6452158 content： 
+
+ pageIndex：105 
+time：0.6370247 content： 
+
+ pageIndex：106 
+time：0.661216 content： 
+
+ pageIndex：107 
+time：0.6423738 content： pageIndex：108 
+time：0.6463801 content： pageIndex：109 
+time：0.6393257 content： 
+
+ pageIndex：110 
+time：0.6386905 content： 
+
+ pageIndex：111 
+time：0.6397963 content： pageIndex：112 
+time：0.6335106 content： pageIndex：113 
+time：0.6548849 content： pageIndex：114 
+time：0.655224 content： pageIndex：115 
+time：0.6534403 content： pageIndex：116 
+time：0.6535761 content： 
+
+ pageIndex：117 
+time：0.6435759 content： 
+
+ pageIndex：118 
+time：0.6533378 content： 
+
+ pageIndex：119 
+time：0.6484575 content： 
+
+ pageIndex：120 
+time：0.6419925 content： 
+
+ pageIndex：121 
+time：0.6352125 content： 
+
+ pageIndex：122 
+time：0.6362621 content： pageIndex：123 
+time：0.6314906 content： pageIndex：124 
+time：0.6248083 content： 
+
+ pageIndex：125 
+time：0.651683 content： 
+
+ pageIndex：126 
+time：0.6348681 content： pageIndex：127 
+time：0.6322419 content： pageIndex：128 
+time：0.6259412 content： pageIndex：129 
+time：0.6328828 content： 
+
+ pageIndex：130 
+time：0.6232802 content： 
+
+ pageIndex：131 
+time：0.6478399 content： pageIndex：132 
+time：0.7131794 content：停止下注
+
+ pageIndex：133 
+time：0.6269649 content： 
+
+ pageIndex：134 
+time：0.6384159 content： 
+
+ pageIndex：135 
+time：0.659703 content： pageIndex：136 
+time：1.4736075 content：鹳滞育` '
+
+ pageIndex：137 
+time：0.6287986 content： 
+
+ pageIndex：138 
+time：0.6389222 content： 
+
+ pageIndex：139 
+time：0.6385763 content： 
+
+ pageIndex：140 
+time：0.619033 content： pageIndex：141 
+time：0.6678792 content：[噱】 ′
+
+ pageIndex：142 
+time：0.6519774 content： pageIndex：143 
+time：0.6473222 content： 
+
+ pageIndex：144 
+time：0.6960406 content：【噱】 ′
+
+ pageIndex：145 
+time：0.6375934 content： 
+
+ pageIndex：146 
+time：0.637211 content： pageIndex：147 
+time：0.6492962 content： 
+
+ pageIndex：148 
+time：0.6455436 content： 
+
+ pageIndex：149 
+time：0.6482649 content： pageIndex：150 
+time：0.6489282 content： pageIndex：151 
+time：0.6546223 content： pageIndex：152 
+time：0.6293295 content： pageIndex：153 
+time：0.6210243 content： pageIndex：154 
+time：0.6311984 content： pageIndex：155 
+time：0.6467225 content： pageIndex：156 
+time：0.6272407 content： pageIndex：157 
+time：0.6247945 content： pageIndex：158 
+time：0.6277635 content： pageIndex：159 
+time：0.6410911 content： pageIndex：160 
+time：0.6363824 content： pageIndex：161 
+time：0.6546795 content： pageIndex：162 
+time：0.6370566 content： pageIndex：163 
+time：0.6319358 content： 
+
+ pageIndex：164 
+time：0.6490761 content： 
+
+ pageIndex：165 
+time：0.6169023 content： 
+
+ pageIndex：166 
+time：0.642654 content： pageIndex：167 
+time：0.6245034 content： pageIndex：168 
+time：0.6296477 content： pageIndex：169 
+time：0.6207712 content： pageIndex：170 
+time：0.6345311 content： pageIndex：171 
+time：0.6397263 content： pageIndex：172 
+time：0.6387733 content： pageIndex：173 
+time：0.6520047 content： pageIndex：174 
+time：0.6243342 content： pageIndex：175 
+time：0.6420964 content： pageIndex：176 
+time：0.6805941 content：[噱】 ′
+
+ pageIndex：177 
+time：0.6990732 content：[嚼】 ′
+
+ pageIndex：178 
+time：0.622766 content： pageIndex：179 
+time：0.6474398 content： pageIndex：180 
+time：0.6299363 content： pageIndex：181 
+time：0.6688898 content： pageIndex：182 
+time：0.74398 content：〉 = 靠柑滩
+
+ pageIndex：183 
+time：0.6360322 content： pageIndex：184 
+time：0.6442711 content： pageIndex：185 
+time：0.6441435 content： pageIndex：186 
+time：0.6529272 content： pageIndex：187 
+time：0.6656952 content： pageIndex：188 
+time：0.6486271 content： pageIndex：189 
+time：0.6371393 content： pageIndex：190 
+time：0.6608413 content： pageIndex：191 
+time：0.6471503 content： pageIndex：192 
+time：0.6923463 content： 
+
+ pageIndex：193 
+time：0.7014043 content： 
+
+ pageIndex：194 
+time：0.6757376 content： pageIndex：195 
+time：0.6949035 content： 
+
+ pageIndex：196 
+time：0.635107 content： pageIndex：197 
+time：0.6650409 content： 
+
+ pageIndex：198 
+time：0.6585586 content： 
+
+ pageIndex：199 
+time：0.6592367 content： pageIndex：200 
+time：0.6614236 content： pageIndex：201 
+time：0.7757701 content：停止下注
+
+ pageIndex：202 
+time：0.755218 content：停止下注
+
+ pageIndex：203 
+time：0.6424516 content： 
+
+ pageIndex：204 
+time：0.6502697 content： 
+
+ pageIndex：205 
+time：0.6382055 content： pageIndex：206 
+time：0.6609122 content： 
+
+ pageIndex：207 
+time：0.6272601 content： pageIndex：208 
+time：0.637697 content： 
+
+ pageIndex：209 
+time：0.6436151 content： 
+
+ pageIndex：210 
+time：1.2285729 content：您在本桌已经3局未下湟
+褥于2局后返回大厅.
+
+ pageIndex：211 
+time：0.6387587 content： pageIndex：212 
+time：0.646345 content： 
+
+ pageIndex：213 
+time：0.6540666 content： 
+
+ pageIndex：214 
+time：0.6472733 content： 
+
+ pageIndex：215 
+time：0.6334008 content： pageIndex：216 
+time：0.6411564 content： 
+
+ pageIndex：217 
+time：0.6618628 content： 
+
+ pageIndex：218 
+time：0.6313872 content： pageIndex：219 
+time：0.6209639 content： pageIndex：220 
+time：0.6314577 content： pageIndex：221 
+time：0.6317219 content： pageIndex：222 
+time：0.6242846 content： pageIndex：223 
+time：0.6484933 content： 
+
+ pageIndex：224 
+time：0.6363311 content： pageIndex：225 
+time：0.6367844 content： 
+
+ pageIndex：226 
+time：0.8100315 content：己开局′ 请下注
+
+ pageIndex：226 
