@@ -151,12 +151,6 @@ namespace Test_02
                     sw.Restart();
                     sw.Start();
                     var picBuffer = ((ITakesScreenshot)driver).GetScreenshot().AsByteArray;
-                    if (picBuffer.Length == 0)
-                    {
-                        MessageBox.Show("获取图片失败");
-                        Thread.Sleep(1000);
-                        continue;
-                    }
 
                     string strReadPic;
                     using (MemoryStream stream = new MemoryStream(picBuffer))
@@ -173,24 +167,25 @@ namespace Test_02
                         using (var page = engine.Process(bitmap_Out))
                         {
                             strReadPic = page.GetText();
-                            if (Regex.IsMatch(strReadPic, "己开局"))
+                            if (Regex.IsMatch(strReadPic, "开局"))
                             {
                                 using (FileStream writer = new FileStream("C:\\Users\\NGPONG\\Desktop\\SmartTools\\SmartTools\\Test_02\\log.txt", FileMode.Append, FileAccess.Write))
                                 {
-                                    byte[] bytes = Encoding.Default.GetBytes($"time：{sw.Elapsed.TotalSeconds.ToString()} content：{strReadPic} pageIndex：{pageindex} \r\n");
+                                    byte[] bytes = Encoding.Default.GetBytes($"time：{sw.Elapsed.TotalSeconds.ToString()} content：{strReadPic} pageIndex：{pageindex} 吴鹏 \r\n");
                                     writer.Write(bytes, 0, bytes.Length);
                                 }
                                 break;
                             }
                         }
                     }
-                    pageindex++;
                     sw.Stop();
                     using (FileStream writer = new FileStream("C:\\Users\\NGPONG\\Desktop\\SmartTools\\SmartTools\\Test_02\\log.txt",FileMode.Append,FileAccess.Write))
                     {
                         byte[] bytes = Encoding.Default.GetBytes($"time：{sw.Elapsed.TotalSeconds.ToString()} content：{strReadPic} pageIndex：{pageindex} \r\n");
                         writer.Write(bytes, 0, bytes.Length);
                     }
+
+                    pageindex++;
                 }
 
                 Console.WriteLine($"start pageIndex{pageindex.ToString()}");
