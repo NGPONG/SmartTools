@@ -1,4 +1,6 @@
-﻿using OpenQA.Selenium;
+﻿using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using System;
@@ -31,8 +33,8 @@ namespace Test_02
         {
             driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory + "\\Resources");
             driver.Url = "http://gci.epda866.com:81/agingame/pcv1/index.jsp?";
-            driver.Manage().Window.Position = new Point(0, 0);
-            driver.Manage().Window.Size = new Size(1200, 1000);
+            driver.Manage().Window.Position = new System.Drawing.Point(0, 0);
+            driver.Manage().Window.Size = new System.Drawing.Size(1200, 1000);
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -48,8 +50,8 @@ namespace Test_02
                 driver.SwitchTo().Window(driver.WindowHandles.First()).Close();
 
                 driver.SwitchTo().Window(driver.WindowHandles.First());
-                driver.Manage().Window.Position = new Point(0, 0);
-                driver.Manage().Window.Size = new Size(1200, 1000);
+                driver.Manage().Window.Position = new System.Drawing.Point(0, 0);
+                driver.Manage().Window.Size = new System.Drawing.Size(1200, 1000);
             }
             catch (Exception)
             {
@@ -161,15 +163,20 @@ namespace Test_02
                         Graphics g = Graphics.FromImage(bitmap_Out);
                         g.DrawImage(bitmap_In, new Rectangle(0, 0, 371, 110), new Rectangle(609, 392, 371, 100), GraphicsUnit.Pixel);
 
-                        bitmap_In.Save($"C:\\Users\\NGPONG\\Desktop\\SmartTools\\SmartTools\\Test_02\\Image\\image_{pageindex.ToString()}.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
-                        bitmap_Out.Save($"C:\\Users\\NGPONG\\Desktop\\SmartTools\\SmartTools\\Test_02\\Image\\image_{pageindex.ToString()}_{pageindex.ToString()}.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+                        if (!Directory.Exists($"{AppDomain.CurrentDomain.BaseDirectory}\\Image"))
+                        {
+                            Directory.CreateDirectory($"{AppDomain.CurrentDomain.BaseDirectory}\\Image");
+                        }
 
-                        using (var page = engine.Process(bitmap_Out))
+                        bitmap_In.Save($"{AppDomain.CurrentDomain.BaseDirectory}\\Image\\Image_{pageindex.ToString()}.png", System.Drawing.Imaging.ImageFormat.Png);
+                        bitmap_Out.Save($"{AppDomain.CurrentDomain.BaseDirectory}\\Image\\Image_{pageindex.ToString()}_{pageindex.ToString()}.png", System.Drawing.Imaging.ImageFormat.Png);
+
+                        using (var page = engine.Process(bitmap_Out, PageSegMode.SingleBlock))
                         {
                             strReadPic = page.GetText();
                             if (Regex.IsMatch(strReadPic, "开局"))
                             {
-                                using (FileStream writer = new FileStream("C:\\Users\\NGPONG\\Desktop\\SmartTools\\SmartTools\\Test_02\\log.txt", FileMode.Append, FileAccess.Write))
+                                using (FileStream writer = new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}\\log.txt", FileMode.Append, FileAccess.Write))
                                 {
                                     byte[] bytes = Encoding.Default.GetBytes($"time：{sw.Elapsed.TotalSeconds.ToString()} content：{strReadPic} pageIndex：{pageindex} 吴鹏 \r\n");
                                     writer.Write(bytes, 0, bytes.Length);
@@ -179,7 +186,7 @@ namespace Test_02
                         }
                     }
                     sw.Stop();
-                    using (FileStream writer = new FileStream("C:\\Users\\NGPONG\\Desktop\\SmartTools\\SmartTools\\Test_02\\log.txt",FileMode.Append,FileAccess.Write))
+                    using (FileStream writer = new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}\\log.txt", FileMode.Append, FileAccess.Write))
                     {
                         byte[] bytes = Encoding.Default.GetBytes($"time：{sw.Elapsed.TotalSeconds.ToString()} content：{strReadPic} pageIndex：{pageindex} \r\n");
                         writer.Write(bytes, 0, bytes.Length);
@@ -215,6 +222,62 @@ namespace Test_02
                     action3.Click();
                 }
                 action3.Perform();
+            }
+        }
+
+        private void Button16_Click(object sender, EventArgs e)
+        {
+            using (var engine = new TesseractEngine("./tessdata", "chi_sim", EngineMode.Default))
+            {
+                Stopwatch sw = new Stopwatch();
+                sw.Restart();
+                sw.Start();
+                string strReadPic;
+
+                Bitmap bitmap_Out = new Bitmap($"{AppDomain.CurrentDomain.BaseDirectory}\\Image\\Image_测试_测试.png");
+
+                using (var page = engine.Process(bitmap_Out, PageSegMode.SingleBlock))
+                {
+                    strReadPic = page.GetText();
+                    if (Regex.IsMatch(strReadPic, "开局"))
+                    {
+                        using (FileStream writer = new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}\\log.txt", FileMode.Append, FileAccess.Write))
+                        {
+                            byte[] bytes = Encoding.Default.GetBytes($"time：{sw.Elapsed.TotalSeconds.ToString()} content：{strReadPic} pageIndex：测试 吴鹏 \r\n");
+                            writer.Write(bytes, 0, bytes.Length);
+                        }
+                    }
+                }
+                sw.Stop();
+                using (FileStream writer = new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}\\log.txt", FileMode.Append, FileAccess.Write))
+                {
+                    byte[] bytes = Encoding.Default.GetBytes($"time：{sw.Elapsed.TotalSeconds.ToString()} content：{strReadPic} pageIndex：测试 \r\n");
+                    writer.Write(bytes, 0, bytes.Length);
+                }
+            }
+        }
+        TesseractEngine engine2 = new TesseractEngine("./tessdata", "chi_sim", EngineMode.Default);
+        private void Button17_Click(object sender, EventArgs e)
+        {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            var picBuffer = ((ITakesScreenshot)driver).GetScreenshot().AsByteArray;
+            var source = Mat.FromImageData(picBuffer, ImreadModes.AnyColor); // 940,1482
+            var roi = new OpenCvSharp.Rect(699, 363, 195, 29);
+
+            var text = new Mat(source, roi);
+
+            var gray = new Mat();
+            Cv2.CvtColor(text, gray, ColorConversionCodes.BGRA2GRAY);
+
+            var threshImage = new Mat();
+            Cv2.Threshold(gray, threshImage, 80, 255, ThresholdTypes.BinaryInv);
+
+            using (var page = engine2.Process(BitmapConverter.ToBitmap(threshImage)))
+            {
+                string str = page.GetText();
+                MessageBox.Show($"content:{str} \r\n time:{stopwatch.Elapsed.TotalSeconds.ToString()}");
             }
         }
     }
