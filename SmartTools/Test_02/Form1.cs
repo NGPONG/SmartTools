@@ -264,9 +264,14 @@ namespace Test_02
 
             var picBuffer = ((ITakesScreenshot)driver).GetScreenshot().AsByteArray;
             var source = Mat.FromImageData(picBuffer, ImreadModes.AnyColor); // 940,1482
+            Cv2.ImShow("source2", source);
+            Cv2.Resize(source, source, new OpenCvSharp.Size(1482, 940));//source.Resize(new OpenCvSharp.Size(940, 1482), 0, 0, InterpolationFlags.Nearest);
+            Cv2.ImShow("source", source);
             var roi = new OpenCvSharp.Rect(699, 363, 195, 29);
 
             var text = new Mat(source, roi);
+
+            //Cv2.ImShow("text", text);
 
             var gray = new Mat();
             Cv2.CvtColor(text, gray, ColorConversionCodes.BGRA2GRAY);
