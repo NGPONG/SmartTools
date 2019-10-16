@@ -34,6 +34,8 @@ namespace Test_02
             driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory + "\\Resources");
             driver.Url = "http://gci.epda866.com:81/agingame/pcv1/index.jsp?";
             driver.Manage().Window.Position = new System.Drawing.Point(0, 0);
+
+            // 根据当前屏幕尺寸 分辨率 ddi 点距 计算出窗口的具体尺寸
             driver.Manage().Window.Size = new System.Drawing.Size(1200, 1000);
         }
 
