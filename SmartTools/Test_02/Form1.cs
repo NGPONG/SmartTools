@@ -265,10 +265,20 @@ namespace Test_02
             stopwatch.Start();
 
             var picBuffer = ((ITakesScreenshot)driver).GetScreenshot().AsByteArray;
-            var source = Mat.FromImageData(picBuffer, ImreadModes.AnyColor); // 940,1482
+            // 940,1482
+            // 1088,1483
+            // 869,1184
+            // 宽：1482 / 2560
+            // 高：1240 / 1440
+            var source = Mat.FromImageData(picBuffer, ImreadModes.AnyColor); 
+            Cv2.ImShow("source2", source);
+            Cv2.Resize(source, source, new OpenCvSharp.Size(1482, 940),0,0,InterpolationFlags.Linear);
+            Cv2.ImShow("source", source);
             var roi = new OpenCvSharp.Rect(699, 363, 195, 29);
 
             var text = new Mat(source, roi);
+
+            //Cv2.ImShow("text", text);
 
             var gray = new Mat();
             Cv2.CvtColor(text, gray, ColorConversionCodes.BGRA2GRAY);
