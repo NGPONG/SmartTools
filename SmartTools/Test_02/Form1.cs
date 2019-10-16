@@ -33,10 +33,10 @@ namespace Test_02
         {
             driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory + "\\Resources");
             driver.Url = "http://gci.epda866.com:81/agingame/pcv1/index.jsp?";
-            driver.Manage().Window.Position = new System.Drawing.Point(0, 0);
+            driver.Manage().Window.Position = new System.Drawing.Point(-7, 0);
 
             // 根据当前屏幕尺寸 分辨率 ddi 点距 计算出窗口的具体尺寸
-            driver.Manage().Window.Size = new System.Drawing.Size(1200, 1000);
+            driver.Manage().Window.Size = new System.Drawing.Size(800, 600);
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -88,8 +88,26 @@ namespace Test_02
 
         private void Button5_Click(object sender, EventArgs e)
         {
+            // 闲：509, 320
+            // 和：509, 300
+            // 庄：509, 280
+
+            // 1：602, 360
+            // 2：632, 360
+            // 3：662, 360
+            // 4：692, 360
+            // 5：732, 360
+
+
             Actions actions = new Actions(driver);
-            actions.MoveToElement(driver.FindElement(By.TagName("canvas")), 913, 534).Click().Build().Perform(); // 1139,663
+            //var picBuffer = ((ITakesScreenshot)driver).GetScreenshot().AsByteArray;
+            //var source = Mat.FromImageData(picBuffer, ImreadModes.AnyColor);
+            //var roi = new OpenCvSharp.Rect(509, 280, 200, 100);
+
+            //var text = new Mat(source, roi);
+            //Cv2.ImShow("text", text);
+            //913, 534
+            actions.MoveToElement(driver.FindElement(By.TagName("canvas")), 732, 360).Click().Build().Perform(); // 1139,663
         }
 
         private void Button6_Click(object sender, EventArgs e)
@@ -270,11 +288,12 @@ namespace Test_02
             // 869,1184
             // 宽：1482 / 2560
             // 高：1240 / 1440
-            var source = Mat.FromImageData(picBuffer, ImreadModes.AnyColor); 
+            var source = Mat.FromImageData(picBuffer, ImreadModes.AnyColor);
+            //Cv2.ImShow("source", source);
             //Cv2.ImShow("source2", source);
             //Cv2.Resize(source, source, new OpenCvSharp.Size(1482, 940),0,0,InterpolationFlags.Linear);
             //Cv2.ImShow("source", source);
-            var roi = new OpenCvSharp.Rect(699, 357, 195, 29);
+            var roi = new OpenCvSharp.Rect(465, 223, 128, 18); // 699, 435, 195, 29
 
             var text = new Mat(source, roi);
 
@@ -287,10 +306,10 @@ namespace Test_02
             Cv2.Threshold(gray, threshImage, 80, 255, ThresholdTypes.BinaryInv);
             Cv2.ImShow("Threshold", threshImage);
 
-            using (var page = engine2.Process(BitmapConverter.ToBitmap(threshImage)))
+            using (var page = engine2.Process(BitmapConverter.ToBitmap(threshImage),PageSegMode.SingleBlock))
             {
                 string str = page.GetText();
-                MessageBox.Show($"content:{str} \r\n time:{stopwatch.Elapsed.TotalSeconds.ToString()}");
+                //MessageBox.Show($"content:{str} \r\n time:{stopwatch.Elapsed.TotalSeconds.ToString()}");
             }
         }
 
@@ -311,7 +330,7 @@ namespace Test_02
         {
             int SH = Screen.PrimaryScreen.Bounds.Height;
             int SW = Screen.PrimaryScreen.Bounds.Width;
-            calc_dpi(1536, 864, 19);
+            calc_dpi(2048, 1152, 27);
         }
     }
 }
