@@ -271,10 +271,10 @@ namespace Test_02
             // 宽：1482 / 2560
             // 高：1240 / 1440
             var source = Mat.FromImageData(picBuffer, ImreadModes.AnyColor); 
-            Cv2.ImShow("source2", source);
-            Cv2.Resize(source, source, new OpenCvSharp.Size(1482, 940),0,0,InterpolationFlags.Linear);
-            Cv2.ImShow("source", source);
-            var roi = new OpenCvSharp.Rect(699, 363, 195, 29);
+            //Cv2.ImShow("source2", source);
+            //Cv2.Resize(source, source, new OpenCvSharp.Size(1482, 940),0,0,InterpolationFlags.Linear);
+            //Cv2.ImShow("source", source);
+            var roi = new OpenCvSharp.Rect(699, 357, 195, 29);
 
             var text = new Mat(source, roi);
 
@@ -282,15 +282,36 @@ namespace Test_02
 
             var gray = new Mat();
             Cv2.CvtColor(text, gray, ColorConversionCodes.BGRA2GRAY);
-
+            
             var threshImage = new Mat();
             Cv2.Threshold(gray, threshImage, 80, 255, ThresholdTypes.BinaryInv);
+            Cv2.ImShow("Threshold", threshImage);
 
             using (var page = engine2.Process(BitmapConverter.ToBitmap(threshImage)))
             {
                 string str = page.GetText();
                 MessageBox.Show($"content:{str} \r\n time:{stopwatch.Elapsed.TotalSeconds.ToString()}");
             }
+        }
+
+        private void calc_dpi(double x, double y, double diag)
+        {
+            if (y == 0 || x == 0)
+                return;
+
+            double ratio = y / x;
+            double xd = Math.Sqrt(Math.Pow(diag, 2) / (1 + Math.Pow(ratio, 2)));
+            double dotPitch = 25.4 / (x / xd);
+
+            double dopi = Math.Round(dotPitch * 10000) / 10000;
+            double metricDiag = diag * 2.54;
+        }
+
+        private void Button18_Click(object sender, EventArgs e)
+        {
+            int SH = Screen.PrimaryScreen.Bounds.Height;
+            int SW = Screen.PrimaryScreen.Bounds.Width;
+            calc_dpi(1536, 864, 19);
         }
     }
 }
