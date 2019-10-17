@@ -290,8 +290,8 @@ namespace Test_02
             // 高：1240 / 1440
             var source = Mat.FromImageData(picBuffer, ImreadModes.AnyColor);
             //Cv2.ImShow("source", source);
-            Bitmap map = BitmapConverter.ToBitmap(source);
-            map.Save($"{AppDomain.CurrentDomain.BaseDirectory}\\Image\\1.png", System.Drawing.Imaging.ImageFormat.Png);
+            //Bitmap map = BitmapConverter.ToBitmap(source);
+            //map.Save($"{AppDomain.CurrentDomain.BaseDirectory}\\Image\\1.png", System.Drawing.Imaging.ImageFormat.Png);
             //Cv2.ImShow("source2", source);
             //Cv2.Resize(source, source, new OpenCvSharp.Size(1482, 940),0,0,InterpolationFlags.Linear);
             //Cv2.ImShow("source", source);
