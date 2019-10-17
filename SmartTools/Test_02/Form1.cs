@@ -290,23 +290,26 @@ namespace Test_02
             // 高：1240 / 1440
             var source = Mat.FromImageData(picBuffer, ImreadModes.AnyColor);
             //Cv2.ImShow("source", source);
+            Bitmap map = BitmapConverter.ToBitmap(source);
+            map.Save($"{AppDomain.CurrentDomain.BaseDirectory}\\Image\\1.png", System.Drawing.Imaging.ImageFormat.Png);
             //Cv2.ImShow("source2", source);
             //Cv2.Resize(source, source, new OpenCvSharp.Size(1482, 940),0,0,InterpolationFlags.Linear);
             //Cv2.ImShow("source", source);
             var roi = new OpenCvSharp.Rect(465, 223, 128, 18); // 699, 435, 195, 29
+            // 465, 223, 128, 18 屏占比？
 
             var text = new Mat(source, roi);
 
-            //Cv2.ImShow("text", text);
+            Cv2.ImShow("text", text);
 
             var gray = new Mat();
             Cv2.CvtColor(text, gray, ColorConversionCodes.BGRA2GRAY);
-            
+
             var threshImage = new Mat();
             Cv2.Threshold(gray, threshImage, 80, 255, ThresholdTypes.BinaryInv);
-            Cv2.ImShow("Threshold", threshImage);
+            // Cv2.ImShow("Threshold", threshImage);
 
-            using (var page = engine2.Process(BitmapConverter.ToBitmap(threshImage),PageSegMode.SingleBlock))
+            using (var page = engine2.Process(BitmapConverter.ToBitmap(threshImage), PageSegMode.SingleBlock))
             {
                 string str = page.GetText();
                 //MessageBox.Show($"content:{str} \r\n time:{stopwatch.Elapsed.TotalSeconds.ToString()}");
@@ -331,6 +334,9 @@ namespace Test_02
             int SH = Screen.PrimaryScreen.Bounds.Height;
             int SW = Screen.PrimaryScreen.Bounds.Width;
             calc_dpi(2048, 1152, 27);
+
+            // 233.52
+            // 175.14
         }
     }
 }
