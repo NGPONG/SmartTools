@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.IO;
+using System.ServiceModel;
 using System.ServiceModel.Web;
 
 namespace SmartTools.Service.Contract
@@ -12,5 +13,9 @@ namespace SmartTools.Service.Contract
                    ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
         string UserLogin(string userName, string userPwd);
+
+        [WebInvoke(Method = "GET")]
+        [OperationContract]
+        Stream Test();
     }
 }
