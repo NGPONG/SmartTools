@@ -8,7 +8,7 @@ namespace SmartTools.Service.Contract
     public interface IUserInfo
     {
         [WebInvoke(Method = "GET",
-                   BodyStyle = WebMessageBodyStyle.WrappedRequest,
+                   BodyStyle = WebMessageBodyStyle.Wrapped,
                    RequestFormat = WebMessageFormat.Json,
                    ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]

@@ -1,4 +1,5 @@
-﻿using SmartTools.Service.Contract;
+﻿using Newtonsoft.Json;
+using SmartTools.Service.Contract;
 using System;
 using System.IO;
 using System.Net.Mime;
@@ -6,7 +7,7 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Web;
 
-namespace SmartTools.Service.Imple
+namespace SmartTools.Service.Implementation
 {
     [ServiceBehavior(IncludeExceptionDetailInFaults = true, InstanceContextMode = InstanceContextMode.PerCall, ConcurrencyMode = ConcurrencyMode.Multiple, UseSynchronizationContext = false), AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
     public class UserInfo : IUserInfo
@@ -22,7 +23,7 @@ namespace SmartTools.Service.Imple
 
         public string UserLogin(string userName, string userPwd)
         {
-            return "Test";
+            return JsonConvert.SerializeObject(new { Name = "Hello", Descripter = "Test" });
         }
     }
 }

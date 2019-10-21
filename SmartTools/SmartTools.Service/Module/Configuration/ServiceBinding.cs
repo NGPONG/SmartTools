@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace SmartTools.Service.Module.Service
+namespace SmartTools.Service.Module.Configuration
 {
     public static class ServiceBinding
     {
