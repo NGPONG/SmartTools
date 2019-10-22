@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace SmartTools
 {
-    static class Program
+    static class SmartTools
     {
         /// <summary>
         /// 应用程序的主入口点。
