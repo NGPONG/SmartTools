@@ -81,6 +81,7 @@
     <Compile Include="Module\Configuration\ServiceBehavior.cs" />
     <Compile Include="Module\Configuration\ServiceBinding.cs" />
     <Compile Include="Module\Configuration\ServiceWebHttpBehaviors.cs" />
+    <Compile Include="Module\Entity\CustomMessage.cs" />
     <Compile Include="Module\ServiceHostBaseExtensions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,7 +99,12 @@
     <None Include="packages.config" />
     <None Include="Update\Update.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SmartTools.Common\SmartTools.Common.csproj">
+      <Project>{79F551D7-97A9-465E-948C-F922E106AA69}</Project>
+      <Name>SmartTools.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Data\STModule.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

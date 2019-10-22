@@ -12,20 +12,34 @@ namespace SmartTools.Service.Data
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
-    using System.Data.Entity.ModelConfiguration.Conventions;
+    using System.Runtime.Remoting.Messaging;
 
     public partial class SM_Module : DbContext
     {
         public SM_Module()
-            : base("name=SM_Module")
+            : base("name=SM_ModuleContainer")
         {
         }
-    
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+            throw new UnintentionalCodeFirstException();
         }
-    
+
         public virtual DbSet<UserInfo> UserInfo { get; set; }
+    }
+
+    public static class DbContainer
+    {
+        public static SM_Module GetDbContext()
+        {
+            var dbContext = CallContext.GetData("DbContext");
+            if (dbContext == null)
+            {
+                CallContext.SetData("DbContext", dbContext);
+            }
+
+            return dbContext as SM_Module;
+        }
     }
 }

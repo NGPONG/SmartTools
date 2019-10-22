@@ -20,5 +20,6 @@ namespace SmartTools.Service.Data
         public System.TimeSpan CreateDate { get; set; }
         public float IsActivation { get; set; }
         public string ActivationLevel { get; set; }
+        public System.TimeSpan ActivationDate { get; set; }
     }
 }
