@@ -17,9 +17,9 @@ namespace SmartTools.Service.Data
         public int UserId { get; set; }
         public string UserName { get; set; }
         public string UserPwd { get; set; }
-        public System.TimeSpan CreateDate { get; set; }
-        public float IsActivation { get; set; }
-        public string ActivationLevel { get; set; }
-        public System.TimeSpan ActivationDate { get; set; }
+        public System.DateTime CreateDate { get; set; }
+        public Nullable<bool> IsActivation { get; set; }
+        public Nullable<int> ActivationLevel { get; set; }
+        public Nullable<System.DateTime> ActivationDate { get; set; }
     }
 }

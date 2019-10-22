@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contract\IUserInfo.cs" />
+    <Compile Include="Data\DbContainer.cs" />
     <Compile Include="Data\STModule.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -86,6 +87,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementation\UserInfo.cs" />
+    <Compile Include="Utils\ConvertExtensions.cs" />
+    <Compile Include="Utils\JsonSerialization.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -98,12 +101,6 @@
     </None>
     <None Include="packages.config" />
     <None Include="Update\Update.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SmartTools.Common\SmartTools.Common.csproj">
-      <Project>{79F551D7-97A9-465E-948C-F922E106AA69}</Project>
-      <Name>SmartTools.Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data\STModule.Context.tt">
@@ -120,6 +117,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SmartTools.Common\SmartTools.Common.csproj">
+      <Project>{79F551D7-97A9-465E-948C-F922E106AA69}</Project>
+      <Name>SmartTools.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

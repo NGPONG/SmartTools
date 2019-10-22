@@ -15,10 +15,10 @@
     <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="32" />
     <Property Name="UserPwd" Type="nvarchar" Nullable="false" MaxLength="128" />
-    <Property Name="CreateDate" Type="time" Nullable="false" Precision="3" />
-    <Property Name="IsActivation" Type="real" Nullable="false" />
-    <Property Name="ActivationLevel" Type="varchar" Nullable="false" MaxLength="2" />
-    <Property Name="ActivationDate" Type="time" Nullable="false" Precision="3" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="IsActivation" Type="bit" Nullable="true" />
+    <Property Name="ActivationLevel" Type="int" Nullable="true" />
+    <Property Name="ActivationDate" Type="datetime" Nullable="true" />
   </EntityType>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -34,9 +34,9 @@
           <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserName" Type="String" Nullable="false" Unicode="true" MaxLength="32" FixedLength="false" />
           <Property Name="UserPwd" Type="String" Nullable="false" Unicode="true" MaxLength="128" FixedLength="false" />
-          <Property Name="CreateDate" Type="Time" Nullable="false" Precision="3" />
-          <Property Name="IsActivation" Type="Single" Nullable="false" />
-          <Property Name="ActivationLevel" Type="String" Nullable="false" Unicode="false" MaxLength="2" FixedLength="false" >
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" />
+          <Property Name="IsActivation" Type="Boolean" Nullable="true" />
+          <Property Name="ActivationLevel" Type="Int32" Nullable="true" >
             <Documentation>
               <LongDescription>激活等级
 1：30天
@@ -45,7 +45,7 @@
 4：一年</LongDescription>
             </Documentation>
           </Property>
-          <Property Name="ActivationDate" Type="Time" Nullable="false" Precision="3" />
+          <Property Name="ActivationDate" Type="DateTime" Nullable="true" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
