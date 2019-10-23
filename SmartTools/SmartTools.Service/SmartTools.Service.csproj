@@ -79,6 +79,7 @@
     <Compile Include="Data\UserInfo.cs">
       <DependentUpon>STModule.tt</DependentUpon>
     </Compile>
+    <Compile Include="Licensing.cs" />
     <Compile Include="Module\Configuration\ServiceBehavior.cs" />
     <Compile Include="Module\Configuration\ServiceBinding.cs" />
     <Compile Include="Module\Configuration\ServiceWebHttpBehaviors.cs" />
