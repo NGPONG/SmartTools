@@ -7,6 +7,7 @@
     <Schema Namespace="SM_Module.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2012" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityContainer Name="SM_ModuleStoreContainer">
     <EntitySet Name="UserInfo" EntityType="SM_Module.Store.UserInfo" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Sys_Activation" EntityType="SM_Module.Store.Sys_Activation" store:Type="Tables" Schema="dbo" />
   </EntityContainer>
   <EntityType Name="UserInfo">
     <Key>
@@ -20,12 +21,22 @@
     <Property Name="ActivationLevel" Type="int" Nullable="true" />
     <Property Name="ActivationDate" Type="datetime" Nullable="true" />
   </EntityType>
+  <EntityType Name="Sys_Activation">
+    <Key>
+      <PropertyRef Name="Sys_ActivationId" />
+    </Key>
+    <Property Name="Sys_ActivationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ActivationCode" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ActivationLevel" Type="int" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+  </EntityType>
 </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="SM_Module" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
         <EntityContainer Name="SM_ModuleContainer" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="UserInfo" EntityType="SM_Module.UserInfo" />
+          <EntitySet Name="Sys_Activation" EntityType="SM_Module.Sys_Activation" />
         </EntityContainer>
         <EntityType Name="UserInfo">
           <Key>
@@ -47,6 +58,15 @@
           </Property>
           <Property Name="ActivationDate" Type="DateTime" Nullable="true" />
         </EntityType>
+        <EntityType Name="Sys_Activation">
+          <Key>
+            <PropertyRef Name="Sys_ActivationId" />
+          </Key>
+          <Property Name="Sys_ActivationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActivationCode" Type="String" Nullable="false" />
+          <Property Name="ActivationLevel" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -63,6 +83,16 @@
           <ScalarProperty Name="IsActivation" ColumnName="IsActivation" />
           <ScalarProperty Name="ActivationLevel" ColumnName="ActivationLevel" />
           <ScalarProperty Name="ActivationDate" ColumnName="ActivationDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Sys_Activation">
+      <EntityTypeMapping TypeName="IsTypeOf(SM_Module.Sys_Activation)">
+        <MappingFragment StoreEntitySet="Sys_Activation">
+          <ScalarProperty Name="Sys_ActivationId" ColumnName="Sys_ActivationId" />
+          <ScalarProperty Name="ActivationCode" ColumnName="ActivationCode" />
+          <ScalarProperty Name="ActivationLevel" ColumnName="ActivationLevel" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

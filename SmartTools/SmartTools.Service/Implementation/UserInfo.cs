@@ -121,7 +121,7 @@ namespace SmartTools.Service.Implementation
             return JsonConvert.SerializeObject(message);
         }
 
-        public string Activation(string userName, int activationLevel)
+        public string Activation(string activationCode)
         {
             var message = new CustomMessage();
 
@@ -130,23 +130,39 @@ namespace SmartTools.Service.Implementation
                 var dbContext = DbContainer.GetDbContext();
                 dbContext.Configuration.ValidateOnSaveEnabled = false;
 
-                var user = new Data.UserInfo()
+                // 查询激活码的有效性
+                var activationInfo = dbContext.Sys_Activation.Where(c => c.ActivationCode == activationCode).FirstOrDefault();
+                if (activationInfo == null)
                 {
-                    UserId = 2
-                };
+                    throw new Exception("激活码不存在或已过期!");
+                }
 
+                string source = DESHelper.Decrypt(activationCode, Licensing.__KEY);
+                if (string.IsNullOrEmpty(source))
+                {
+                    throw new Exception("激活码有误！请重新输入");
+                }
+
+                // 解码后的信息，包含用户名还有激活等级
+                dynamic info = JsonConvert.DeserializeObject<dynamic>(source);
+                string userName = info.UserName;
+                int activationLevel = info.ActivationLevel;
+
+                // 修改用户激活数据
                 var userItem = (from u in dbContext.UserInfo
                                 where u.UserName == userName
                                 select u).FirstOrDefault();
-
                 userItem.IsActivation = true;
                 userItem.ActivationLevel = activationLevel;
                 userItem.ActivationDate = DateTime.Now;
 
-                if (dbContext.SaveChanges() <= 0)
+                // 删除掉临时保存的激活码
+                dbContext.Sys_Activation.Remove(activationInfo);
+
+                if (dbContext.SaveChanges() == 0)
                 {
                     message.Status = HttpStatus.Error;
-                    message.Message = "用户名错误！";
+                    message.Message = "修改错误";
                 }
 
                 message.Status = HttpStatus.OK;

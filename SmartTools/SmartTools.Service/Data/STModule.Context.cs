@@ -26,5 +26,6 @@ namespace SmartTools.Service.Data
         }
     
         public virtual DbSet<UserInfo> UserInfo { get; set; }
+        public virtual DbSet<Sys_Activation> Sys_Activation { get; set; }
     }
 }

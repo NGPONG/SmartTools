@@ -14,9 +14,9 @@ namespace SmartTools.Service
         static void Main(string[] args)
         {
             // 服务契约
-            var contracts = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.Namespace == "SmartTools.Service.Contract" && !t.FullName.Contains("DisplayClass"));
+            var contracts = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.Namespace == "SmartTools.Service.Contract" && t.IsPublic);
             // 服务实现
-            var services = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.Namespace == "SmartTools.Service.Implementation" && !t.FullName.Contains("DisplayClass"));
+            var services = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.Namespace == "SmartTools.Service.Implementation" && t.IsPublic);
 
             foreach (var service in services)
             {

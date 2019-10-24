@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 10/22/2019 23:10:50
--- Generated from EDMX file: C:\Users\NGPONG\Desktop\SmartTools\SmartTools\SmartTools.Service\Data\STModule.edmx
+-- Date Created: 10/24/2019 15:22:25
+-- Generated from EDMX file: C:\Users\acer\Desktop\SmartTools\SmartTools\SmartTools.Service\Data\STModule.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -42,6 +42,15 @@ CREATE TABLE [dbo].[UserInfo] (
 );
 GO
 
+-- Creating table 'Sys_Activation'
+CREATE TABLE [dbo].[Sys_Activation] (
+    [Sys_ActivationId] int IDENTITY(1,1) NOT NULL,
+    [ActivationCode] nvarchar(max)  NOT NULL,
+    [ActivationLevel] int  NOT NULL,
+    [UserId] int  NOT NULL
+);
+GO
+
 -- --------------------------------------------------
 -- Creating all PRIMARY KEY constraints
 -- --------------------------------------------------
@@ -50,6 +59,12 @@ GO
 ALTER TABLE [dbo].[UserInfo]
 ADD CONSTRAINT [PK_UserInfo]
     PRIMARY KEY CLUSTERED ([UserId] ASC);
+GO
+
+-- Creating primary key on [Sys_ActivationId] in table 'Sys_Activation'
+ALTER TABLE [dbo].[Sys_Activation]
+ADD CONSTRAINT [PK_Sys_Activation]
+    PRIMARY KEY CLUSTERED ([Sys_ActivationId] ASC);
 GO
 
 -- --------------------------------------------------

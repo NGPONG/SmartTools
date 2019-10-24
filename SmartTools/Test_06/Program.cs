@@ -1,4 +1,6 @@
 ﻿using log4net;
+using Newtonsoft.Json;
+using SmartTools.Common.Helper;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -14,10 +16,19 @@ namespace Test_06
     {
         static void Main(string[] args)
         {
-            DateTime time = Convert.ToDateTime("2019-10-22 19:54:53.287");
-            DateTime time_Add = time + TimeSpan.FromDays(3);
-            TimeSpan timeSpan = time_Add - time;
-            int seconds = timeSpan.Seconds;
+            string source = JsonConvert.SerializeObject(new
+            {
+                Name = "Admin",
+                ActivationLevel = 4
+            });
+
+            string str =  DESHelper.Encrypt(source, "SMARTOOL");
+            //6FXG05FnfPJqaiosye6X7creZAQkqnTZUhnAuFcvLopw/UjvFqCfGQ==
+            string strD = DESHelper.Decrypt(str, "SMARTOOL");
+
+            Console.WriteLine(strD);
+
+            Console.ReadKey();
         }
     }
 }

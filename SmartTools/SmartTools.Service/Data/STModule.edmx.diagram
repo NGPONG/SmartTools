@@ -6,6 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="e7379999cdab474eacbb6816a07be2d8" Name="Diagram1" >
         <EntityTypeShape EntityType="SM_Module.UserInfo" Width="1.5" PointX="2.375" PointY="1.5" />
+        <EntityTypeShape EntityType="SM_Module.Sys_Activation" Width="1.5" PointX="6" PointY="1.875" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

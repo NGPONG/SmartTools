@@ -26,7 +26,7 @@ namespace SmartTools.Service.Contract
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json)]
         [OperationContract]
-        string Activation(string userName, int activationLevel);
+        string Activation(string activationCode);
 
         [WebInvoke(Method = "GET")]
         [OperationContract]

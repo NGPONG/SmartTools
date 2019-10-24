@@ -76,6 +76,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>STModule.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Data\Sys_Activation.cs">
+      <DependentUpon>STModule.tt</DependentUpon>
+    </Compile>
     <Compile Include="Data\UserInfo.cs">
       <DependentUpon>STModule.tt</DependentUpon>
     </Compile>
