@@ -10,27 +10,31 @@ namespace SmartTools.Common.Helper
 {
     public static class DESHelper
     {
-        public static string Encrypt(string source,string _key)
+        public static string Encrypt(string source, string _key)
         {
             MemoryStream output = null;
             CryptoStream crypStream = null;
             try
             {
-                output = new MemoryStream();
-
-                byte[] rbgKey = Encoding.UTF8.GetBytes(_key), rbgIv = rbgKey;
-                byte[] input = Encoding.UTF8.GetBytes(source);
-
                 DESCryptoServiceProvider provider = new DESCryptoServiceProvider();
-                provider.Mode = CipherMode.ECB; // java 默认的是ECB模式 -> PKCS5padding  c#默认的CBC模式 -> PKCS7padding
+                provider.Key = ASCIIEncoding.ASCII.GetBytes(_key);
+                provider.IV = ASCIIEncoding.ASCII.GetBytes(_key);
 
-                crypStream = new CryptoStream(output, provider.CreateEncryptor(rbgKey, rbgIv), CryptoStreamMode.Write);
+                output = new MemoryStream();
+                crypStream = new CryptoStream(output, provider.CreateEncryptor(), CryptoStreamMode.Write);
+                byte[] input = Encoding.GetEncoding("UTF-8").GetBytes(source);
                 crypStream.Write(input, 0, input.Length);
                 crypStream.FlushFinalBlock();
 
-                return Convert.ToBase64String(output.ToArray(), Base64FormattingOptions.InsertLineBreaks);
+                StringBuilder ret = new StringBuilder();
+                foreach (byte b in output.ToArray())
+                {
+                    ret.AppendFormat("{0:X2}", b);
+                }
+
+                return ret.ToString();
             }
-            catch(Exception objException)
+            catch (Exception objException)
             {
                 LogHelper.Error(objException);
                 return string.Empty;
@@ -46,21 +50,21 @@ namespace SmartTools.Common.Helper
         {
             MemoryStream output = null;
             CryptoStream crypStream = null;
+
             try
             {
+                DESCryptoServiceProvider provider = new DESCryptoServiceProvider();
+                provider.Key = ASCIIEncoding.ASCII.GetBytes(_key);
+                provider.IV = ASCIIEncoding.ASCII.GetBytes(_key);
+
+                output = new MemoryStream();
+                crypStream = new CryptoStream(output, provider.CreateDecryptor(), CryptoStreamMode.Write);
                 byte[] input = new byte[toDecrypt.Length / 2];
                 for (int x = 0; x < toDecrypt.Length / 2; x++)
                 {
                     int i = (Convert.ToInt32(toDecrypt.Substring(x * 2, 2), 16));
                     input[x] = (byte)i;
                 }
-
-                DESCryptoServiceProvider provider = new DESCryptoServiceProvider();
-                provider.Key = ASCIIEncoding.ASCII.GetBytes(_key);
-                provider.IV = provider.Key;
-
-                output = new MemoryStream();
-                crypStream = new CryptoStream(output, provider.CreateDecryptor(), CryptoStreamMode.Write);
                 crypStream.Write(input, 0, input.Length);
                 crypStream.FlushFinalBlock();
 

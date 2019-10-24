@@ -22,8 +22,8 @@ namespace Test_06
                 ActivationLevel = 4
             });
 
-            string str =  DESHelper.Encrypt(source, "SMARTOOL");
-            //6FXG05FnfPJqaiosye6X7creZAQkqnTZUhnAuFcvLopw/UjvFqCfGQ==
+            string str =  DESHelper.Encrypt(source, "SMTDESIV");
+            //202265E69C3D36A4EE65FC125D6EBEBA69E71541B5BF66728E1A4FD9800E4C9FF4EADADEE9EC7C44
             string strD = DESHelper.Decrypt(str, "SMARTOOL");
 
             Console.WriteLine(strD);

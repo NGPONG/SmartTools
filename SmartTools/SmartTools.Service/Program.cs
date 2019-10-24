@@ -6,26 +6,32 @@ using System.Configuration;
 using SmartTools.Service.Module;
 using SmartTools.Service.Module.Configuration;
 using System.ServiceModel.Description;
+using System.Collections.Concurrent;
+using SmartTools.Service.Utils;
 
 namespace SmartTools.Service
 {
     class Program
     {
+        public static ConcurrentQueue<ICommunicationObject> _ServiceQueue = new ConcurrentQueue<ICommunicationObject>();
+
         static void Main(string[] args)
         {
-            // 服务契约
             var contracts = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.Namespace == "SmartTools.Service.Contract" && t.IsPublic);
-            // 服务实现
             var services = Assembly.GetExecutingAssembly().GetTypes().Where(t => t.Namespace == "SmartTools.Service.Implementation" && t.IsPublic);
 
             foreach (var service in services)
             {
-                Uri url = new Uri($"http://127.0.0.1:{ConfigurationManager.AppSettings["Port"]}/{service.Name}");
+                Uri url = new Uri($"http://127.0.0.1:{AppConfiger.Port}/{service.Name}");
 
                 ServiceHost host = new ServiceHost(service, url);
                 host.Opened += (object sender, EventArgs e) =>
                 {
-                    Console.WriteLine("[SmartTools] Opened!");
+                    Console.WriteLine("[SmartTools Service] Opened!");
+                };
+                host.Closed += (object sender, EventArgs e) =>
+                {
+                    Console.WriteLine("[SmartTools Service] closed!");
                 };
 
                 host.AddServiceEndpoint(contracts.Where(c => c.Name.Contains(service.Name)).FirstOrDefault(), ServiceBinding.Create<WebHttpBinding>(), url);
@@ -35,11 +41,29 @@ namespace SmartTools.Service
 
                 host.AddServiceEndpoint(typeof(IMetadataExchange), MetadataExchangeBindings.CreateMexHttpBinding(), "mex");
 
-                // Start
-                ((ICommunicationObject)host).Open();
+                var communicationObject = host as ICommunicationObject;
+                communicationObject.Open();
+
+                _ServiceQueue.Enqueue(communicationObject);
             }
 
-            Console.ReadKey();
+            while (true)
+            {
+                var input = Console.ReadLine();
+                if (input.Equals("Close Service", StringComparison.OrdinalIgnoreCase))
+                {
+                    while (true)
+                    {
+                        ICommunicationObject serviceHost;
+                        bool isPeekSuccess = _ServiceQueue.TryPeek(out serviceHost);
+                        if (!isPeekSuccess)
+                            break;
+
+                        serviceHost.Close();
+                    }
+                    break;
+                }
+            }
         }
     }
 }

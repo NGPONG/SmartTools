@@ -20,13 +20,14 @@
     <Property Name="IsActivation" Type="bit" Nullable="true" />
     <Property Name="ActivationLevel" Type="int" Nullable="true" />
     <Property Name="ActivationDate" Type="datetime" Nullable="true" />
+    <Property Name="EmailAddress" Type="nvarchar" Nullable="true" MaxLength="128" />
   </EntityType>
   <EntityType Name="Sys_Activation">
     <Key>
       <PropertyRef Name="Sys_ActivationId" />
     </Key>
     <Property Name="Sys_ActivationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ActivationCode" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ActivationCode" Type="nvarchar" Nullable="false" MaxLength="512" />
     <Property Name="ActivationLevel" Type="int" Nullable="false" />
     <Property Name="UserId" Type="int" Nullable="false" />
   </EntityType>
@@ -57,13 +58,14 @@
             </Documentation>
           </Property>
           <Property Name="ActivationDate" Type="DateTime" Nullable="true" />
+          <Property Name="EmailAddress" Type="String" Nullable="true" Unicode="true" MaxLength="128" />
         </EntityType>
         <EntityType Name="Sys_Activation">
           <Key>
             <PropertyRef Name="Sys_ActivationId" />
           </Key>
           <Property Name="Sys_ActivationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ActivationCode" Type="String" Nullable="false" />
+          <Property Name="ActivationCode" Type="String" Nullable="false" Unicode="true" MaxLength="512" />
           <Property Name="ActivationLevel" Type="Int32" Nullable="false" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
         </EntityType>
@@ -83,6 +85,7 @@
           <ScalarProperty Name="IsActivation" ColumnName="IsActivation" />
           <ScalarProperty Name="ActivationLevel" ColumnName="ActivationLevel" />
           <ScalarProperty Name="ActivationDate" ColumnName="ActivationDate" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

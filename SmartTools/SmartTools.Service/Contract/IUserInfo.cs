@@ -10,23 +10,26 @@ namespace SmartTools.Service.Contract
         [WebInvoke(Method = "POST",
                    BodyStyle = WebMessageBodyStyle.WrappedRequest,
                    RequestFormat = WebMessageFormat.Json,
-                   ResponseFormat = WebMessageFormat.Json)]
+                   ResponseFormat = WebMessageFormat.Json,
+                   UriTemplate = "/Login")]
         [OperationContract]
         string UserLogin(string userName, string userPwd);
 
         [WebInvoke(Method = "POST",
-            BodyStyle = WebMessageBodyStyle.WrappedRequest,
-            RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json)]
+                   BodyStyle = WebMessageBodyStyle.WrappedRequest,
+                   RequestFormat = WebMessageFormat.Json,
+                   ResponseFormat = WebMessageFormat.Json,
+                   UriTemplate = "/Register")]
         [OperationContract]
-        string AddUserInfo(string userName, string userPwd);
+        string AddUserInfo(string userName, string userPwd, string emailAddress);
 
         [WebInvoke(Method = "POST",
-            BodyStyle = WebMessageBodyStyle.WrappedRequest,
-            RequestFormat = WebMessageFormat.Json,
-            ResponseFormat = WebMessageFormat.Json)]
+                   BodyStyle = WebMessageBodyStyle.WrappedRequest,
+                   RequestFormat = WebMessageFormat.Json,
+                   ResponseFormat = WebMessageFormat.Json,
+                   UriTemplate = "/Activation")]
         [OperationContract]
-        string Activation(string activationCode);
+        string ActivationUser(string activationCode);
 
         [WebInvoke(Method = "GET")]
         [OperationContract]

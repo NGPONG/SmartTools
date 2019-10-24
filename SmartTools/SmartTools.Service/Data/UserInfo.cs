@@ -21,5 +21,6 @@ namespace SmartTools.Service.Data
         public Nullable<bool> IsActivation { get; set; }
         public Nullable<int> ActivationLevel { get; set; }
         public Nullable<System.DateTime> ActivationDate { get; set; }
+        public string EmailAddress { get; set; }
     }
 }

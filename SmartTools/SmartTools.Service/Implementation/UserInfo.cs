@@ -78,7 +78,7 @@ namespace SmartTools.Service.Implementation
             return JsonConvert.SerializeObject(message);
         }
 
-        public string AddUserInfo(string userName, string userPwd)
+        public string AddUserInfo(string userName, string userPwd, string emailAddress)
         {
             var message = new CustomMessage();
 
@@ -101,6 +101,7 @@ namespace SmartTools.Service.Implementation
                     {
                         UserName = userName,
                         UserPwd = MD5Helper.Encry(userPwd),
+                        EmailAddress = emailAddress,
                         CreateDate = DateTime.Now
                     };
 
@@ -121,7 +122,7 @@ namespace SmartTools.Service.Implementation
             return JsonConvert.SerializeObject(message);
         }
 
-        public string Activation(string activationCode)
+        public string ActivationUser(string activationCode)
         {
             var message = new CustomMessage();
 

@@ -8,6 +8,6 @@ namespace SmartTools.Service
 {
     public static class Licensing
     {
-        public const string __KEY = "SMARTTOOLS_G";
+        public const string __KEY = "SMTDESIV";
     }
 }

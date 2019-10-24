@@ -2,8 +2,8 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 10/24/2019 15:22:25
--- Generated from EDMX file: C:\Users\acer\Desktop\SmartTools\SmartTools\SmartTools.Service\Data\STModule.edmx
+-- Date Created: 10/24/2019 20:37:07
+-- Generated from EDMX file: C:\Users\NGPONG\Desktop\SmartTools\SmartTools\SmartTools.Service\Data\STModule.edmx
 -- --------------------------------------------------
 
 SET QUOTED_IDENTIFIER OFF;
@@ -25,6 +25,9 @@ GO
 IF OBJECT_ID(N'[dbo].[UserInfo]', 'U') IS NOT NULL
     DROP TABLE [dbo].[UserInfo];
 GO
+IF OBJECT_ID(N'[dbo].[Sys_Activation]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Sys_Activation];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -38,14 +41,15 @@ CREATE TABLE [dbo].[UserInfo] (
     [CreateDate] datetime  NOT NULL,
     [IsActivation] bit  NULL,
     [ActivationLevel] int  NULL,
-    [ActivationDate] datetime  NULL
+    [ActivationDate] datetime  NULL,
+    [EmailAddress] nvarchar(128)  NULL
 );
 GO
 
 -- Creating table 'Sys_Activation'
 CREATE TABLE [dbo].[Sys_Activation] (
     [Sys_ActivationId] int IDENTITY(1,1) NOT NULL,
-    [ActivationCode] nvarchar(max)  NOT NULL,
+    [ActivationCode] nvarchar(512)  NOT NULL,
     [ActivationLevel] int  NOT NULL,
     [UserId] int  NOT NULL
 );
