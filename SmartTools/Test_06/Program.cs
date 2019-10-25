@@ -7,7 +7,10 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Test_06.Properties;
+using static System.Net.Mime.MediaTypeNames;
 
 [assembly: log4net.Config.XmlConfigurator(Watch = true)]
 namespace Test_06
@@ -16,19 +19,14 @@ namespace Test_06
     {
         static void Main(string[] args)
         {
-            string source = JsonConvert.SerializeObject(new
-            {
-                Name = "Admin",
-                ActivationLevel = 4
-            });
-
-            string str =  DESHelper.Encrypt(source, "SMTDESIV");
-            //202265E69C3D36A4EE65FC125D6EBEBA69E71541B5BF66728E1A4FD9800E4C9FF4EADADEE9EC7C44
-            string strD = DESHelper.Decrypt(str, "SMARTOOL");
-
-            Console.WriteLine(strD);
-
-            Console.ReadKey();
+            var obj = JsonConvert.DeserializeObject<dynamic>(Encoding.UTF8.GetString(Resources._1123));
+            var name = System.Globalization.CultureInfo.GetCultures(System.Globalization.CultureTypes.AllCultures);
         }
+    }
+
+    public class Test
+    {
+        public string item { get; set; }
+        public string value { get; set; }
     }
 }

@@ -8,11 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SmartTools.Properties {
+namespace Test_06.Properties {
     using System;
-    using System.Text;
-
-
+    
+    
     /// <summary>
     ///   一个强类型的资源类，用于查找本地化的字符串等。
     /// </summary>
@@ -40,7 +39,7 @@ namespace SmartTools.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SmartTools.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Test_06.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,11 +59,46 @@ namespace SmartTools.Properties {
                 resourceCulture = value;
             }
         }
-
-        internal static string en_US {
+        
+        /// <summary>
+        ///   查找类似 # translation for Simplified Chinese
+        ///
+        ///Shadowsocks=Shadowsocks
+        ///
+        ///# Menu items
+        ///
+        ///Mode=系统代理模式
+        ///No modify system proxy=保持当前状态不修改
+        ///Disable system proxy=直连模式
+        ///PAC=PAC 模式
+        ///Global=全局模式
+        ///Proxy rule=代理规则
+        ///Bypass LAN=绕过局域网
+        ///Bypass LAN &amp;&amp; China=绕过局域网和大陆
+        ///Bypass LAN &amp;&amp; not China=绕过局域网和非大陆
+        ///User custom=用户自定义
+        ///Disable bypass=全局
+        ///Servers=服务器
+        ///Edit servers...=编辑服务器...
+        ///Import servers from file...=从文件导入服务器...
+        ///Servers Subscribe=服务器订阅
+        ///Subscribe setting...=SSR服务器订阅设置...
+        ///Update subscribe SSR node=更新SSR服务器订阅
+        ///Update subscr [字符串的其余部分被截断]&quot;; 的本地化字符串。
+        /// </summary>
+        internal static string _1 {
             get {
-                var buffer = (byte[])ResourceManager.GetObject("en_US", resourceCulture);
-                return Encoding.UTF8.GetString(buffer);
+                return ResourceManager.GetString("_1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
+        internal static byte[] _1123 {
+            get {
+                object obj = ResourceManager.GetObject("_1123", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

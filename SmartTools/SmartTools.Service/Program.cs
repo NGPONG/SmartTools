@@ -8,6 +8,7 @@ using SmartTools.Service.Module.Configuration;
 using System.ServiceModel.Description;
 using System.Collections.Concurrent;
 using SmartTools.Service.Utils;
+using Configuration = SmartTools.Service.Utils.Configuration;
 
 namespace SmartTools.Service
 {
@@ -22,7 +23,7 @@ namespace SmartTools.Service
 
             foreach (var service in services)
             {
-                Uri url = new Uri($"http://127.0.0.1:{AppConfiger.Port}/{service.Name}");
+                Uri url = new Uri($"http://127.0.0.1:{Configuration.Port}/{service.Name}");
 
                 ServiceHost host = new ServiceHost(service, url);
                 host.Opened += (object sender, EventArgs e) =>

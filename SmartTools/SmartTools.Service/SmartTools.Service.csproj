@@ -86,7 +86,7 @@
     <Compile Include="Data\UserInfo.cs">
       <DependentUpon>STModule.tt</DependentUpon>
     </Compile>
-    <Compile Include="Licensing.cs" />
+    <Compile Include="Global.cs" />
     <Compile Include="Module\Configuration\ServiceBehavior.cs" />
     <Compile Include="Module\Configuration\ServiceBinding.cs" />
     <Compile Include="Module\Configuration\ServiceWebHttpBehaviors.cs" />
@@ -95,7 +95,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Implementation\UserInfo.cs" />
-    <Compile Include="Utils\AppConfiger.cs" />
+    <Compile Include="Utils\Configuration.cs" />
     <Compile Include="Utils\ConvertExtensions.cs" />
     <Compile Include="Utils\JsonSerialization.cs" />
   </ItemGroup>
