@@ -18,7 +18,7 @@ namespace SmartTools.Utils
             {
                 if (Global.__CULTURE == "en-US")
                 {
-                    Init(Resources.en_US);
+                    Init(Encoding.UTF8.GetString(Resources.en_US));
                 }
             }
         }

@@ -10,9 +10,8 @@
 
 namespace SmartTools.Properties {
     using System;
-    using System.Text;
-
-
+    
+    
     /// <summary>
     ///   一个强类型的资源类，用于查找本地化的字符串等。
     /// </summary>
@@ -60,11 +59,34 @@ namespace SmartTools.Properties {
                 resourceCulture = value;
             }
         }
-
-        internal static string en_US {
+        
+        /// <summary>
+        ///   查找 System.Byte[] 类型的本地化资源。
+        /// </summary>
+        internal static byte[] en_US {
             get {
-                var buffer = (byte[])ResourceManager.GetObject("en_US", resourceCulture);
-                return Encoding.UTF8.GetString(buffer);
+                object obj = ResourceManager.GetObject("en_US", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap minus {
+            get {
+                object obj = ResourceManager.GetObject("minus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        /// </summary>
+        internal static System.Drawing.Bitmap plus {
+            get {
+                object obj = ResourceManager.GetObject("plus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
