@@ -138,7 +138,7 @@ namespace SmartTools.Service.Implementation
                     throw new Exception("激活码不存在或已过期!");
                 }
 
-                string source = DESHelper.Decrypt(activationCode, Licensing.__KEY);
+                string source = DESHelper.Decrypt(activationCode, Global.__KEY);
                 if (string.IsNullOrEmpty(source))
                 {
                     throw new Exception("激活码有误！请重新输入");

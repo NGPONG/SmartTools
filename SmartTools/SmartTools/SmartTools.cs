@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SmartTools.Utils;
+using SmartTools.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -19,12 +21,28 @@ namespace SmartTools
             {
                 if (!mutex.WaitOne(0, false))
                 {
-                    Console.WriteLine("HelloWorld");
+                    Console.WriteLine(I18N.Get("初始化失败！SmartTools已运行！"), I18N.Get("警告"));
                 }
+
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                // Application.Run(new Form1());
+                Application.ApplicationExit += Application_ApplicationExit;
+                Application.ThreadException += Application_ThreadException;
+                AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+                Application.Run(new Login());
             }
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+        }
+
+        private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+        {
+        }
+
+        private static void Application_ApplicationExit(object sender, EventArgs e)
+        {
         }
     }
 }

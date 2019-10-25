@@ -14,10 +14,9 @@ namespace SmartTools.Utils
 
         static I18N()
         {
-            string culture = System.Globalization.CultureInfo.CurrentCulture.Name;
-            if (culture.StartsWith("en"))
+            if (Global.__CULTURE.StartsWith("en"))
             {
-                if (culture == "en-US")
+                if (Global.__CULTURE == "en-US")
                 {
                     Init(Resources.en_US);
                 }
