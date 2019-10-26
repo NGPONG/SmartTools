@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using SmartTools.Service.Module.Entity;
+using System.IO;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 
@@ -8,12 +9,11 @@ namespace SmartTools.Service.Contract
     public interface IUserInfo
     {
         [WebInvoke(Method = "POST",
-                   BodyStyle = WebMessageBodyStyle.WrappedRequest,
                    RequestFormat = WebMessageFormat.Json,
                    ResponseFormat = WebMessageFormat.Json,
                    UriTemplate = "/Login")]
         [OperationContract]
-        string UserLogin(string userName, string userPwd);
+        CustomMessage UserLogin(string userName, string userPwd);
 
         [WebInvoke(Method = "POST",
                    BodyStyle = WebMessageBodyStyle.WrappedRequest,
@@ -21,7 +21,7 @@ namespace SmartTools.Service.Contract
                    ResponseFormat = WebMessageFormat.Json,
                    UriTemplate = "/Register")]
         [OperationContract]
-        string AddUserInfo(string userName, string userPwd, string emailAddress);
+        CustomMessage AddUserInfo(string userName, string userPwd, string emailAddress);
 
         [WebInvoke(Method = "POST",
                    BodyStyle = WebMessageBodyStyle.WrappedRequest,
@@ -29,7 +29,7 @@ namespace SmartTools.Service.Contract
                    ResponseFormat = WebMessageFormat.Json,
                    UriTemplate = "/Activation")]
         [OperationContract]
-        string ActivationUser(string activationCode);
+        CustomMessage ActivationUser(string activationCode);
 
         [WebInvoke(Method = "GET")]
         [OperationContract]

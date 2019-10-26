@@ -1,13 +1,19 @@
-﻿using MaterialSkin;
-using MaterialSkin.Controls;
+﻿using MaterialSkin.Controls;
+using Newtonsoft.Json;
+using SmartTools.Common.Enum;
+using SmartTools.Common.Helper;
 using SmartTools.Controller;
+using SmartTools.Service.Module.Entity;
+using SmartTools.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,45 +21,107 @@ namespace SmartTools.Views
 {
     public partial class Login : MaterialForm
     {
-        MaterialSkinManager Themes = MaterialSkinManager.Instance;
-
-        FormController controller = new FormController();
+        FormController control = new FormController();
         public Login()
         {
             InitializeComponent();
-            controller.Init(this);
+            control.Init(this);
         }
 
-        private int _colorSchemeIndex;
-        private void MaterialRaisedButton1_Click(object sender, EventArgs e)
+        private void MaterialRaisedButton1_Click_1(object sender, EventArgs e)
         {
-            _colorSchemeIndex++;
-            if (_colorSchemeIndex > 6) _colorSchemeIndex = 0;
+            control.ChangeColorScheme();
+        }
 
-            //These are just example color schemes
-            switch (_colorSchemeIndex)
+        private void BtnLogin_Click(object sender, EventArgs e)
+        {
+            try
             {
-                case 0:
-                    Themes.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
-                    break;
-                case 1:
-                    Themes.ColorScheme = new ColorScheme(Primary.Indigo500, Primary.Indigo700, Primary.Indigo100, Accent.Pink200, TextShade.WHITE);
-                    break;
-                case 2:
-                    Themes.ColorScheme = new ColorScheme(Primary.Green600, Primary.Green700, Primary.Green200, Accent.Red100, TextShade.WHITE);
-                    break;
-                case 3:
-                    Themes.ColorScheme = new ColorScheme(Primary.Amber500, Primary.Amber700, Primary.Amber100, Accent.Red100, TextShade.WHITE);
-                    break;
-                case 4:
-                    Themes.ColorScheme = new ColorScheme(Primary.Blue600, Primary.Blue700, Primary.Blue200, Accent.Red100, TextShade.WHITE);
-                    break;
-                case 5:
-                    Themes.ColorScheme = new ColorScheme(Primary.Brown600, Primary.Brown700, Primary.Brown200, Accent.Red100, TextShade.WHITE);
-                    break;
-                case 6:
-                    Themes.ColorScheme = new ColorScheme(Primary.Teal600, Primary.Teal700, Primary.Purple200, Accent.Red100, TextShade.WHITE);
-                    break;
+                string userName = this.txtUserName.Text;
+                if (string.IsNullOrEmpty(userName)) throw new Exception(I18N.Get("请输入用户名"));
+
+                string userPwd = this.txtUserPwd.Text;
+                if (string.IsNullOrEmpty(userPwd)) throw new Exception(I18N.Get("请输入密码"));
+
+                #region login
+                HttpController webContext = new HttpController()
+                {
+                    Address = "http://127.0.0.1:9876/UserInfo/Login",
+                    Method = "POST",
+                    ContentType = "application/json",
+                    Parameter = JsonConvert.SerializeObject(new
+                    {
+                        userName = userName,
+                        userPwd = userPwd
+                    })
+                };
+                CustomMessage resouce;
+                using (Stream stream = webContext.Start())
+                {
+                    StreamReader reader = new StreamReader(stream);
+                    resouce = JsonConvert.DeserializeObject<CustomMessage>(reader.ReadToEnd());
+                }
+                #endregion
+
+                if (resouce.Status != HttpStatus.OK)
+                {
+                    MessageBox.Show(resouce.Message.ToString());
+                }
+            }
+            catch (Exception objException)
+            {
+                MessageBox.Show(objException.Message);
+            }
+        }
+
+        private void BtnRegistered_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string userName = this.txtRegistered_UserName.Text;
+                if (string.IsNullOrEmpty(userName)) throw new Exception(I18N.Get("请输入用户名"));
+
+                string userPwd = this.txtRegistered_UserPwd.Text;
+                if (string.IsNullOrEmpty(userPwd)) throw new Exception(I18N.Get("请输入密码"));
+
+                string userEmail = this.txtRegistered_Email.Text;
+                if (string.IsNullOrEmpty(userPwd)) throw new Exception(I18N.Get("请输入邮箱"));
+                if (!Regex.IsMatch(userEmail, @"^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$")) throw new Exception(I18N.Get("请输入正确的邮箱号"));
+
+                #region Registered
+                HttpController webContext = new HttpController()
+                {
+                    Address = "http://127.0.0.1:9876/UserInfo/Register",
+                    Method = "POST",
+                    ContentType = "application/json",
+                    Parameter = JsonConvert.SerializeObject(new
+                    {
+                        userName = userName,
+                        userPwd = userPwd,
+                        emailAddress = userEmail
+                    })
+                };
+                CustomMessage resouce;
+                using (Stream stream = webContext.Start())
+                {
+                    StreamReader reader = new StreamReader(stream);
+                    resouce = JsonConvert.DeserializeObject<CustomMessage>(reader.ReadToEnd());
+                }
+                webContext.Close();
+                #endregion
+
+                if (resouce.Status != HttpStatus.OK)
+                {
+                    MessageBox.Show(resouce.Message.ToString());
+                }
+                else
+                {
+                    MessageBox.Show(resouce.Message.ToString());
+                }
+            }
+            catch (Exception objException)
+            {
+                MessageBox.Show(objException.Message);
             }
         }
     }

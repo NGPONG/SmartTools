@@ -27,7 +27,7 @@ namespace SmartTools.Service.Implementation
             return stream;
         }
 
-        public string UserLogin(string userName, string userPwd)
+        public CustomMessage UserLogin(string userName, string userPwd)
         {
             var message = new CustomMessage();
 
@@ -49,7 +49,7 @@ namespace SmartTools.Service.Implementation
                 {
                     Data.UserInfo user = query[0];
 
-                    if (!(bool)user.IsActivation)
+                    if (user.IsActivation == null)
                     {
                         message.Status = HttpStatus.Error;
                         message.Message = "当前账户还未激活！";
@@ -60,11 +60,11 @@ namespace SmartTools.Service.Implementation
                         var remainingSeconds = (DateTime.Now - ConvertExtensions.ToTimeSpan((int)user.ActivationLevel, (DateTime)user.ActivationDate)).TotalSeconds;
 
                         message.Status = HttpStatus.OK;
-                        message.Message = JsonConvert.SerializeObject(new
+                        message.Message = new
                         {
                             RemainingSeconds = remainingSeconds,
-                            Message = "登陆成功！"
-                        });
+                            Info = "登陆成功！"
+                        };
                     }
                 }
             }
@@ -75,10 +75,10 @@ namespace SmartTools.Service.Implementation
                 message.Message = objException.Message;
             }
 
-            return JsonConvert.SerializeObject(message);
+            return message;
         }
 
-        public string AddUserInfo(string userName, string userPwd, string emailAddress)
+        public CustomMessage AddUserInfo(string userName, string userPwd, string emailAddress)
         {
             var message = new CustomMessage();
 
@@ -86,31 +86,39 @@ namespace SmartTools.Service.Implementation
             {
                 var dbContext = DbContainer.GetDbContext();
 
-                var query = from u in dbContext.UserInfo
-                            where u.UserName == userName
-                            select u;
-
-                if (query.Count() > 0)
+                var queryUserName = from u in dbContext.UserInfo
+                                    where u.UserName == userName
+                                    select u;
+                if (queryUserName.Count() > 0)
                 {
                     message.Status = HttpStatus.Error;
                     message.Message = "用户名已存在!";
+                    return message;
                 }
-                else
+
+                var queryEmail = from u in dbContext.UserInfo
+                                 where u.EmailAddress == emailAddress
+                                 select u;
+                if (queryEmail.FirstOrDefault() != null)
                 {
-                    var user = new Data.UserInfo()
-                    {
-                        UserName = userName,
-                        UserPwd = MD5Helper.Encry(userPwd),
-                        EmailAddress = emailAddress,
-                        CreateDate = DateTime.Now
-                    };
-
-                    dbContext.UserInfo.Add(user);
-                    dbContext.SaveChanges();
-
-                    message.Status = HttpStatus.OK;
-                    message.Message = "用户注册成功!请及时激活";
+                    message.Status = HttpStatus.Error;
+                    message.Message = "当前邮箱已被注册!";
+                    return message;
                 }
+
+                var user = new Data.UserInfo()
+                {
+                    UserName = userName,
+                    UserPwd = MD5Helper.Encry(userPwd),
+                    EmailAddress = emailAddress,
+                    CreateDate = DateTime.Now
+                };
+
+                dbContext.UserInfo.Add(user);
+                dbContext.SaveChanges();
+
+                message.Status = HttpStatus.OK;
+                message.Message = "用户注册成功!请及时激活";
             }
             catch (Exception objException)
             {
@@ -118,11 +126,10 @@ namespace SmartTools.Service.Implementation
                 message.Status = HttpStatus.Error;
                 message.Message = objException.Message;
             }
-
-            return JsonConvert.SerializeObject(message);
+            return message;
         }
 
-        public string ActivationUser(string activationCode)
+        public CustomMessage ActivationUser(string activationCode)
         {
             var message = new CustomMessage();
 
@@ -176,7 +183,7 @@ namespace SmartTools.Service.Implementation
                 message.Message = objException.Message;
             }
 
-            return JsonConvert.SerializeObject(message);
+            return message;
         }
     }
 }

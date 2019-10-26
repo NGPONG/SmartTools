@@ -9,13 +9,14 @@ namespace SmartTools
     public class Global
     {
         public static string __KEY;
-
         public static string __CULTURE;
+        public static string __SERVERADDRESS;
 
         static Global()
         {
             __KEY = "SMTDESIV";
             __CULTURE = "zh_cn";
+            __SERVERADDRESS = "127.0.0.1";
         }
     }
 }
