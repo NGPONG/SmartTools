@@ -29,7 +29,7 @@ namespace SmartTools
                 Application.ApplicationExit += Application_ApplicationExit;
                 Application.ThreadException += Application_ThreadException;
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-                Application.Run(new Login());
+                Application.Run(new MessageBoxExt());
             }
         }
 

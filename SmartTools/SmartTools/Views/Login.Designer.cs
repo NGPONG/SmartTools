@@ -36,7 +36,7 @@
             this.tpActivation = new System.Windows.Forms.TabPage();
             this.btnActivation = new MaterialSkin.Controls.MaterialRaisedButton();
             this.txtActivation_UserName = new MaterialSkin.Controls.MaterialSingleLineTextField();
-            this.txtActivation_Email = new MaterialSkin.Controls.MaterialSingleLineTextField();
+            this.txtActivationCode = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.tpRegistered = new System.Windows.Forms.TabPage();
             this.btnRegistered = new MaterialSkin.Controls.MaterialRaisedButton();
             this.txtRegistered_Email = new MaterialSkin.Controls.MaterialSingleLineTextField();
@@ -144,7 +144,7 @@
             this.tpActivation.BackColor = System.Drawing.Color.White;
             this.tpActivation.Controls.Add(this.btnActivation);
             this.tpActivation.Controls.Add(this.txtActivation_UserName);
-            this.tpActivation.Controls.Add(this.txtActivation_Email);
+            this.tpActivation.Controls.Add(this.txtActivationCode);
             this.tpActivation.Location = new System.Drawing.Point(4, 25);
             this.tpActivation.Name = "tpActivation";
             this.tpActivation.Size = new System.Drawing.Size(524, 200);
@@ -189,26 +189,26 @@
             this.txtActivation_UserName.TabStop = false;
             this.txtActivation_UserName.UseSystemPasswordChar = false;
             // 
-            // txtActivation_Email
+            // txtActivationCode
             // 
-            this.txtActivation_Email.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtActivationCode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtActivation_Email.Depth = 0;
-            this.txtActivation_Email.Font = new System.Drawing.Font("微软雅黑", 9F);
-            this.txtActivation_Email.Hint = "Please Enter Your Email";
-            this.txtActivation_Email.Location = new System.Drawing.Point(7, 72);
-            this.txtActivation_Email.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.txtActivation_Email.MaxLength = 32767;
-            this.txtActivation_Email.MouseState = MaterialSkin.MouseState.HOVER;
-            this.txtActivation_Email.Name = "txtActivation_Email";
-            this.txtActivation_Email.PasswordChar = '\0';
-            this.txtActivation_Email.SelectedText = "";
-            this.txtActivation_Email.SelectionLength = 0;
-            this.txtActivation_Email.SelectionStart = 0;
-            this.txtActivation_Email.Size = new System.Drawing.Size(511, 28);
-            this.txtActivation_Email.TabIndex = 7;
-            this.txtActivation_Email.TabStop = false;
-            this.txtActivation_Email.UseSystemPasswordChar = true;
+            this.txtActivationCode.Depth = 0;
+            this.txtActivationCode.Font = new System.Drawing.Font("微软雅黑", 9F);
+            this.txtActivationCode.Hint = "Please Enter Your Activation Code";
+            this.txtActivationCode.Location = new System.Drawing.Point(7, 72);
+            this.txtActivationCode.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtActivationCode.MaxLength = 32767;
+            this.txtActivationCode.MouseState = MaterialSkin.MouseState.HOVER;
+            this.txtActivationCode.Name = "txtActivationCode";
+            this.txtActivationCode.PasswordChar = '\0';
+            this.txtActivationCode.SelectedText = "";
+            this.txtActivationCode.SelectionLength = 0;
+            this.txtActivationCode.SelectionStart = 0;
+            this.txtActivationCode.Size = new System.Drawing.Size(511, 28);
+            this.txtActivationCode.TabIndex = 7;
+            this.txtActivationCode.TabStop = false;
+            this.txtActivationCode.UseSystemPasswordChar = true;
             // 
             // tpRegistered
             // 
@@ -380,7 +380,7 @@
         private MaterialSkin.Controls.MaterialRaisedButton materialRaisedButton1;
         private System.Windows.Forms.TabPage tpActivation;
         private MaterialSkin.Controls.MaterialSingleLineTextField txtActivation_UserName;
-        private MaterialSkin.Controls.MaterialSingleLineTextField txtActivation_Email;
+        private MaterialSkin.Controls.MaterialSingleLineTextField txtActivationCode;
         private MaterialSkin.Controls.MaterialFlatButton btnLogin;
         private MaterialSkin.Controls.MaterialRaisedButton btnActivation;
         private System.Windows.Forms.TabPage tpRegistered;
