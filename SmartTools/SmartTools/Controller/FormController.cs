@@ -17,7 +17,8 @@ namespace SmartTools.Controller
         #endregion
 
         #region private
-        private int _colorSchemeIndex; 
+        private int _colorSchemeIndex;
+        private const int _offSizeWidth = 48;
         #endregion
 
         public void Init(Form frm)
@@ -64,6 +65,14 @@ namespace SmartTools.Controller
                     Themes.ColorScheme = new ColorScheme(Primary.Teal600, Primary.Teal700, Primary.Purple200, Accent.Red100, TextShade.WHITE);
                     break;
             }
+        }
+
+        public void SetDynamicSize<T>(T sender, Form frm)
+            where T : Control
+        {
+            if (sender == null) throw new ArgumentNullException();
+
+            frm.Width = sender.Width + _offSizeWidth;
         }
     }
 }

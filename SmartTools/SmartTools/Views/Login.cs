@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using SmartTools.Common.Enum;
 using SmartTools.Common.Helper;
 using SmartTools.Controller;
+using SmartTools.Controller.Entity;
 using SmartTools.Service.Module.Entity;
 using SmartTools.Utils;
 using System;
@@ -43,34 +44,21 @@ namespace SmartTools.Views
                 string userPwd = this.txtUserPwd.Text;
                 if (string.IsNullOrEmpty(userPwd)) throw new Exception(I18N.Get("请输入密码"));
 
-                #region login
-                HttpController webContext = new HttpController()
+                UserInfo userInfoService = new UserInfo();
+                CustomMessage resouce = userInfoService.Login(JsonConvert.SerializeObject(new
                 {
-                    Address = "http://127.0.0.1:9876/UserInfo/Login",
-                    Method = "POST",
-                    ContentType = "application/json",
-                    Parameter = JsonConvert.SerializeObject(new
-                    {
-                        userName = userName,
-                        userPwd = userPwd
-                    })
-                };
-                CustomMessage resouce;
-                using (Stream stream = webContext.Start())
-                {
-                    StreamReader reader = new StreamReader(stream);
-                    resouce = JsonConvert.DeserializeObject<CustomMessage>(reader.ReadToEnd());
-                }
-                #endregion
+                    userName,
+                    userPwd
+                })) as CustomMessage;
 
                 if (resouce.Status != HttpStatus.OK)
                 {
-                    MessageBox.Show(resouce.Message.ToString());
+                    MessageBoxExt.Show(resouce.Message.ToString(), MessageboxType.Error);
                 }
             }
             catch (Exception objException)
             {
-                MessageBox.Show(objException.Message);
+                MessageBoxExt.Show(objException.Message, MessageboxType.Error);
             }
         }
 
@@ -88,40 +76,26 @@ namespace SmartTools.Views
                 if (string.IsNullOrEmpty(userPwd)) throw new Exception(I18N.Get("请输入邮箱"));
                 if (!Regex.IsMatch(userEmail, @"^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$")) throw new Exception(I18N.Get("请输入正确的邮箱号"));
 
-                #region Registered
-                HttpController webContext = new HttpController()
+                UserInfo userInfoService = new UserInfo();
+                CustomMessage resouce = userInfoService.Register(JsonConvert.SerializeObject(new
                 {
-                    Address = "http://127.0.0.1:9876/UserInfo/Register",
-                    Method = "POST",
-                    ContentType = "application/json",
-                    Parameter = JsonConvert.SerializeObject(new
-                    {
-                        userName = userName,
-                        userPwd = userPwd,
-                        emailAddress = userEmail
-                    })
-                };
-                CustomMessage resouce;
-                using (Stream stream = webContext.Start())
-                {
-                    StreamReader reader = new StreamReader(stream);
-                    resouce = JsonConvert.DeserializeObject<CustomMessage>(reader.ReadToEnd());
-                }
-                webContext.Close();
-                #endregion
+                    userName,
+                    userPwd,
+                    emailAddress = userEmail
+                })) as CustomMessage;
 
                 if (resouce.Status != HttpStatus.OK)
                 {
-                    MessageBox.Show(resouce.Message.ToString());
+                    MessageBoxExt.Show(resouce.Message.ToString(), MessageboxType.Error);
                 }
                 else
                 {
-                    MessageBox.Show(resouce.Message.ToString());
+                    MessageBoxExt.Show(resouce.Message.ToString(), MessageboxType.Info);
                 }
             }
             catch (Exception objException)
             {
-                MessageBox.Show(objException.Message);
+                MessageBoxExt.Show(objException.Message, MessageboxType.Error);
             }
         }
     }

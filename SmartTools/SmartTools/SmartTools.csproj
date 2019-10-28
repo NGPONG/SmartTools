@@ -61,8 +61,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controller\Entity\UserInfo.cs" />
     <Compile Include="Controller\FormController.cs" />
-    <Compile Include="Controller\ICustomForm.cs" />
+    <Compile Include="Controller\Header.cs" />
+    <Compile Include="Views\ICustomForm.cs" />
     <Compile Include="Controller\HttpController.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="SmartTools.cs" />

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartTools.Controller
+namespace SmartTools.Views
 {
     public interface ICustomForm
     {

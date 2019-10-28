@@ -24,9 +24,7 @@ namespace Test_06
         }
     }
 
-    public class Test
+    public interface Test
     {
-        public string item { get; set; }
-        public string value { get; set; }
     }
 }

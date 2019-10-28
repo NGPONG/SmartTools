@@ -28,52 +28,56 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialFlatButton1 = new MaterialSkin.Controls.MaterialFlatButton();
+            this.lblMessage = new MaterialSkin.Controls.MaterialLabel();
+            this.btnSure = new MaterialSkin.Controls.MaterialFlatButton();
             this.SuspendLayout();
             // 
-            // materialLabel1
+            // lblMessage
             // 
-            this.materialLabel1.AutoSize = true;
-            this.materialLabel1.Depth = 0;
-            this.materialLabel1.Font = new System.Drawing.Font("Roboto", 11F);
-            this.materialLabel1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel1.Location = new System.Drawing.Point(37, 86);
-            this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel1.Name = "materialLabel1";
-            this.materialLabel1.Size = new System.Drawing.Size(190, 24);
-            this.materialLabel1.TabIndex = 0;
-            this.materialLabel1.Text = "这一个文本测试信息";
+            this.lblMessage.AutoSize = true;
+            this.lblMessage.Depth = 0;
+            this.lblMessage.Font = new System.Drawing.Font("Roboto", 11F);
+            this.lblMessage.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblMessage.Location = new System.Drawing.Point(24, 83);
+            this.lblMessage.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Size = new System.Drawing.Size(170, 24);
+            this.lblMessage.TabIndex = 0;
+            this.lblMessage.Text = "这是一个文本测试";
+            this.lblMessage.SizeChanged += new System.EventHandler(this.LblMessage_SizeChanged);
             // 
-            // materialFlatButton1
+            // btnSure
             // 
-            this.materialFlatButton1.AutoSize = true;
-            this.materialFlatButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialFlatButton1.Depth = 0;
-            this.materialFlatButton1.Icon = null;
-            this.materialFlatButton1.Location = new System.Drawing.Point(167, 131);
-            this.materialFlatButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialFlatButton1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialFlatButton1.Name = "materialFlatButton1";
-            this.materialFlatButton1.Primary = false;
-            this.materialFlatButton1.Size = new System.Drawing.Size(60, 36);
-            this.materialFlatButton1.TabIndex = 1;
-            this.materialFlatButton1.Text = "确定";
-            this.materialFlatButton1.UseVisualStyleBackColor = true;
+            this.btnSure.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.btnSure.AutoSize = true;
+            this.btnSure.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnSure.Depth = 0;
+            this.btnSure.Icon = null;
+            this.btnSure.Location = new System.Drawing.Point(57, 116);
+            this.btnSure.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnSure.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnSure.Name = "btnSure";
+            this.btnSure.Primary = true;
+            this.btnSure.Size = new System.Drawing.Size(98, 36);
+            this.btnSure.TabIndex = 1;
+            this.btnSure.Text = "我知道了";
+            this.btnSure.UseVisualStyleBackColor = true;
+            this.btnSure.Click += new System.EventHandler(this.BtnSure_Click);
             // 
             // MessageBoxExt
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(271, 180);
-            this.Controls.Add(this.materialFlatButton1);
-            this.Controls.Add(this.materialLabel1);
+            this.ClientSize = new System.Drawing.Size(218, 158);
+            this.Controls.Add(this.btnSure);
+            this.Controls.Add(this.lblMessage);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "MessageBoxExt";
             this.Text = "Error";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MessageBoxExt_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -81,7 +85,7 @@
 
         #endregion
 
-        private MaterialSkin.Controls.MaterialLabel materialLabel1;
-        private MaterialSkin.Controls.MaterialFlatButton materialFlatButton1;
+        private MaterialSkin.Controls.MaterialLabel lblMessage;
+        private MaterialSkin.Controls.MaterialFlatButton btnSure;
     }
 }
