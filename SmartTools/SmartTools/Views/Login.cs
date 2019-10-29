@@ -1,22 +1,12 @@
 ﻿using MaterialSkin.Controls;
 using Newtonsoft.Json;
 using SmartTools.Common.Enum;
-using SmartTools.Common.Helper;
 using SmartTools.Controller;
-using SmartTools.Controller.Entity;
+using SmartTools.Model;
 using SmartTools.Service.Module.Entity;
 using SmartTools.Utils;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace SmartTools.Views
 {

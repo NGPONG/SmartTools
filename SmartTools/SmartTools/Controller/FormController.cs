@@ -1,11 +1,8 @@
 ﻿using MaterialSkin;
 using MaterialSkin.Controls;
+using SmartTools.Properties;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SmartTools.Controller
@@ -17,12 +14,14 @@ namespace SmartTools.Controller
         #endregion
 
         #region private
-        private int _colorSchemeIndex;
+        private int _colorSchemeIndex = 2;
         private const int _offSizeWidth = 48;
         #endregion
 
         public void Init(Form frm)
         {
+            frm.Icon = Icon.FromHandle(Resources.Active.GetHicon());
+            frm.StartPosition = FormStartPosition.CenterScreen;
             if (Themes == null)
             {
                 Themes = MaterialSkinManager.Instance;
@@ -30,7 +29,7 @@ namespace SmartTools.Controller
                 Themes.ROBOTO_MEDIUM_10 = new Font("微软雅黑", 10f);
                 Themes.ROBOTO_REGULAR_11 = new Font("微软雅黑", 11f);
                 Themes.ROBOTO_MEDIUM_11 = new Font("微软雅黑", 11f);
-                Themes.ColorScheme = new ColorScheme(Primary.Blue600, Primary.Blue700, Primary.Blue200, Accent.Red100, TextShade.WHITE);
+                Themes.ColorScheme = new ColorScheme(Primary.Green600, Primary.Green700, Primary.Green200, Accent.Red100, TextShade.WHITE);
                 Themes.AddFormToManage(frm as MaterialForm);
             }
         }
