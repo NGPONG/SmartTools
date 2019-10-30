@@ -10,12 +10,10 @@ namespace SmartTools.Utils
         public static void ReleaseMemory()
         {
 #if !_CONSOLE
-            // release any unused pages
-            // making the numbers look good in task manager
-            // this is totally nonsense in programming
-            // but good for those users who care
-            // making them happier with their everyday life
-            // which is part of user experience
+            // 释放掉未使用的页面
+            // 使任务管理器中的数字看起来稍微好看点
+            // 然而并没有什么实际乱用，对于编程来说完全是胡说八道
+            // 但是就用户体验来说能够得到一个很好的体验
             GC.Collect(GC.MaxGeneration);
             GC.WaitForPendingFinalizers();
 
