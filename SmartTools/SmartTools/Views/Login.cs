@@ -12,16 +12,14 @@ namespace SmartTools.Views
 {
     public partial class Login : MaterialForm
     {
-        FormController control = new FormController();
         public Login()
         {
             InitializeComponent();
-            control.Init(this);
         }
 
         private void MaterialRaisedButton1_Click_1(object sender, EventArgs e)
         {
-            control.ChangeColorScheme();
+            FormController.Instance().ChangeColorScheme();
         }
 
         private void BtnLogin_Click(object sender, EventArgs e)

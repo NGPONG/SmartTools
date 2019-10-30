@@ -14,11 +14,9 @@ namespace SmartTools.Views
 {
     public partial class MessageBoxExt : MaterialForm
     {
-        FormController control = new FormController();
         public MessageBoxExt(string message)
         {
             InitializeComponent();
-            control.Init(this);
             this.lblMessage.Text = message;
         }
 
@@ -60,7 +58,7 @@ namespace SmartTools.Views
 
         private void LblMessage_SizeChanged(object sender, EventArgs e)
         {
-            control.SetDynamicSize((MaterialLabel)sender, this);
+            FormController.Instance().SetDynamicSize((MaterialLabel)sender, this);
         }
     }
 

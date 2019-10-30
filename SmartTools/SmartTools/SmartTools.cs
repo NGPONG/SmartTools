@@ -1,4 +1,5 @@
-﻿using SmartTools.Utils;
+﻿using SmartTools.Controller;
+using SmartTools.Utils;
 using SmartTools.Views;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace SmartTools
             {
                 if (!mutex.WaitOne(0, false))
                 {
-                    Console.WriteLine(I18N.Get("初始化失败！SmartTools已运行！"), I18N.Get("警告"));
+                    Console.WriteLine(I18N.Get("初始化失败，Smart Tool已运行!"), I18N.Get("警告"));
                 }
 
                 Application.EnableVisualStyles();
@@ -29,7 +30,10 @@ namespace SmartTools
                 Application.ApplicationExit += Application_ApplicationExit;
                 Application.ThreadException += Application_ThreadException;
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
-                Application.Run(new Main());
+
+                FormController.Instance().Start();
+
+                Application.Run();
             }
         }
 

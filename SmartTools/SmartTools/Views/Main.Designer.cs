@@ -30,13 +30,10 @@ namespace SmartTools.Views
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // notifyIcon
             // 
-            this.notifyIcon.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.NotifyIcon_MouseDoubleClick);
             // 
             // Main
             // 
@@ -45,7 +42,6 @@ namespace SmartTools.Views
             this.ClientSize = new System.Drawing.Size(1259, 779);
             this.Name = "Main";
             this.Text = "Smart Tool";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.ResumeLayout(false);
 
         }

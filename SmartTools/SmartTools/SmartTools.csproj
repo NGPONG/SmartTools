@@ -83,7 +83,7 @@
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Controller\FormController.cs" />
     <Compile Include="Model\Header.cs" />
-    <Compile Include="Utils\FormInitializationExtensions.cs" />
+    <Compile Include="Utils\Machine.cs" />
     <Compile Include="Utils\Win32API.cs" />
     <Compile Include="Views\ICustomForm.cs" />
     <Compile Include="Controller\HttpController.cs" />

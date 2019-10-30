@@ -1,7 +1,10 @@
 ﻿using MaterialSkin;
 using MaterialSkin.Controls;
 using SmartTools.Properties;
+using SmartTools.Utils;
+using SmartTools.Views;
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -11,6 +14,8 @@ namespace SmartTools.Controller
     {
         #region member
         public static MaterialSkinManager Themes;
+        private static FormController controller = null;
+        private static object locker = new object();
         #endregion
 
         #region private
@@ -18,10 +23,63 @@ namespace SmartTools.Controller
         private const int _offSizeWidth = 48;
         #endregion
 
-        public void Init(Form frm)
+        #region controls
+        private NotifyIcon _notifyIcon;
+        #endregion
+
+        private FormController() { }
+
+        public static FormController Instance()
+        {
+            if (controller == null)
+            {
+                lock (locker)
+                {
+                    if (controller == null)
+                    {
+                        controller = new FormController();
+                    }
+                }
+            }
+
+            return controller;
+        }
+
+        public void Start()
+        {
+            Init(new Main(FormController_FormClosed))
+                .InitNotify(false);
+        }
+
+        public FormController InitNotify(bool visible)
+        {
+            if (!visible)
+            {
+                if(this._notifyIcon == null)
+                    this._notifyIcon = new NotifyIcon();
+                this._notifyIcon.Visible = visible;
+                this._notifyIcon.Text = "Smart Tool ✔";
+                this._notifyIcon.Icon = Icon.FromHandle(Resources.Sleep.GetHicon());
+                this._notifyIcon.MouseClick -= this._notifyIcon_MouseClick;
+                this._notifyIcon.MouseClick += this._notifyIcon_MouseClick;
+            }
+            else
+            {
+                this._notifyIcon.Visible = visible;
+                this._notifyIcon.BalloonTipTitle = "Smart Tool ✔";
+                this._notifyIcon.BalloonTipText = "程序正在后台运行";
+                this._notifyIcon.ShowBalloonTip(1);
+            }
+
+            return this;
+        }
+
+        public FormController Init<T>(T frm)
+            where T : Form
         {
             frm.Icon = Icon.FromHandle(Resources.Active.GetHicon());
             frm.StartPosition = FormStartPosition.CenterScreen;
+
             if (Themes == null)
             {
                 Themes = MaterialSkinManager.Instance;
@@ -30,11 +88,17 @@ namespace SmartTools.Controller
                 Themes.ROBOTO_REGULAR_11 = new Font("微软雅黑", 11f);
                 Themes.ROBOTO_MEDIUM_11 = new Font("微软雅黑", 11f);
                 Themes.ColorScheme = new ColorScheme(Primary.Green600, Primary.Green700, Primary.Green200, Accent.Red100, TextShade.WHITE);
-                Themes.AddFormToManage(frm as MaterialForm);
             }
+            Themes.AddFormToManage(frm as MaterialForm);
+
+            frm.Show();
+            frm.Activate();
+            frm.BringToFront();
+
+            return this;
         }
 
-        public void ChangeColorScheme()
+        public FormController ChangeColorScheme()
         {
             _colorSchemeIndex++;
             if (_colorSchemeIndex > 6) _colorSchemeIndex = 0;
@@ -64,14 +128,44 @@ namespace SmartTools.Controller
                     Themes.ColorScheme = new ColorScheme(Primary.Teal600, Primary.Teal700, Primary.Purple200, Accent.Red100, TextShade.WHITE);
                     break;
             }
+
+            return this;
         }
 
-        public void SetDynamicSize<T>(T sender, Form frm)
+        public FormController SetDynamicSize<T>(T sender, Form frm)
             where T : Control
         {
             if (sender == null) throw new ArgumentNullException();
 
             frm.Width = sender.Width + _offSizeWidth;
+
+            return this;
         }
+
+        public FormController RePostion(Form frm)
+        {
+            frm.Left = (Screen.PrimaryScreen.Bounds.Width - frm.Width) / 2;
+            frm.Top = (Screen.PrimaryScreen.Bounds.Height - frm.Height) / 2;
+
+            return this;
+        }
+
+
+        #region Event Handler
+        private void _notifyIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                Init(new Main(FormController_FormClosed))
+                    .InitNotify(false);
+            }
+        }
+
+        private void FormController_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Machine.ReleaseMemory();
+            InitNotify(true);
+        }
+        #endregion
     }
 }
