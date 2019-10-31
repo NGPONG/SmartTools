@@ -3,17 +3,18 @@ using System.Diagnostics;
 
 namespace SmartTools.Utils
 {
-    public class Machine
+    public class Native
     {
-        static Process _CURRENTPROCESS = Process.GetCurrentProcess();
+        private static Process _CURRENTPROCESS = Process.GetCurrentProcess();
 
+        // 释放掉未使用的页面
+        // 使任务管理器中的数字看起来稍微好看点
+        // 然而并没有什么卵用，对于编程来说完全是胡说八道
+        // 但就用户体验来说
+        // 是能够得到一个很好的体验，这是一个出发点
         public static void ReleaseMemory()
         {
 #if !_CONSOLE
-            // 释放掉未使用的页面
-            // 使任务管理器中的数字看起来稍微好看点
-            // 然而并没有什么实际乱用，对于编程来说完全是胡说八道
-            // 但是就用户体验来说能够得到一个很好的体验
             GC.Collect(GC.MaxGeneration);
             GC.WaitForPendingFinalizers();
 
@@ -31,5 +32,6 @@ namespace SmartTools.Utils
             }
 #endif
         }
+
     }
 }

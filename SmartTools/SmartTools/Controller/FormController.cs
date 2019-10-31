@@ -163,7 +163,7 @@ namespace SmartTools.Controller
 
         private void FormController_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Machine.ReleaseMemory();
+            Native.ReleaseMemory();
             InitNotify(true);
         }
         #endregion
