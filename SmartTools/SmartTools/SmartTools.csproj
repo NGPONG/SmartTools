@@ -80,7 +80,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\Configuration.cs" />
+    <Compile Include="Model\Configuration.cs" />
+    <Compile Include="Controller\ConfigurationManager.cs" />
+    <Compile Include="Model\CustomAction.cs" />
+    <Compile Include="Model\Proxy.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Controller\FormController.cs" />
     <Compile Include="Model\Header.cs" />

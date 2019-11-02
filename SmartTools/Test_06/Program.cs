@@ -19,12 +19,14 @@ namespace Test_06
     {
         static void Main(string[] args)
         {
-            var obj = JsonConvert.DeserializeObject<dynamic>(Encoding.UTF8.GetString(Resources._1123));
-            var name = System.Globalization.CultureInfo.GetCultures(System.Globalization.CultureTypes.AllCultures);
-        }
-    }
+            Timer timer = new Timer((object state) =>
+            {
+                Console.WriteLine("哈哈哈");
+            }, null, 0, 10);
 
-    public interface Test
-    {
+            
+
+            Console.ReadLine();
+        }
     }
 }

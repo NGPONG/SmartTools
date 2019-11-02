@@ -3,6 +3,7 @@ using SmartTools.Utils;
 using SmartTools.Views;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace SmartTools
                 {
                     Console.WriteLine(I18N.Get("初始化失败，Smart Tool已运行!"), I18N.Get("警告"));
                 }
+
+                Directory.SetCurrentDirectory(Application.StartupPath);
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);

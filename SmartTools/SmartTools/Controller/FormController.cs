@@ -4,7 +4,6 @@ using SmartTools.Properties;
 using SmartTools.Utils;
 using SmartTools.Views;
 using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -13,7 +12,7 @@ namespace SmartTools.Controller
     public class FormController
     {
         #region member
-        public static MaterialSkinManager Themes;
+        private static MaterialSkinManager Themes;
         private static FormController controller = null;
         private static object locker = new object();
         #endregion

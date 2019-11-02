@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Helper\DESHelper.cs" />
     <Compile Include="Helper\EmailHelper.cs" />
+    <Compile Include="Helper\IOHelper.cs" />
     <Compile Include="Helper\LogHelper.cs" />
     <Compile Include="Helper\MD5Helper.cs" />
     <Compile Include="Enum\HttpStatus.cs" />
@@ -51,6 +52,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

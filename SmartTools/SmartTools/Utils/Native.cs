@@ -14,7 +14,6 @@ namespace SmartTools.Utils
         // 是能够得到一个很好的体验，这是一个出发点
         public static void ReleaseMemory()
         {
-#if !_CONSOLE
             GC.Collect(GC.MaxGeneration);
             GC.WaitForPendingFinalizers();
 
@@ -30,8 +29,39 @@ namespace SmartTools.Utils
                                                  (UIntPtr)0xFFFFFFFFFFFFFFFF,
                                                  (UIntPtr)0xFFFFFFFFFFFFFFFF);
             }
-#endif
         }
 
+        /// <summary>
+        /// 获取堆栈调用信息
+        /// https://www.cnblogs.com/huangtailang/p/4550177.html
+        /// </summary>
+        /// <returns></returns>
+        public static string GetStackTraceModelName()
+        {
+            try
+            {
+                StackTrace st = new StackTrace();
+                StackFrame[] sfs = st.GetFrames();
+                string _filterdName = "ResponseWrite,ResponseWriteError,";
+                string _fullName = string.Empty, _methodName = string.Empty;
+
+                for (int i = 1; i < sfs.Length; ++i)
+                {
+                    if (StackFrame.OFFSET_UNKNOWN == sfs[i].GetILOffset())
+                        break;
+                    _methodName = sfs[i].GetMethod().Name;
+                    //sfs[i].GetFileLineNumber();
+                    if (_filterdName.Contains(_methodName))
+                        continue;
+
+                    _fullName = _methodName + "()->" + _fullName;
+                }
+                return _fullName.TrimEnd('-', '>');
+            }
+            catch // can't track
+            {
+                throw;
+            }
+        }
     }
 }
