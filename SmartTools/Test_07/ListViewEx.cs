@@ -208,9 +208,10 @@ namespace CustomListView
 			if(item != null )
 			{
 				for(int index = 0; index < this.Columns.Count; index++)
-				{				
-					// We need to pass the 1 based index of the subitem.
-					subItemRect.top = index + 1; 
+				{
+                    // We need to pass the 1 based index of the subitem.
+                    // 因为 LVM_GETSUBITEMRECT 所获取的offset的left如果是第一列的话则为0，那么我们将无法计算当前鼠标具体是指向哪一列，故从第一列向后取
+                    subItemRect.top = index + 1;
 
 					// To get the boudning rectangle, as we are using the report view
 					subItemRect.left = Win32.LVIR_BOUNDS;
