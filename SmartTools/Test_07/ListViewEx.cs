@@ -375,11 +375,16 @@ namespace CustomListView
 			}
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnMouseUp ( MouseEventArgs e)
+        protected override void WndProc(ref Message m)
+        {
+            base.WndProc(ref m);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnMouseUp ( MouseEventArgs e)
 		{
 			try
 			{
