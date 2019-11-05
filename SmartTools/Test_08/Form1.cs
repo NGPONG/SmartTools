@@ -16,7 +16,13 @@ namespace Test_08
         {
             InitializeComponent();
 
-            var data = new[]
+            this.materialListView1.AddCustomItem(0, new TextBox())
+                                  .AddCustomItem(1, new TextBox())
+                                  .AddCustomItem(2, new TextBox())
+                                  .AddCustomItem(3, new TextBox())
+                                  .InitializeCustomControl();
+
+            var data = new []
             {
                 new []{"Lollipop", "392", "0.2", "0"},
                 new []{"KitKat", "518", "26.0", "7"},

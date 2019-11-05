@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -25,18 +26,16 @@ namespace MaterialSkin.Controls
 
         #region Member
         private const int ITEM_PADDING = 12;
+        private const int CONTROL_PADDING = ITEM_PADDING - 2;
         private bool IsShowing = false;
-        #endregion
-
-        #region SubControls
-        private TextBox textBox;
+        private Dictionary<int, Control> _dicCustomItem = new Dictionary<int, Control>();
+        private int _rowIndex = -1;
+        private int _columnIndex = -1;
         #endregion
 
         public MaterialListView()
         {
             // Initialize textbox & drowdownlist
-            InitializeComponent();
-
             HideSelection = true;
             GridLines = false;
             FullRowSelect = true;
@@ -77,33 +76,64 @@ namespace MaterialSkin.Controls
             // Showning Component When Mouse DoubleClick Item
             MouseDoubleClick += delegate (object sender, MouseEventArgs e)
             {
-                int rowIndex, columnIndex;
-                RECT subItem_RECT = this.GetSubItemRECT(e.Location, out rowIndex, out columnIndex);
+                RECT subItem_RECT = this.GetSubItemRECT(e.Location);
 
-                this.textBox.Location = columnIndex == 0 ? new Point(0 + ITEM_PADDING - 2, subItem_RECT.top + ITEM_PADDING - 2) : new Point(subItem_RECT.left + ITEM_PADDING - 2, subItem_RECT.top + ITEM_PADDING - 2);
-                this.textBox.Text = this.Items[rowIndex].SubItems[columnIndex].Text;
-                this.textBox.Visible = true;
-                this.IsShowing = true;
-                this.textBox.Focus();
+                try
+                {
+                    ShowCustomControl(_dicCustomItem[_columnIndex], subItem_RECT);
+                }
+                catch
+                {
+                    _rowIndex = -1;
+                    _columnIndex = -1;
+                }
             };
         }
 
-        private void InitializeComponent()
+        public void InitializeCustomControl()
         {
-            textBox = new TextBox();
-            textBox.Font = new Font("微软雅黑", 9f);
-            textBox.Visible = false;
-            textBox.KeyDown += delegate (object sender, KeyEventArgs e)
+            foreach (KeyValuePair<int, Control> item in this._dicCustomItem)
             {
-                if (e.KeyCode == Keys.Enter)
+                var control = item.Value;
+                control.Font = new Font("微软雅黑", 9f);
+                control.Visible = false;
+                if (control is TextBox)
                 {
-
-
-                    this.IsShowing = false;
-                    ((TextBox)sender).Visible = false;
+                    TextBox textBox = control as TextBox;
+                    textBox.KeyDown += delegate (object sender, KeyEventArgs e)
+                    {
+                        if (e.KeyCode == Keys.Enter)
+                        {
+                            // Save
+                            this.Items[_rowIndex].SubItems[_columnIndex].Text = textBox.Text;
+                            HideCustomControl(textBox);
+                        }
+                    };
+                    textBox.Leave += delegate (object sender, EventArgs e)
+                    {
+                        HideCustomControl(textBox);
+                    };
+                    this.Controls.Add(textBox);
                 }
-            };
-            this.Controls.Add(textBox);
+                else if (control is ComboBox)
+                {
+                    ComboBox combo = control as ComboBox;
+                    combo.SelectedIndexChanged += delegate (object sender, EventArgs e)
+                    {
+                        // Save
+                        this.Items[_rowIndex].SubItems[_columnIndex].Text = combo.Text;
+                        HideCustomControl(combo);
+                    };
+                    combo.KeyDown += delegate (object sender, KeyEventArgs e)
+                    {
+                        if (e.KeyCode == Keys.Enter)
+                        {
+                            // Save
+                            HideCustomControl(combo);
+                        }
+                    };
+                }
+            }
         }
 
         private const int WM_HSCROLL = 0x114;
@@ -226,11 +256,8 @@ namespace MaterialSkin.Controls
             }
         }
 
-        private RECT GetSubItemRECT(Point mouse_Point, out int rowIndex, out int columnIndex)
+        private RECT GetSubItemRECT(Point mouse_Point)
         {
-            rowIndex = -1;
-            columnIndex = -1;
-
             RECT subItem_RECT = new RECT();
             var activeItem = this.GetItemAt(mouse_Point.X, mouse_Point.Y);
             if (activeItem != null)
@@ -247,14 +274,14 @@ namespace MaterialSkin.Controls
                         // 仅针对第一列的内容
                         if (mouse_Point.X < subItem_RECT.left)
                         {
-                            rowIndex = activeItem.Index;
-                            columnIndex = i;
+                            _rowIndex = activeItem.Index;
+                            _columnIndex = i;
                             break;
                         }
                         else if (mouse_Point.X > subItem_RECT.left && mouse_Point.X < subItem_RECT.right)
                         {
-                            rowIndex = activeItem.Index;
-                            columnIndex = i + 1;
+                            _rowIndex = activeItem.Index;
+                            _columnIndex = i + 1;
                             break;
                         }
                     }
@@ -262,6 +289,34 @@ namespace MaterialSkin.Controls
             }
 
             return subItem_RECT;
+        }
+
+        private void ShowCustomControl(Control control, RECT rect)
+        {
+            if (this._rowIndex != -1 && this._columnIndex != -1)
+            {
+                control.Location = _columnIndex == 0 ? new Point(0 + CONTROL_PADDING, rect.top + CONTROL_PADDING) : new Point(rect.left + CONTROL_PADDING, rect.top + CONTROL_PADDING);
+                control.Text = this.Items[_rowIndex].SubItems[_columnIndex].Text;
+                control.Visible = true;
+                control.Width = control.Text.Length * 9;
+                // lock scroll ball first time
+                this.IsShowing = true;
+                control.Focus();
+            }
+        }
+
+        private void HideCustomControl(Control control)
+        {
+            this.IsShowing = false;
+            control.Visible = false;
+            _rowIndex = -1;
+            _columnIndex = -1;
+        }
+
+        public MaterialListView AddCustomItem(int index, Control control)
+        {
+            this._dicCustomItem[index] = control;
+            return this;
         }
 
         [DllImport("user32.dll", SetLastError = true)]
