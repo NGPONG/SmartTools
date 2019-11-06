@@ -5,7 +5,16 @@ namespace SmartTools.Utils
 {
     public class Native
     {
-        private static Process _CURRENTPROCESS = Process.GetCurrentProcess();
+        #region Internal
+        private static Process _CURRENTPROCESS = Process.GetCurrentProcess(); 
+        #endregion
+
+        #region Message
+        public const int WM_HSCROLL = 0x114;
+        public const int WM_VSCROLL = 0x115;
+        public const int WM_MOUSEWHEEL = 0x020A;
+        public const int WM_KEYDOWN = 0x0100; 
+        #endregion
 
         // 释放掉未使用的页面
         // 使任务管理器中的数字看起来稍微好看点
@@ -19,13 +28,13 @@ namespace SmartTools.Utils
 
             if (UIntPtr.Size == 4)
             {
-                Win32API.SetProcessWorkingSetSize(_CURRENTPROCESS.Handle,
+                Win32.SetProcessWorkingSetSize(_CURRENTPROCESS.Handle,
                                                  (UIntPtr)0xFFFFFFFF,
                                                  (UIntPtr)0xFFFFFFFF);
             }
             else if (UIntPtr.Size == 8)
             {
-                Win32API.SetProcessWorkingSetSize(_CURRENTPROCESS.Handle,
+                Win32.SetProcessWorkingSetSize(_CURRENTPROCESS.Handle,
                                                  (UIntPtr)0xFFFFFFFFFFFFFFFF,
                                                  (UIntPtr)0xFFFFFFFFFFFFFFFF);
             }

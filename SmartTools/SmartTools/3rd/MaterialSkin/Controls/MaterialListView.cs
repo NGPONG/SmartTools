@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartTools.Utils;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -146,17 +147,13 @@ namespace MaterialSkin.Controls
             }
         }
 
-        private const int WM_HSCROLL = 0x114;
-        private const int WM_VSCROLL = 0x115;
-        private const int WM_MOUSEWHEEL = 0x020A;
-        private const int WM_KEYDOWN = 0x0100;
         protected override void WndProc(ref Message m)
         {
             if (IsShowing
-                          && (m.Msg == WM_MOUSEWHEEL||
-                              m.Msg == WM_HSCROLL ||
-                              m.Msg == WM_VSCROLL ||
-                             (m.Msg == WM_KEYDOWN && (m.WParam == (IntPtr)40 || m.WParam == (IntPtr)35))))
+                          && (m.Msg == Native.WM_MOUSEWHEEL||
+                              m.Msg == Native.WM_HSCROLL ||
+                              m.Msg == Native.WM_VSCROLL ||
+                             (m.Msg == Native.WM_KEYDOWN && (m.WParam == (IntPtr)40 || m.WParam == (IntPtr)35))))
             {
                 // Tracking Scroll ball Active
             }
@@ -278,7 +275,7 @@ namespace MaterialSkin.Controls
                     subItem_RECT.top = i + 1;
                     subItem_RECT.left = 0;
 
-                    var success = SendMessage(this.Handle, (0x1000) + 56, activeItem.Index, ref subItem_RECT);
+                    var success = Win32.SendMessage(this.Handle, (0x1000) + 56, activeItem.Index, ref subItem_RECT);
                     if (success > 0)
                     {
                         // 仅针对第一列的内容
@@ -311,7 +308,7 @@ namespace MaterialSkin.Controls
                 ChangeCustomControlWidth(control);
                 // lock scroll ball first time
                 this.IsShowing = true;
-                SetFocus(control.Handle);
+                Win32.SetFocus(control.Handle);
             }
         }
 
@@ -361,11 +358,5 @@ namespace MaterialSkin.Controls
             this._dicCustomItem[index] = control;
             return this;
         }
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern int SendMessage(IntPtr hWnd, int messageID, int wParam, ref RECT lParam);
-
-        [DllImport("user32.dll")]
-        public static extern IntPtr SetFocus(IntPtr hWnd);
     }
 }

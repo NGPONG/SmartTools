@@ -17,12 +17,12 @@ namespace Test_08
             InitializeComponent();
 
             this.materialListView1.AddCustomItem(0, new TextBox())
-                                  .AddCustomItem(1, new TextBox())
+                                  .AddCustomItem(1, new ComboBox() { DataSource = new List<string>() { "392", "518", "237", "375", "408" } })
                                   .AddCustomItem(2, new TextBox())
                                   .AddCustomItem(3, new TextBox())
                                   .InitializeCustomControl();
 
-            var data = new []
+            var data = new[]
             {
                 new []{"Lollipop", "392", "0.2", "0"},
                 new []{"KitKat", "518", "26.0", "7"},
@@ -37,6 +37,11 @@ namespace Test_08
                 var item = new ListViewItem(version);
                 materialListView1.Items.Add(item);
             }
+        }
+
+        private void ComboBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+
         }
     }
 }

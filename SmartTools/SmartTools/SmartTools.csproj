@@ -40,10 +40,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MaterialSkin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>3rd\MaterialSkin.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -80,6 +76,52 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="3rd\MaterialSkin\Animations\AnimationDirection.cs" />
+    <Compile Include="3rd\MaterialSkin\Animations\AnimationManager.cs" />
+    <Compile Include="3rd\MaterialSkin\Animations\Animations.cs" />
+    <Compile Include="3rd\MaterialSkin\ColorScheme.cs" />
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialCheckbox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialContextMenuStrip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialDivider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialFlatButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialRaisedButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialSingleLineTextField.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialTabSelector.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="3rd\MaterialSkin\DrawHelper.cs" />
+    <Compile Include="3rd\MaterialSkin\IMaterialControl.cs" />
+    <Compile Include="3rd\MaterialSkin\MaterialSkinManager.cs" />
     <Compile Include="Model\Configuration.cs" />
     <Compile Include="Controller\ConfigurationManager.cs" />
     <Compile Include="Model\CustomAction.cs" />
@@ -88,7 +130,7 @@
     <Compile Include="Controller\FormController.cs" />
     <Compile Include="Model\Header.cs" />
     <Compile Include="Utils\Native.cs" />
-    <Compile Include="Utils\Win32API.cs" />
+    <Compile Include="Utils\Win32.cs" />
     <Compile Include="Views\ICustomForm.cs" />
     <Compile Include="Controller\HttpController.cs" />
     <Compile Include="Global.cs" />
@@ -114,6 +156,9 @@
     <Compile Include="Views\MessageBoxExt.Designer.cs">
       <DependentUpon>MessageBoxExt.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="3rd\MaterialSkin\Controls\MaterialForm.resx">
+      <DependentUpon>MaterialForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -145,6 +190,8 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <None Include="Resources\en-US.json" />
+    <None Include="Resources\Roboto-Medium.ttf" />
+    <None Include="Resources\Roboto-Regular.ttf" />
     <None Include="tessdata\chi_sim.traineddata">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -165,7 +212,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="3rd\MaterialSkin.dll" />
     <None Include="Resources\Sleep.png" />
     <None Include="Resources\Active.png" />
   </ItemGroup>

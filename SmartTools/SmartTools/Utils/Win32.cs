@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using static MaterialSkin.Controls.MaterialForm;
 
 namespace SmartTools.Utils
 {
-    public class Win32API
+    public class Win32
     {
         /// <summary>
         /// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-destroyicon
@@ -31,5 +32,24 @@ namespace SmartTools.Utils
         [DllImport("kernel32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetProcessWorkingSetSize(IntPtr process,UIntPtr minimumWorkingSetSize, UIntPtr maximumWorkingSetSize);
+
+        /// <summary>
+        /// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <param name="messageID"></param>
+        /// <param name="wParam"></param>
+        /// <param name="lParam"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern int SendMessage(IntPtr hWnd, int messageID, int wParam, ref RECT lParam);
+
+        /// <summary>
+        /// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setfocus
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetFocus(IntPtr hWnd);
     }
 }
