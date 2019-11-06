@@ -1,6 +1,9 @@
 ﻿using MaterialSkin.Controls;
+using SmartTools.Model;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using SmartTools.Utils.Extensions;
 
 namespace SmartTools.Views
 {
@@ -11,6 +14,29 @@ namespace SmartTools.Views
             InitializeComponent();
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             this.FormClosed += handler;
+
+            this.mlvData_Default.AddCustomItem(0, new TextBox())
+                                  .AddCustomItem(1, new ComboBox() { DataSource = new List<string>() { "庄", "闲", "和", "停" } })
+                                  .AddCustomItem(2, new TextBox())
+                                  .AddCustomItem(3, new TextBox())
+                                  .InitializeCustomControl();
+
+            var data = new List<CustomAction>()
+            {
+                new CustomAction(){ ActionIndex=1 , BetType=Bet.闲 , Delay=1000 , Money=100 },
+                new CustomAction(){ ActionIndex=2 , BetType=Bet.和 , Delay=1000 , Money=50 },
+                new CustomAction(){ ActionIndex=3 , BetType=Bet.闲 , Delay=1000 , Money=10 },
+                new CustomAction(){ ActionIndex=4 , BetType=Bet.庄 , Delay=1000 , Money=20 },
+                new CustomAction(){ ActionIndex=5 , BetType=Bet.闲 , Delay=1000 , Money=200 }
+            }
+            .ConvertByJagged();
+
+            //Add
+            foreach (string[] version in data)
+            {
+                var item = new ListViewItem(version);
+                mlvData_Default.Items.Add(item);
+            }
         }
 
         private void CbConfigLock_Default_CheckedChanged(object sender, EventArgs e)
@@ -64,6 +90,11 @@ namespace SmartTools.Views
                         timer.Change(1, System.Threading.Timeout.Infinite);
                 }, this, 1, System.Threading.Timeout.Infinite);
             }
+        }
+
+        private void LblMoney_Title_Default_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

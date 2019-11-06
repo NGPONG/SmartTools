@@ -32,6 +32,11 @@ namespace SmartTools.Views
         {
             this.tcMaster = new MaterialSkin.Controls.MaterialTabControl();
             this.lblMoney_Title_Default = new System.Windows.Forms.TabPage();
+            this.pnlProxy_Default = new System.Windows.Forms.Panel();
+            this.txtPort_Default = new MaterialSkin.Controls.MaterialSingleLineTextField();
+            this.txtIP_Default = new MaterialSkin.Controls.MaterialSingleLineTextField();
+            this.lblPort_Default = new MaterialSkin.Controls.MaterialLabel();
+            this.lblIP_Deafult = new MaterialSkin.Controls.MaterialLabel();
             this.lblUserProxy_Default = new MaterialSkin.Controls.MaterialLabel();
             this.cbUserProxy_Default = new MaterialSkin.Controls.MaterialCheckBox();
             this.lblMoneyWarning_Default = new MaterialSkin.Controls.MaterialLabel();
@@ -49,11 +54,11 @@ namespace SmartTools.Views
             this.tsMaster = new MaterialSkin.Controls.MaterialTabSelector();
             this.materialDivider1 = new MaterialSkin.Controls.MaterialDivider();
             this.btnStart = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.txtIP_Default = new MaterialSkin.Controls.MaterialSingleLineTextField();
-            this.lblIP_Deafult = new MaterialSkin.Controls.MaterialLabel();
-            this.txtPort_Default = new MaterialSkin.Controls.MaterialSingleLineTextField();
-            this.lblPort_Default = new MaterialSkin.Controls.MaterialLabel();
-            this.pnlProxy_Default = new System.Windows.Forms.Panel();
+            this.mlvData_Default = new MaterialSkin.Controls.MaterialListView();
+            this.chActionIndex_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chBetType_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chDelay_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chMoney_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tcMaster.SuspendLayout();
             this.lblMoney_Title_Default.SuspendLayout();
             this.pnlProxy_Default.SuspendLayout();
@@ -67,12 +72,13 @@ namespace SmartTools.Views
             this.tcMaster.MouseState = MaterialSkin.MouseState.HOVER;
             this.tcMaster.Name = "tcMaster";
             this.tcMaster.SelectedIndex = 0;
-            this.tcMaster.Size = new System.Drawing.Size(1236, 559);
+            this.tcMaster.Size = new System.Drawing.Size(906, 559);
             this.tcMaster.TabIndex = 0;
             // 
             // lblMoney_Title_Default
             // 
             this.lblMoney_Title_Default.BackColor = System.Drawing.Color.White;
+            this.lblMoney_Title_Default.Controls.Add(this.mlvData_Default);
             this.lblMoney_Title_Default.Controls.Add(this.pnlProxy_Default);
             this.lblMoney_Title_Default.Controls.Add(this.lblUserProxy_Default);
             this.lblMoney_Title_Default.Controls.Add(this.cbUserProxy_Default);
@@ -91,9 +97,81 @@ namespace SmartTools.Views
             this.lblMoney_Title_Default.Location = new System.Drawing.Point(4, 25);
             this.lblMoney_Title_Default.Name = "lblMoney_Title_Default";
             this.lblMoney_Title_Default.Padding = new System.Windows.Forms.Padding(3);
-            this.lblMoney_Title_Default.Size = new System.Drawing.Size(1228, 530);
+            this.lblMoney_Title_Default.Size = new System.Drawing.Size(898, 530);
             this.lblMoney_Title_Default.TabIndex = 0;
             this.lblMoney_Title_Default.Text = "默认配置";
+            this.lblMoney_Title_Default.Click += new System.EventHandler(this.LblMoney_Title_Default_Click);
+            // 
+            // pnlProxy_Default
+            // 
+            this.pnlProxy_Default.Controls.Add(this.txtPort_Default);
+            this.pnlProxy_Default.Controls.Add(this.txtIP_Default);
+            this.pnlProxy_Default.Controls.Add(this.lblPort_Default);
+            this.pnlProxy_Default.Controls.Add(this.lblIP_Deafult);
+            this.pnlProxy_Default.Location = new System.Drawing.Point(135, 167);
+            this.pnlProxy_Default.Name = "pnlProxy_Default";
+            this.pnlProxy_Default.Size = new System.Drawing.Size(1, 66);
+            this.pnlProxy_Default.TabIndex = 15;
+            // 
+            // txtPort_Default
+            // 
+            this.txtPort_Default.Depth = 0;
+            this.txtPort_Default.Hint = "";
+            this.txtPort_Default.Location = new System.Drawing.Point(292, 17);
+            this.txtPort_Default.MaxLength = 32767;
+            this.txtPort_Default.MouseState = MaterialSkin.MouseState.HOVER;
+            this.txtPort_Default.Name = "txtPort_Default";
+            this.txtPort_Default.PasswordChar = '\0';
+            this.txtPort_Default.SelectedText = "";
+            this.txtPort_Default.SelectionLength = 0;
+            this.txtPort_Default.SelectionStart = 0;
+            this.txtPort_Default.Size = new System.Drawing.Size(70, 28);
+            this.txtPort_Default.TabIndex = 11;
+            this.txtPort_Default.TabStop = false;
+            this.txtPort_Default.UseSystemPasswordChar = false;
+            // 
+            // txtIP_Default
+            // 
+            this.txtIP_Default.Depth = 0;
+            this.txtIP_Default.Hint = "";
+            this.txtIP_Default.Location = new System.Drawing.Point(39, 17);
+            this.txtIP_Default.MaxLength = 32767;
+            this.txtIP_Default.MouseState = MaterialSkin.MouseState.HOVER;
+            this.txtIP_Default.Name = "txtIP_Default";
+            this.txtIP_Default.PasswordChar = '\0';
+            this.txtIP_Default.SelectedText = "";
+            this.txtIP_Default.SelectionLength = 0;
+            this.txtIP_Default.SelectionStart = 0;
+            this.txtIP_Default.Size = new System.Drawing.Size(175, 28);
+            this.txtIP_Default.TabIndex = 9;
+            this.txtIP_Default.TabStop = false;
+            this.txtIP_Default.UseSystemPasswordChar = false;
+            // 
+            // lblPort_Default
+            // 
+            this.lblPort_Default.AutoSize = true;
+            this.lblPort_Default.Depth = 0;
+            this.lblPort_Default.Font = new System.Drawing.Font("Roboto", 11F);
+            this.lblPort_Default.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblPort_Default.Location = new System.Drawing.Point(243, 21);
+            this.lblPort_Default.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblPort_Default.Name = "lblPort_Default";
+            this.lblPort_Default.Size = new System.Drawing.Size(45, 24);
+            this.lblPort_Default.TabIndex = 10;
+            this.lblPort_Default.Text = "Port";
+            // 
+            // lblIP_Deafult
+            // 
+            this.lblIP_Deafult.AutoSize = true;
+            this.lblIP_Deafult.Depth = 0;
+            this.lblIP_Deafult.Font = new System.Drawing.Font("Roboto", 11F);
+            this.lblIP_Deafult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblIP_Deafult.Location = new System.Drawing.Point(9, 21);
+            this.lblIP_Deafult.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblIP_Deafult.Name = "lblIP_Deafult";
+            this.lblIP_Deafult.Size = new System.Drawing.Size(27, 24);
+            this.lblIP_Deafult.TabIndex = 8;
+            this.lblIP_Deafult.Text = "IP";
             // 
             // lblUserProxy_Default
             // 
@@ -303,7 +381,7 @@ namespace SmartTools.Views
             this.lblAuthentication_Default.AutoSize = true;
             this.lblAuthentication_Default.Depth = 0;
             this.lblAuthentication_Default.Font = new System.Drawing.Font("Roboto", 11F);
-            this.lblAuthentication_Default.ForeColor = System.Drawing.Color.Red;
+            this.lblAuthentication_Default.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.lblAuthentication_Default.Location = new System.Drawing.Point(6, 73);
             this.lblAuthentication_Default.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblAuthentication_Default.Name = "lblAuthentication_Default";
@@ -318,7 +396,7 @@ namespace SmartTools.Views
             this.tsMaster.Location = new System.Drawing.Point(-2, 64);
             this.tsMaster.MouseState = MaterialSkin.MouseState.HOVER;
             this.tsMaster.Name = "tsMaster";
-            this.tsMaster.Size = new System.Drawing.Size(1264, 64);
+            this.tsMaster.Size = new System.Drawing.Size(948, 64);
             this.tsMaster.TabIndex = 1;
             this.tsMaster.Text = "materialTabSelector1";
             // 
@@ -339,7 +417,7 @@ namespace SmartTools.Views
             this.btnStart.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnStart.Depth = 0;
             this.btnStart.Icon = null;
-            this.btnStart.Location = new System.Drawing.Point(1150, 735);
+            this.btnStart.Location = new System.Drawing.Point(820, 731);
             this.btnStart.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnStart.Name = "btnStart";
             this.btnStart.Primary = true;
@@ -348,83 +426,58 @@ namespace SmartTools.Views
             this.btnStart.Text = "开始启动";
             this.btnStart.UseVisualStyleBackColor = true;
             // 
-            // txtIP_Default
+            // mlvData_Default
             // 
-            this.txtIP_Default.Depth = 0;
-            this.txtIP_Default.Hint = "";
-            this.txtIP_Default.Location = new System.Drawing.Point(39, 17);
-            this.txtIP_Default.MaxLength = 32767;
-            this.txtIP_Default.MouseState = MaterialSkin.MouseState.HOVER;
-            this.txtIP_Default.Name = "txtIP_Default";
-            this.txtIP_Default.PasswordChar = '\0';
-            this.txtIP_Default.SelectedText = "";
-            this.txtIP_Default.SelectionLength = 0;
-            this.txtIP_Default.SelectionStart = 0;
-            this.txtIP_Default.Size = new System.Drawing.Size(175, 28);
-            this.txtIP_Default.TabIndex = 9;
-            this.txtIP_Default.TabStop = false;
-            this.txtIP_Default.UseSystemPasswordChar = false;
+            this.mlvData_Default.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.mlvData_Default.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chActionIndex_Default,
+            this.chBetType_Default,
+            this.chDelay_Default,
+            this.chMoney_Default});
+            this.mlvData_Default.Depth = 0;
+            this.mlvData_Default.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.mlvData_Default.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F);
+            this.mlvData_Default.FullRowSelect = true;
+            this.mlvData_Default.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.mlvData_Default.Location = new System.Drawing.Point(3, 239);
+            this.mlvData_Default.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.mlvData_Default.MouseState = MaterialSkin.MouseState.OUT;
+            this.mlvData_Default.Name = "mlvData_Default";
+            this.mlvData_Default.OwnerDraw = true;
+            this.mlvData_Default.Size = new System.Drawing.Size(892, 288);
+            this.mlvData_Default.TabIndex = 16;
+            this.mlvData_Default.UseCompatibleStateImageBehavior = false;
+            this.mlvData_Default.View = System.Windows.Forms.View.Details;
             // 
-            // lblIP_Deafult
+            // chActionIndex_Default
             // 
-            this.lblIP_Deafult.AutoSize = true;
-            this.lblIP_Deafult.Depth = 0;
-            this.lblIP_Deafult.Font = new System.Drawing.Font("Roboto", 11F);
-            this.lblIP_Deafult.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblIP_Deafult.Location = new System.Drawing.Point(9, 21);
-            this.lblIP_Deafult.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lblIP_Deafult.Name = "lblIP_Deafult";
-            this.lblIP_Deafult.Size = new System.Drawing.Size(27, 24);
-            this.lblIP_Deafult.TabIndex = 8;
-            this.lblIP_Deafult.Text = "IP";
+            this.chActionIndex_Default.Text = "动作次数";
+            this.chActionIndex_Default.Width = 200;
             // 
-            // txtPort_Default
+            // chBetType_Default
             // 
-            this.txtPort_Default.Depth = 0;
-            this.txtPort_Default.Hint = "";
-            this.txtPort_Default.Location = new System.Drawing.Point(292, 17);
-            this.txtPort_Default.MaxLength = 32767;
-            this.txtPort_Default.MouseState = MaterialSkin.MouseState.HOVER;
-            this.txtPort_Default.Name = "txtPort_Default";
-            this.txtPort_Default.PasswordChar = '\0';
-            this.txtPort_Default.SelectedText = "";
-            this.txtPort_Default.SelectionLength = 0;
-            this.txtPort_Default.SelectionStart = 0;
-            this.txtPort_Default.Size = new System.Drawing.Size(70, 28);
-            this.txtPort_Default.TabIndex = 11;
-            this.txtPort_Default.TabStop = false;
-            this.txtPort_Default.UseSystemPasswordChar = false;
+            this.chBetType_Default.Text = "动作类型";
+            this.chBetType_Default.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.chBetType_Default.Width = 200;
             // 
-            // lblPort_Default
+            // chDelay_Default
             // 
-            this.lblPort_Default.AutoSize = true;
-            this.lblPort_Default.Depth = 0;
-            this.lblPort_Default.Font = new System.Drawing.Font("Roboto", 11F);
-            this.lblPort_Default.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblPort_Default.Location = new System.Drawing.Point(243, 21);
-            this.lblPort_Default.MouseState = MaterialSkin.MouseState.HOVER;
-            this.lblPort_Default.Name = "lblPort_Default";
-            this.lblPort_Default.Size = new System.Drawing.Size(45, 24);
-            this.lblPort_Default.TabIndex = 10;
-            this.lblPort_Default.Text = "Port";
+            this.chDelay_Default.Text = "延迟时间";
+            this.chDelay_Default.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.chDelay_Default.Width = 200;
             // 
-            // pnlProxy_Default
+            // chMoney_Default
             // 
-            this.pnlProxy_Default.Controls.Add(this.txtPort_Default);
-            this.pnlProxy_Default.Controls.Add(this.txtIP_Default);
-            this.pnlProxy_Default.Controls.Add(this.lblPort_Default);
-            this.pnlProxy_Default.Controls.Add(this.lblIP_Deafult);
-            this.pnlProxy_Default.Location = new System.Drawing.Point(135, 167);
-            this.pnlProxy_Default.Name = "pnlProxy_Default";
-            this.pnlProxy_Default.Size = new System.Drawing.Size(1, 66);
-            this.pnlProxy_Default.TabIndex = 15;
+            this.chMoney_Default.Text = "金额";
+            this.chMoney_Default.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.chMoney_Default.Width = 150;
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1259, 779);
+            this.ClientSize = new System.Drawing.Size(937, 779);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.materialDivider1);
             this.Controls.Add(this.tsMaster);
@@ -468,5 +521,10 @@ namespace SmartTools.Views
         private MaterialSkin.Controls.MaterialSingleLineTextField txtIP_Default;
         private MaterialSkin.Controls.MaterialLabel lblIP_Deafult;
         private System.Windows.Forms.Panel pnlProxy_Default;
+        private MaterialSkin.Controls.MaterialListView mlvData_Default;
+        private System.Windows.Forms.ColumnHeader chActionIndex_Default;
+        private System.Windows.Forms.ColumnHeader chBetType_Default;
+        private System.Windows.Forms.ColumnHeader chDelay_Default;
+        private System.Windows.Forms.ColumnHeader chMoney_Default;
     }
 }

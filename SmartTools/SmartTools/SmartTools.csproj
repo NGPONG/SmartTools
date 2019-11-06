@@ -129,6 +129,7 @@
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Controller\FormController.cs" />
     <Compile Include="Model\Header.cs" />
+    <Compile Include="Utils\Extensions\EnumerableExtension.cs" />
     <Compile Include="Utils\Native.cs" />
     <Compile Include="Utils\Win32.cs" />
     <Compile Include="Views\ICustomForm.cs" />
@@ -218,7 +219,6 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

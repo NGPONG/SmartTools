@@ -29,7 +29,7 @@ namespace MaterialSkin.Controls
 
         #region Member
         private const int ITEM_PADDING = 12;
-        private const int CONTROL_PADDING = ITEM_PADDING - 4;
+        private const int CONTROL_PADDING = ITEM_PADDING + 2;
         private bool IsShowing = false;
         private Dictionary<int, Control> _dicCustomItem = new Dictionary<int, Control>();
         private int _rowIndex = -1;
@@ -83,6 +83,9 @@ namespace MaterialSkin.Controls
 
                 try
                 {
+                    if (_columnIndex == 0)
+                        throw new Exception("default");
+
                     ShowCustomControl(_dicCustomItem[_columnIndex], subItem_RECT);
                 }
                 catch
@@ -150,7 +153,7 @@ namespace MaterialSkin.Controls
         protected override void WndProc(ref Message m)
         {
             if (IsShowing
-                          && (m.Msg == Native.WM_MOUSEWHEEL||
+                          && (m.Msg == Native.WM_MOUSEWHEEL ||
                               m.Msg == Native.WM_HSCROLL ||
                               m.Msg == Native.WM_VSCROLL ||
                              (m.Msg == Native.WM_KEYDOWN && (m.WParam == (IntPtr)40 || m.WParam == (IntPtr)35))))
@@ -267,6 +270,7 @@ namespace MaterialSkin.Controls
         {
             RECT subItem_RECT = new RECT();
             var activeItem = this.GetItemAt(mouse_Point.X, mouse_Point.Y);
+
             if (activeItem != null)
             {
                 for (int i = 0; i < this.Columns.Count; i++)

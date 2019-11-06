@@ -28,7 +28,7 @@ namespace MaterialSkin.Controls
 
         #region Member
         private const int ITEM_PADDING = 12;
-        private const int CONTROL_PADDING = ITEM_PADDING - 4;
+        private const int CONTROL_PADDING = ITEM_PADDING + 10;
         private bool IsShowing = false;
         private Dictionary<int, Control> _dicCustomItem = new Dictionary<int, Control>();
         private int _rowIndex = -1;

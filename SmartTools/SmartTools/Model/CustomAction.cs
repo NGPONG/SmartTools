@@ -12,8 +12,28 @@ namespace SmartTools.Model
         public Bet BetType { get; set; }
         public int Delay { get; set; }
         public double Money { get; set; }
-        public double StopMoney { get; set; }
-        public bool IsCycle { get; set; }
+
+        public string GetBetString()
+        {
+            string strReturn = string.Empty;
+            switch (this.BetType)
+            {
+                case Bet.庄:
+                    strReturn = "庄";
+                    break;
+                case Bet.闲:
+                    strReturn = "闲";
+                    break;
+                case  Bet.和:
+                    strReturn = "和";
+                    break;
+                case Bet.停:
+                    strReturn = "停";
+                    break;
+            }
+
+            return strReturn;
+        }
     }
 
     public enum Bet
