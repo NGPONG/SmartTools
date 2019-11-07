@@ -53,29 +53,32 @@ namespace MaterialSkin.Controls
             //TODO: should only redraw when the hovered line changed, this to reduce unnecessary redraws
             MouseLocation = new Point(-1, -1);
             MouseState = MouseState.OUT;
-            MouseEnter += delegate
-            {
-                MouseState = MouseState.HOVER;
-            };
-            MouseLeave += delegate
-            {
-                MouseState = MouseState.OUT;
-                MouseLocation = new Point(-1, -1);
-                HoveredItem = null;
-                Invalidate();
-            };
+            #region Deprecated
+            //MouseEnter += delegate
+            //{
+            //    MouseState = MouseState.HOVER;
+            //};
+            //MouseLeave += delegate
+            //{
+            //    MouseState = MouseState.OUT;
+            //    MouseLocation = new Point(-1, -1);
+            //    HoveredItem = null;
+            //    Invalidate();
+            //}; 
+            //MouseMove += delegate (object sender, MouseEventArgs args)
+            //{
+            //    MouseLocation = args.Location;
+            //    var currentHoveredItem = this.GetItemAt(MouseLocation.X, MouseLocation.Y);
+            //    if (HoveredItem != currentHoveredItem)
+            //    {
+            //        HoveredItem = currentHoveredItem;
+            //        Invalidate();
+            //    }
+            //};
+            #endregion
             MouseDown += delegate { MouseState = MouseState.DOWN; };
             MouseUp += delegate { MouseState = MouseState.HOVER; };
-            MouseMove += delegate (object sender, MouseEventArgs args)
-            {
-                MouseLocation = args.Location;
-                var currentHoveredItem = this.GetItemAt(MouseLocation.X, MouseLocation.Y);
-                if (HoveredItem != currentHoveredItem)
-                {
-                    HoveredItem = currentHoveredItem;
-                    Invalidate();
-                }
-            };
+
             // Showning Component When Mouse DoubleClick Item
             MouseDoubleClick += delegate (object sender, MouseEventArgs e)
             {
@@ -202,24 +205,12 @@ namespace MaterialSkin.Controls
 
             foreach (ListViewItem.ListViewSubItem subItem in e.Item.SubItems)
             {
-                if (subItem.Text == "点击删除")
-                {
-                    Font font = new Font("微软雅黑", 7f, FontStyle.Underline);
-                    g.DrawString(subItem.Text,
-                                 font,
-                                 new SolidBrush(Color.FromArgb(0, 0, 255)),
-                                 new Rectangle(subItem.Bounds.X + ITEM_PADDING, ITEM_PADDING, subItem.Bounds.Width - 2 * ITEM_PADDING, subItem.Bounds.Height - 2 * ITEM_PADDING),
-                                 getStringFormat());
-                }
-                else
-                {
-                    //Draw default text
-                    g.DrawString(subItem.Text,
-                                 SkinManager.ROBOTO_MEDIUM_10,
-                                 SkinManager.GetPrimaryTextBrush(),
-                                 new Rectangle(subItem.Bounds.X + ITEM_PADDING, ITEM_PADDING, subItem.Bounds.Width - 2 * ITEM_PADDING, subItem.Bounds.Height - 2 * ITEM_PADDING),
-                                 getStringFormat());
-                }
+                //Draw default text
+                g.DrawString(subItem.Text,
+                             SkinManager.ROBOTO_MEDIUM_10,
+                             SkinManager.GetPrimaryTextBrush(),
+                             new Rectangle(subItem.Bounds.X + ITEM_PADDING, ITEM_PADDING, subItem.Bounds.Width - 2 * ITEM_PADDING, subItem.Bounds.Height - 2 * ITEM_PADDING),
+                             getStringFormat());
             }
 
             e.Graphics.DrawImage((Image)b.Clone(), new Point(0, e.Item.Bounds.Location.Y));

@@ -98,9 +98,10 @@ namespace SmartTools.Views
             }
         }
 
-        private void LblMoney_Title_Default_Click(object sender, EventArgs e)
+        private void MlvData_Default_MouseMove(object sender, MouseEventArgs e)
         {
-
+            this.Text = $"X:{e.X.ToString()}  Y:{e.Y.ToString()}";
+            this.Refresh();
         }
     }
 }

@@ -10,17 +10,25 @@ namespace SmartTools.Utils
         #endregion
 
         #region Message
-        public const int WM_HSCROLL = 0x114;
-        public const int WM_VSCROLL = 0x115;
-        public const int WM_MOUSEWHEEL = 0x020A;
-        public const int WM_KEYDOWN = 0x0100; 
+        // WINDOWS
+        public const int WM_HSCROLL                 = 0x114;
+        public const int WM_VSCROLL                 = 0x115;
+        public const int WM_MOUSEWHEEL              = 0x020A;
+        public const int WM_KEYDOWN                 = 0x0100;
+        public const int WM_PAINT                   = 0x000F;
+
+        // LISTVIEW
+        public const int LVM_FIRST                  = 0x1000;
+        public const int LVM_GETCOLUMNORDERARRAY    = Native.LVM_FIRST + 59;
         #endregion
 
         // 释放掉未使用的页面
         // 使任务管理器中的数字看起来稍微好看点
-        // 然而并没有什么卵用，对于编程来说完全是胡说八道
+        // 然而并没有什么卵用
+        // 对于编程来说完全是胡说八道
         // 但就用户体验来说
-        // 是能够得到一个很好的体验，这是一个出发点
+        // 是能够得到一个很好的体验
+        // 这是一个出发点
         public static void ReleaseMemory()
         {
             GC.Collect(GC.MaxGeneration);
@@ -29,14 +37,14 @@ namespace SmartTools.Utils
             if (UIntPtr.Size == 4)
             {
                 Win32.SetProcessWorkingSetSize(_CURRENTPROCESS.Handle,
-                                                 (UIntPtr)0xFFFFFFFF,
-                                                 (UIntPtr)0xFFFFFFFF);
+                                              (UIntPtr)0xFFFFFFFF,
+                                              (UIntPtr)0xFFFFFFFF);
             }
             else if (UIntPtr.Size == 8)
             {
                 Win32.SetProcessWorkingSetSize(_CURRENTPROCESS.Handle,
-                                                 (UIntPtr)0xFFFFFFFFFFFFFFFF,
-                                                 (UIntPtr)0xFFFFFFFFFFFFFFFF);
+                                              (UIntPtr)0xFFFFFFFFFFFFFFFF,
+                                              (UIntPtr)0xFFFFFFFFFFFFFFFF);
             }
         }
 
