@@ -32,6 +32,11 @@ namespace SmartTools.Views
         {
             this.tcMaster = new MaterialSkin.Controls.MaterialTabControl();
             this.lblMoney_Title_Default = new System.Windows.Forms.TabPage();
+            this.mlvData_Default = new MaterialSkin.Controls.MaterialListView();
+            this.chActionIndex_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chBetType_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chDelay_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chMoney_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pnlProxy_Default = new System.Windows.Forms.Panel();
             this.txtPort_Default = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.txtIP_Default = new MaterialSkin.Controls.MaterialSingleLineTextField();
@@ -54,11 +59,7 @@ namespace SmartTools.Views
             this.tsMaster = new MaterialSkin.Controls.MaterialTabSelector();
             this.materialDivider1 = new MaterialSkin.Controls.MaterialDivider();
             this.btnStart = new MaterialSkin.Controls.MaterialRaisedButton();
-            this.mlvData_Default = new MaterialSkin.Controls.MaterialListView();
-            this.chActionIndex_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chBetType_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chDelay_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chMoney_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.chAction_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.tcMaster.SuspendLayout();
             this.lblMoney_Title_Default.SuspendLayout();
             this.pnlProxy_Default.SuspendLayout();
@@ -101,6 +102,53 @@ namespace SmartTools.Views
             this.lblMoney_Title_Default.TabIndex = 0;
             this.lblMoney_Title_Default.Text = "默认配置";
             this.lblMoney_Title_Default.Click += new System.EventHandler(this.LblMoney_Title_Default_Click);
+            // 
+            // mlvData_Default
+            // 
+            this.mlvData_Default.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.mlvData_Default.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.chActionIndex_Default,
+            this.chBetType_Default,
+            this.chDelay_Default,
+            this.chMoney_Default,
+            this.chAction_Default});
+            this.mlvData_Default.Depth = 0;
+            this.mlvData_Default.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.mlvData_Default.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F);
+            this.mlvData_Default.FullRowSelect = true;
+            this.mlvData_Default.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.mlvData_Default.Location = new System.Drawing.Point(3, 239);
+            this.mlvData_Default.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.mlvData_Default.MouseState = MaterialSkin.MouseState.OUT;
+            this.mlvData_Default.Name = "mlvData_Default";
+            this.mlvData_Default.OwnerDraw = true;
+            this.mlvData_Default.Size = new System.Drawing.Size(892, 288);
+            this.mlvData_Default.TabIndex = 16;
+            this.mlvData_Default.UseCompatibleStateImageBehavior = false;
+            this.mlvData_Default.View = System.Windows.Forms.View.Details;
+            // 
+            // chActionIndex_Default
+            // 
+            this.chActionIndex_Default.Text = "动作次数";
+            this.chActionIndex_Default.Width = 200;
+            // 
+            // chBetType_Default
+            // 
+            this.chBetType_Default.Text = "动作类型";
+            this.chBetType_Default.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.chBetType_Default.Width = 200;
+            // 
+            // chDelay_Default
+            // 
+            this.chDelay_Default.Text = "延迟时间";
+            this.chDelay_Default.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.chDelay_Default.Width = 200;
+            // 
+            // chMoney_Default
+            // 
+            this.chMoney_Default.Text = "金额";
+            this.chMoney_Default.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.chMoney_Default.Width = 150;
             // 
             // pnlProxy_Default
             // 
@@ -426,51 +474,10 @@ namespace SmartTools.Views
             this.btnStart.Text = "开始启动";
             this.btnStart.UseVisualStyleBackColor = true;
             // 
-            // mlvData_Default
+            // chAction_Default
             // 
-            this.mlvData_Default.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.mlvData_Default.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.chActionIndex_Default,
-            this.chBetType_Default,
-            this.chDelay_Default,
-            this.chMoney_Default});
-            this.mlvData_Default.Depth = 0;
-            this.mlvData_Default.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.mlvData_Default.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F);
-            this.mlvData_Default.FullRowSelect = true;
-            this.mlvData_Default.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.mlvData_Default.Location = new System.Drawing.Point(3, 239);
-            this.mlvData_Default.MouseLocation = new System.Drawing.Point(-1, -1);
-            this.mlvData_Default.MouseState = MaterialSkin.MouseState.OUT;
-            this.mlvData_Default.Name = "mlvData_Default";
-            this.mlvData_Default.OwnerDraw = true;
-            this.mlvData_Default.Size = new System.Drawing.Size(892, 288);
-            this.mlvData_Default.TabIndex = 16;
-            this.mlvData_Default.UseCompatibleStateImageBehavior = false;
-            this.mlvData_Default.View = System.Windows.Forms.View.Details;
-            // 
-            // chActionIndex_Default
-            // 
-            this.chActionIndex_Default.Text = "动作次数";
-            this.chActionIndex_Default.Width = 200;
-            // 
-            // chBetType_Default
-            // 
-            this.chBetType_Default.Text = "动作类型";
-            this.chBetType_Default.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.chBetType_Default.Width = 200;
-            // 
-            // chDelay_Default
-            // 
-            this.chDelay_Default.Text = "延迟时间";
-            this.chDelay_Default.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.chDelay_Default.Width = 200;
-            // 
-            // chMoney_Default
-            // 
-            this.chMoney_Default.Text = "金额";
-            this.chMoney_Default.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.chMoney_Default.Width = 150;
+            this.chAction_Default.Text = "操作";
+            this.chAction_Default.Width = 105;
             // 
             // Main
             // 
@@ -526,5 +533,6 @@ namespace SmartTools.Views
         private System.Windows.Forms.ColumnHeader chBetType_Default;
         private System.Windows.Forms.ColumnHeader chDelay_Default;
         private System.Windows.Forms.ColumnHeader chMoney_Default;
+        private System.Windows.Forms.ColumnHeader chAction_Default;
     }
 }

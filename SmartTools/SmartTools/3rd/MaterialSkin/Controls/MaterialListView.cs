@@ -29,7 +29,7 @@ namespace MaterialSkin.Controls
 
         #region Member
         private const int ITEM_PADDING = 12;
-        private const int CONTROL_PADDING = ITEM_PADDING + 2;
+        private const int CONTROL_PADDING = ITEM_PADDING + 1;
         private bool IsShowing = false;
         private Dictionary<int, Control> _dicCustomItem = new Dictionary<int, Control>();
         private int _rowIndex = -1;
@@ -202,10 +202,24 @@ namespace MaterialSkin.Controls
 
             foreach (ListViewItem.ListViewSubItem subItem in e.Item.SubItems)
             {
-                //Draw text
-                g.DrawString(subItem.Text, SkinManager.ROBOTO_MEDIUM_10, SkinManager.GetPrimaryTextBrush(),
+                if (subItem.Text == "点击删除")
+                {
+                    Font font = new Font("微软雅黑", 7f, FontStyle.Underline);
+                    g.DrawString(subItem.Text,
+                                 font,
+                                 new SolidBrush(Color.FromArgb(0, 0, 255)),
                                  new Rectangle(subItem.Bounds.X + ITEM_PADDING, ITEM_PADDING, subItem.Bounds.Width - 2 * ITEM_PADDING, subItem.Bounds.Height - 2 * ITEM_PADDING),
                                  getStringFormat());
+                }
+                else
+                {
+                    //Draw default text
+                    g.DrawString(subItem.Text,
+                                 SkinManager.ROBOTO_MEDIUM_10,
+                                 SkinManager.GetPrimaryTextBrush(),
+                                 new Rectangle(subItem.Bounds.X + ITEM_PADDING, ITEM_PADDING, subItem.Bounds.Width - 2 * ITEM_PADDING, subItem.Bounds.Height - 2 * ITEM_PADDING),
+                                 getStringFormat());
+                }
             }
 
             e.Graphics.DrawImage((Image)b.Clone(), new Point(0, e.Item.Bounds.Location.Y));

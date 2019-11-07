@@ -18,7 +18,7 @@ namespace SmartTools.Utils.Extensions
             //init
             for (int i = 0; i < data.Length; i++)
             {
-                data[i] = new string[4];
+                data[i] = new string[5];
             }
 
             int index = 0;
@@ -28,6 +28,7 @@ namespace SmartTools.Utils.Extensions
                 data[index][1] = item.GetBetString();
                 data[index][2] = item.Delay.ToString();
                 data[index][3] = item.Money.ToString();
+                data[index][4] = item.Action;
                 index ++;
             }
 
