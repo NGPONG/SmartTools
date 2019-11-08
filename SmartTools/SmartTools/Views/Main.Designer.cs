@@ -134,7 +134,6 @@ namespace SmartTools.Views
             this.mlvData_Default.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F);
             this.mlvData_Default.FullRowSelect = true;
             this.mlvData_Default.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.mlvData_Default.LabelEdit = true;
             this.mlvData_Default.Location = new System.Drawing.Point(3, 239);
             this.mlvData_Default.MouseLocation = new System.Drawing.Point(-1, -1);
             this.mlvData_Default.MouseState = MaterialSkin.MouseState.OUT;

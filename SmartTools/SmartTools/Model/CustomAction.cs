@@ -12,7 +12,6 @@ namespace SmartTools.Model
         public Bet BetType { get; set; }
         public int Delay { get; set; }
         public double Money { get; set; }
-        public string Action { get; set; }
 
         public string GetBetString()
         {

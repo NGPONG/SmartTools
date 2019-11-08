@@ -15,25 +15,25 @@ namespace SmartTools.Views
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             this.FormClosed += handler;
 
-            this.mlvData_Default.AddCustomItem(0, new TextBox())
-                                  .AddCustomItem(1, new ComboBox() { DataSource = new List<string>() { "庄", "闲", "和", "停" } })
-                                  .AddCustomItem(2, new TextBox())
-                                  .AddCustomItem(3, new TextBox())
-                                  .InitializeCustomControl();
+            this.mlvData_Default.AddEditControl(0, new TextBox())
+                                .AddEditControl(1, new ComboBox() { DataSource = new List<string>() { "庄", "闲", "和", "停" } })
+                                .AddEditControl(2, new TextBox())
+                                .AddEditControl(3, new TextBox())
+                                .InitializeCustomControl();
 
             var data = new List<CustomAction>()
             {
-                new CustomAction(){ ActionIndex=1 , BetType=Bet.闲 , Delay=1000 , Money=100 , Action = "点击删除" },
-                new CustomAction(){ ActionIndex=2 , BetType=Bet.和 , Delay=1000 , Money=50 , Action = "点击删除"},
-                new CustomAction(){ ActionIndex=3 , BetType=Bet.闲 , Delay=1000 , Money=10, Action = "点击删除" },
-                new CustomAction(){ ActionIndex=4 , BetType=Bet.庄 , Delay=1000 , Money=20 , Action = "点击删除"},
-                new CustomAction(){ ActionIndex=5 , BetType=Bet.闲 , Delay=1000 , Money=200 , Action = "点击删除"},
-                new CustomAction(){ ActionIndex=6 , BetType=Bet.闲 , Delay=1000 , Money=200 , Action = "点击删除"},
-                new CustomAction(){ ActionIndex=7 , BetType=Bet.闲 , Delay=1000 , Money=200 , Action = "点击删除"},
-                new CustomAction(){ ActionIndex=8 , BetType=Bet.闲 , Delay=1000 , Money=200 , Action = "点击删除"},
-                new CustomAction(){ ActionIndex=9 , BetType=Bet.闲 , Delay=1000 , Money=200 , Action = "点击删除"},
-                new CustomAction(){ ActionIndex=10 , BetType=Bet.闲 , Delay=1000 , Money=200 , Action = "点击删除"},
-                new CustomAction(){ ActionIndex=11 , BetType=Bet.闲 , Delay=1000 , Money=200 , Action = "点击删除"}
+                new CustomAction(){ ActionIndex=1 , BetType=Bet.闲 , Delay=1000 , Money=100  },
+                new CustomAction(){ ActionIndex=2 , BetType=Bet.和 , Delay=1000 , Money=50   },
+                new CustomAction(){ ActionIndex=3 , BetType=Bet.闲 , Delay=1000 , Money=10   },
+                new CustomAction(){ ActionIndex=4 , BetType=Bet.庄 , Delay=1000 , Money=20   },
+                new CustomAction(){ ActionIndex=5 , BetType=Bet.闲 , Delay=1000 , Money=200  },
+                new CustomAction(){ ActionIndex=6 , BetType=Bet.闲 , Delay=1000 , Money=200  },
+                new CustomAction(){ ActionIndex=7 , BetType=Bet.闲 , Delay=1000 , Money=200  },
+                new CustomAction(){ ActionIndex=8 , BetType=Bet.闲 , Delay=1000 , Money=200  },
+                new CustomAction(){ ActionIndex=9 , BetType=Bet.闲 , Delay=1000 , Money=200  },
+                new CustomAction(){ ActionIndex=10 , BetType=Bet.闲 , Delay=1000 , Money=200 },
+                new CustomAction(){ ActionIndex=11 , BetType=Bet.闲 , Delay=1000 , Money=200 }
             }
             .ConvertByJagged();
 

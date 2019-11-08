@@ -31,7 +31,7 @@ namespace MaterialSkin.Controls
         private const int ITEM_PADDING = 12;
         private const int CONTROL_PADDING = ITEM_PADDING + 1;
         private bool IsShowing = false;
-        private Dictionary<int, Control> _dicCustomItem = new Dictionary<int, Control>();
+        private Dictionary<int, Control> _dicEditItem = new Dictionary<int, Control>();
         private int _rowIndex = -1;
         private int _columnIndex = -1;
         #endregion
@@ -89,7 +89,7 @@ namespace MaterialSkin.Controls
                     if (_columnIndex == 0)
                         throw new Exception("default");
 
-                    ShowCustomControl(_dicCustomItem[_columnIndex], subItem_RECT);
+                    ShowEditControl(_dicEditItem[_columnIndex], subItem_RECT);
                 }
                 catch
                 {
@@ -101,7 +101,7 @@ namespace MaterialSkin.Controls
 
         public void InitializeCustomControl()
         {
-            foreach (KeyValuePair<int, Control> item in this._dicCustomItem)
+            foreach (KeyValuePair<int, Control> item in this._dicEditItem)
             {
                 var control = item.Value;
                 control.Font = new Font("微软雅黑", 9f);
@@ -115,16 +115,16 @@ namespace MaterialSkin.Controls
                         {
                             // Save
                             this.Items[_rowIndex].SubItems[_columnIndex].Text = textBox.Text;
-                            HideCustomControl(textBox);
+                            HideEditControl(textBox);
                         }
                         else if (e.KeyCode == Keys.Escape)
                         {
-                            HideCustomControl(textBox);
+                            HideEditControl(textBox);
                         }
                     };
                     textBox.Leave += delegate (object sender, EventArgs e)
                     {
-                        HideCustomControl(textBox);
+                        HideEditControl(textBox);
                     };
                     this.Controls.Add(textBox);
                 }
@@ -141,12 +141,12 @@ namespace MaterialSkin.Controls
                     {
                         if (e.KeyCode == Keys.Escape)
                         {
-                            HideCustomControl(combo);
+                            HideEditControl(combo);
                         }
                     };
                     combo.Leave += delegate (object sender, EventArgs e)
                     {
-                        HideCustomControl(combo);
+                        HideEditControl(combo);
                     };
                     this.Controls.Add(combo);
                 }
@@ -307,21 +307,21 @@ namespace MaterialSkin.Controls
             return subItem_RECT;
         }
 
-        private void ShowCustomControl(Control control, RECT rect)
+        private void ShowEditControl(Control control, RECT rect)
         {
             if (this._rowIndex != -1 && this._columnIndex != -1)
             {
                 control.Location = _columnIndex == 0 ? new Point(0 + CONTROL_PADDING, rect.top + CONTROL_PADDING) : new Point(rect.left + CONTROL_PADDING, rect.top + CONTROL_PADDING);
                 control.Text = this.Items[_rowIndex].SubItems[_columnIndex].Text;
                 control.Show();
-                ChangeCustomControlWidth(control);
+                ChangeEditControlWidth(control);
                 // lock scroll ball first time
                 this.IsShowing = true;
                 Win32.SetFocus(control.Handle);
             }
         }
 
-        private void ChangeCustomControlWidth(Control control)
+        private void ChangeEditControlWidth(Control control)
         {
             if (control is TextBox)
             {
@@ -353,7 +353,7 @@ namespace MaterialSkin.Controls
                                                 TextFormatFlags.TextBoxControl).Width + 25;
             }
         }
-        private void HideCustomControl(Control control)
+        private void HideEditControl(Control control)
         {
             this.IsShowing = false;
             control.Text = string.Empty;
@@ -362,9 +362,9 @@ namespace MaterialSkin.Controls
             _columnIndex = -1;
         }
 
-        public MaterialListView AddCustomItem(int index, Control control)
+        public MaterialListView AddEditControl(int index, Control control)
         {
-            this._dicCustomItem[index] = control;
+            this._dicEditItem[index] = control;
             return this;
         }
     }
