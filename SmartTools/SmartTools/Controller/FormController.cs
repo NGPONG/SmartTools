@@ -83,7 +83,7 @@ namespace SmartTools.Controller
             {
                 Themes = MaterialSkinManager.Instance;
                 Themes.ROBOTO_MEDIUM_12 = new Font("微软雅黑", 12f);
-                Themes.ROBOTO_MEDIUM_10 = new Font("微软雅黑", 10f);
+                Themes.ROBOTO_MEDIUM_10 = new Font("微软雅黑", 11f);
                 Themes.ROBOTO_REGULAR_11 = new Font("微软雅黑", 11f);
                 Themes.ROBOTO_MEDIUM_11 = new Font("微软雅黑", 11f);
                 Themes.ColorScheme = new ColorScheme(Primary.Green600, Primary.Green700, Primary.Green200, Accent.Red100, TextShade.WHITE);

@@ -43,6 +43,12 @@ namespace SmartTools.Views
                 var item = new ListViewItem(version);
                 mlvData_Default.Items.Add(item);
             }
+
+            this.mlvData_Default.AddEmbeddedButton(delegate (object sender, EventArgs args)
+            {
+                this.mlvData_Default.RemoveActiveItem(sender as MaterialFlatButton);
+            });
+
         }
 
         private void CbConfigLock_Default_CheckedChanged(object sender, EventArgs e)
@@ -96,12 +102,6 @@ namespace SmartTools.Views
                         timer.Change(1, System.Threading.Timeout.Infinite);
                 }, this, 1, System.Threading.Timeout.Infinite);
             }
-        }
-
-        private void MlvData_Default_MouseMove(object sender, MouseEventArgs e)
-        {
-            this.Text = $"X:{e.X.ToString()}  Y:{e.Y.ToString()}";
-            this.Refresh();
         }
     }
 }

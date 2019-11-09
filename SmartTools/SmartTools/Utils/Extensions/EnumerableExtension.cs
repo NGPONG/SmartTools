@@ -28,7 +28,6 @@ namespace SmartTools.Utils.Extensions
                 data[index][1] = item.GetBetString();
                 data[index][2] = item.Delay.ToString();
                 data[index][3] = item.Money.ToString();
-                data[index][4] = "点击删除";
                 index ++;
             }
 

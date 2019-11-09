@@ -32,13 +32,11 @@ namespace SmartTools.Views
         {
             this.tcMaster = new MaterialSkin.Controls.MaterialTabControl();
             this.lblMoney_Title_Default = new System.Windows.Forms.TabPage();
-            this.materialFlatButton1 = new MaterialSkin.Controls.MaterialFlatButton();
             this.mlvData_Default = new MaterialSkin.Controls.MaterialListView();
             this.chActionIndex_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chBetType_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chDelay_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chMoney_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chAction_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.pnlProxy_Default = new System.Windows.Forms.Panel();
             this.txtPort_Default = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.txtIP_Default = new MaterialSkin.Controls.MaterialSingleLineTextField();
@@ -80,7 +78,6 @@ namespace SmartTools.Views
             // lblMoney_Title_Default
             // 
             this.lblMoney_Title_Default.BackColor = System.Drawing.Color.White;
-            this.lblMoney_Title_Default.Controls.Add(this.materialFlatButton1);
             this.lblMoney_Title_Default.Controls.Add(this.mlvData_Default);
             this.lblMoney_Title_Default.Controls.Add(this.pnlProxy_Default);
             this.lblMoney_Title_Default.Controls.Add(this.lblUserProxy_Default);
@@ -104,36 +101,21 @@ namespace SmartTools.Views
             this.lblMoney_Title_Default.TabIndex = 0;
             this.lblMoney_Title_Default.Text = "默认配置";
             // 
-            // materialFlatButton1
-            // 
-            this.materialFlatButton1.AutoSize = true;
-            this.materialFlatButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialFlatButton1.Depth = 0;
-            this.materialFlatButton1.Icon = null;
-            this.materialFlatButton1.Location = new System.Drawing.Point(758, 330);
-            this.materialFlatButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialFlatButton1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialFlatButton1.Name = "materialFlatButton1";
-            this.materialFlatButton1.Primary = false;
-            this.materialFlatButton1.Size = new System.Drawing.Size(98, 36);
-            this.materialFlatButton1.TabIndex = 17;
-            this.materialFlatButton1.Text = "点击删除";
-            this.materialFlatButton1.UseVisualStyleBackColor = true;
-            // 
             // mlvData_Default
             // 
+            this.mlvData_Default.BackColor = System.Drawing.Color.White;
             this.mlvData_Default.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.mlvData_Default.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chActionIndex_Default,
             this.chBetType_Default,
             this.chDelay_Default,
-            this.chMoney_Default,
-            this.chAction_Default});
+            this.chMoney_Default});
             this.mlvData_Default.Depth = 0;
             this.mlvData_Default.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.mlvData_Default.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F);
             this.mlvData_Default.FullRowSelect = true;
             this.mlvData_Default.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.mlvData_Default.HoveredItem = null;
             this.mlvData_Default.Location = new System.Drawing.Point(3, 239);
             this.mlvData_Default.MouseLocation = new System.Drawing.Point(-1, -1);
             this.mlvData_Default.MouseState = MaterialSkin.MouseState.OUT;
@@ -143,7 +125,6 @@ namespace SmartTools.Views
             this.mlvData_Default.TabIndex = 16;
             this.mlvData_Default.UseCompatibleStateImageBehavior = false;
             this.mlvData_Default.View = System.Windows.Forms.View.Details;
-            this.mlvData_Default.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MlvData_Default_MouseMove);
             // 
             // chActionIndex_Default
             // 
@@ -167,11 +148,6 @@ namespace SmartTools.Views
             this.chMoney_Default.Text = "金额";
             this.chMoney_Default.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.chMoney_Default.Width = 150;
-            // 
-            // chAction_Default
-            // 
-            this.chAction_Default.Text = "操作";
-            this.chAction_Default.Width = 105;
             // 
             // pnlProxy_Default
             // 
@@ -367,6 +343,7 @@ namespace SmartTools.Views
             // 
             this.btnHow_Default.AutoSize = true;
             this.btnHow_Default.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnHow_Default.CustomFont = new System.Drawing.Font("Roboto", 10F);
             this.btnHow_Default.Depth = 0;
             this.btnHow_Default.Icon = null;
             this.btnHow_Default.Location = new System.Drawing.Point(612, 67);
@@ -551,7 +528,5 @@ namespace SmartTools.Views
         private System.Windows.Forms.ColumnHeader chBetType_Default;
         private System.Windows.Forms.ColumnHeader chDelay_Default;
         private System.Windows.Forms.ColumnHeader chMoney_Default;
-        private System.Windows.Forms.ColumnHeader chAction_Default;
-        private MaterialSkin.Controls.MaterialFlatButton materialFlatButton1;
     }
 }

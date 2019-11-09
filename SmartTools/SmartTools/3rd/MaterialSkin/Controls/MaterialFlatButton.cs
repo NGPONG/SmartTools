@@ -18,6 +18,26 @@ namespace MaterialSkin.Controls
         public MouseState MouseState { get; set; }
         public bool Primary { get; set; }
 
+        private Font _customFont = null;
+        public Font CustomFont
+        {
+            get
+            {
+                if (_customFont == null)
+                {
+                    return SkinManager.ROBOTO_MEDIUM_10;
+                }
+                else
+                {
+                    return _customFont;
+                }
+            }
+            set
+            {
+                _customFont = value;
+            }
+        }
+
         private readonly AnimationManager _animationManager;
         private readonly AnimationManager _hoverAnimationManager;
 
@@ -136,7 +156,7 @@ namespace MaterialSkin.Controls
 
             g.DrawString(
                 Text.ToUpper(),
-                SkinManager.ROBOTO_MEDIUM_10,
+                this.CustomFont,
                 Enabled ? (Primary ? SkinManager.ColorScheme.PrimaryBrush : SkinManager.GetPrimaryTextBrush()) : SkinManager.GetFlatButtonDisabledTextBrush(),
                 textRect,
                 new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center }

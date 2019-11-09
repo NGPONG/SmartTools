@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Linq;
 using static MaterialSkin.Controls.MaterialForm;
 
 namespace MaterialSkin.Controls
@@ -25,16 +26,26 @@ namespace MaterialSkin.Controls
         [Browsable(false)]
         public Point MouseLocation { get; set; }
         [Browsable(false)]
-        private ListViewItem HoveredItem { get; set; }
+        public ListViewItem HoveredItem { get; set; }
 
         #region Member
         private const int ITEM_PADDING = 12;
         private const int CONTROL_PADDING = ITEM_PADDING + 1;
+
         private bool IsShowing = false;
-        private Dictionary<int, Control> _dicEditItem = new Dictionary<int, Control>();
-        private int _rowIndex = -1;
-        private int _columnIndex = -1;
+
+        private Dictionary<int, Control> _dynamicControls = new Dictionary<int, Control>();
+        private int _dynamicRowIndex = -1;
+        private int _dynamicColumnIndex = -1;
+
+        private Dictionary<SubItem, Control> _embeddedControls = new Dictionary<SubItem, Control>();
         #endregion
+
+        public class SubItem
+        {
+            public int Column { get; set; }
+            public int Row { get; set; }
+        }
 
         public MaterialListView()
         {
@@ -53,6 +64,8 @@ namespace MaterialSkin.Controls
             //TODO: should only redraw when the hovered line changed, this to reduce unnecessary redraws
             MouseLocation = new Point(-1, -1);
             MouseState = MouseState.OUT;
+            MouseDown += delegate { MouseState = MouseState.DOWN; };
+            MouseUp += delegate { MouseState = MouseState.HOVER; };
             #region Deprecated
             //MouseEnter += delegate
             //{
@@ -65,19 +78,15 @@ namespace MaterialSkin.Controls
             //    HoveredItem = null;
             //    Invalidate();
             //}; 
-            //MouseMove += delegate (object sender, MouseEventArgs args)
-            //{
-            //    MouseLocation = args.Location;
-            //    var currentHoveredItem = this.GetItemAt(MouseLocation.X, MouseLocation.Y);
-            //    if (HoveredItem != currentHoveredItem)
-            //    {
-            //        HoveredItem = currentHoveredItem;
-            //        Invalidate();
-            //    }
-            //};
             #endregion
-            MouseDown += delegate { MouseState = MouseState.DOWN; };
-            MouseUp += delegate { MouseState = MouseState.HOVER; };
+            MouseMove += delegate (object sender, MouseEventArgs args)
+            {
+                var currentHoveredItem = this.GetItemAt(args.Location.X, args.Location.Y);
+                if (HoveredItem != currentHoveredItem)
+                {
+                    HoveredItem = currentHoveredItem;
+                }
+            };
 
             // Showning Component When Mouse DoubleClick Item
             MouseDoubleClick += delegate (object sender, MouseEventArgs e)
@@ -86,22 +95,22 @@ namespace MaterialSkin.Controls
 
                 try
                 {
-                    if (_columnIndex == 0)
+                    if (_dynamicColumnIndex == 0)
                         throw new Exception("default");
 
-                    ShowEditControl(_dicEditItem[_columnIndex], subItem_RECT);
+                    ShowEditControl(_dynamicControls[_dynamicColumnIndex], subItem_RECT);
                 }
                 catch
                 {
-                    _rowIndex = -1;
-                    _columnIndex = -1;
+                    _dynamicRowIndex = -1;
+                    _dynamicColumnIndex = -1;
                 }
             };
         }
 
-        public void InitializeCustomControl()
+        public MaterialListView InitializeCustomControl()
         {
-            foreach (KeyValuePair<int, Control> item in this._dicEditItem)
+            foreach (KeyValuePair<int, Control> item in this._dynamicControls)
             {
                 var control = item.Value;
                 control.Font = new Font("微软雅黑", 9f);
@@ -114,7 +123,7 @@ namespace MaterialSkin.Controls
                         if (e.KeyCode == Keys.Enter)
                         {
                             // Save
-                            this.Items[_rowIndex].SubItems[_columnIndex].Text = textBox.Text;
+                            this.Items[_dynamicRowIndex].SubItems[_dynamicColumnIndex].Text = textBox.Text;
                             HideEditControl(textBox);
                         }
                         else if (e.KeyCode == Keys.Escape)
@@ -135,7 +144,7 @@ namespace MaterialSkin.Controls
                     combo.SelectedIndexChanged += delegate (object sender, EventArgs e)
                     {
                         if (combo.SelectedIndex > -1)
-                            this.Items[_rowIndex].SubItems[_columnIndex].Text = combo.Text; // Save
+                            this.Items[_dynamicRowIndex].SubItems[_dynamicColumnIndex].Text = combo.Text; // Save
                     };
                     combo.KeyDown += delegate (object sender, KeyEventArgs e)
                     {
@@ -151,6 +160,8 @@ namespace MaterialSkin.Controls
                     this.Controls.Add(combo);
                 }
             }
+
+            return this;
         }
 
         protected override void WndProc(ref Message m)
@@ -165,6 +176,39 @@ namespace MaterialSkin.Controls
             }
             else
             {
+                // Change control postion when windows painting
+                if (m.Msg == Native.WM_PAINT)
+                {
+                    if (View == View.Details)
+                    {
+                        foreach (KeyValuePair<SubItem, Control> item in _embeddedControls)
+                        {
+                            Rectangle rc = Rectangle.Empty;
+                            try
+                            {
+                                rc = this.GetSubItemBounds(this.Items[item.Key.Row], item.Key.Column);
+                            }
+                            catch
+                            {
+                                base.WndProc(ref m);
+                                return;
+                            }
+
+                            if ((this.HeaderStyle != ColumnHeaderStyle.None) &&
+                                (rc.Top < this.Font.Height)) // Control overlaps ColumnHeader
+                            {
+                                item.Value.Visible = false;
+                                continue;
+                            }
+                            else
+                            {
+                                item.Value.Visible = true;
+                            }
+
+                            item.Value.Bounds = rc;
+                        }
+                    }
+                }
                 base.WndProc(ref m);
             }
         }
@@ -175,7 +219,7 @@ namespace MaterialSkin.Controls
             e.Graphics.DrawString(e.Header.Text,
                 new Font("微软雅黑", 9f),
                 SkinManager.GetPrimaryTextBrush(),
-                new Rectangle(e.Bounds.X + ITEM_PADDING, e.Bounds.Y + ITEM_PADDING, e.Bounds.Width - ITEM_PADDING * 2, e.Bounds.Height - ITEM_PADDING * 2),
+                new Rectangle(e.Header.Text == "操作"? e.Bounds.X + ITEM_PADDING + 25 : e.Bounds.X + ITEM_PADDING, e.Bounds.Y + ITEM_PADDING, e.Bounds.Width - ITEM_PADDING * 2, e.Bounds.Height - ITEM_PADDING * 2),
                 getStringFormat());
         }
 
@@ -290,14 +334,14 @@ namespace MaterialSkin.Controls
                         // 仅针对第一列的内容
                         if (mouse_Point.X < subItem_RECT.left)
                         {
-                            _rowIndex = activeItem.Index;
-                            _columnIndex = i;
+                            _dynamicRowIndex = activeItem.Index;
+                            _dynamicColumnIndex = i;
                             break;
                         }
                         else if (mouse_Point.X > subItem_RECT.left && mouse_Point.X < subItem_RECT.right)
                         {
-                            _rowIndex = activeItem.Index;
-                            _columnIndex = i + 1;
+                            _dynamicRowIndex = activeItem.Index;
+                            _dynamicColumnIndex = i + 1;
                             break;
                         }
                     }
@@ -309,10 +353,10 @@ namespace MaterialSkin.Controls
 
         private void ShowEditControl(Control control, RECT rect)
         {
-            if (this._rowIndex != -1 && this._columnIndex != -1)
+            if (this._dynamicRowIndex != -1 && this._dynamicColumnIndex != -1)
             {
-                control.Location = _columnIndex == 0 ? new Point(0 + CONTROL_PADDING, rect.top + CONTROL_PADDING) : new Point(rect.left + CONTROL_PADDING, rect.top + CONTROL_PADDING);
-                control.Text = this.Items[_rowIndex].SubItems[_columnIndex].Text;
+                control.Location = _dynamicColumnIndex == 0 ? new Point(0 + CONTROL_PADDING, rect.top + CONTROL_PADDING) : new Point(rect.left + CONTROL_PADDING, rect.top + CONTROL_PADDING);
+                control.Text = this.Items[_dynamicRowIndex].SubItems[_dynamicColumnIndex].Text;
                 control.Show();
                 ChangeEditControlWidth(control);
                 // lock scroll ball first time
@@ -348,9 +392,9 @@ namespace MaterialSkin.Controls
                     }
                 }
                 control.Width = TextRenderer.MeasureText(data == null ? control.Text : maxValue,
-                                                control.Font,
-                                                Size.Empty,
-                                                TextFormatFlags.TextBoxControl).Width + 25;
+                                                         control.Font,
+                                                         Size.Empty,
+                                                         TextFormatFlags.TextBoxControl).Width + 25;
             }
         }
         private void HideEditControl(Control control)
@@ -358,13 +402,123 @@ namespace MaterialSkin.Controls
             this.IsShowing = false;
             control.Text = string.Empty;
             control.Hide();
-            _rowIndex = -1;
-            _columnIndex = -1;
+            _dynamicRowIndex = -1;
+            _dynamicColumnIndex = -1;
         }
 
-        public MaterialListView AddEditControl(int index, Control control)
+        public MaterialListView AddEmbeddedButton(EventHandler handler, string columnName = "chAction_Default")
         {
-            this._dicEditItem[index] = control;
+            // Add Column header.
+            ColumnHeader header = new ColumnHeader();
+            header.Name = columnName;
+            header.Text = "操作";
+            header.Width = 105;
+            header.TextAlign = HorizontalAlignment.Center;
+            this.Columns.Add(header);
+
+            for (int i = 0; i < this.Items.Count; i++)
+            {
+                MaterialFlatButton button = new MaterialFlatButton();
+                button.CustomFont = new Font("微软雅黑", 9f);
+                button.Text = "点击删除";
+                button.Primary = true;
+                button.Click += handler;
+                button.Tag = i;
+
+                SubItem subItem = new SubItem() { Column = header.Index, Row = i };
+                _embeddedControls[subItem] = button;
+
+                this.Controls.Add(button);
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Retrieve the order in which columns dispaly
+        /// </summary>
+        /// <returns></returns>
+        private int[] GetColumnOrder()
+        {
+            IntPtr lPar = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(int)) * Columns.Count);
+
+            IntPtr res = Win32.SendMessage(Handle, Native.LVM_GETCOLUMNORDERARRAY, new IntPtr(Columns.Count), lPar);
+            if (res.ToInt32() == 0)
+            {
+                // Something went wrong
+                Marshal.FreeHGlobal(lPar);
+                return null;
+            }
+
+            int[] order = new int[Columns.Count];
+            Marshal.Copy(lPar, order, 0, Columns.Count);
+
+            Marshal.FreeHGlobal(lPar);
+
+            return order;
+        }
+
+        /// <summary>
+        /// Retrieve the bounds of a ListViewSubItem
+        /// </summary>
+        /// <param name="Item">The Item containing the SubItem</param>
+        /// <param name="SubItem">Index of the SubItem</param>
+        /// <returns>Subitem's bounds</returns>
+        protected Rectangle GetSubItemBounds(ListViewItem Item, int SubItem)
+        {
+            Rectangle subItemRect = Rectangle.Empty;
+
+            int[] order = GetColumnOrder();
+            if (order == null) // No Columns
+                return subItemRect;
+
+            // Retrieve the bounds of the entire ListViewItem (all subitems)
+            Rectangle lviBounds = Item.GetBounds(ItemBoundsPortion.Entire);
+            int subItemX = lviBounds.Left;
+
+            // Calculate the X position of the SubItem.
+            // Because the columns can be reordered we have to use Columns[order[i]] instead of Columns[i] !
+            int i;
+            for (i = 0; i < order.Length; i++)
+            {
+                ColumnHeader col = this.Columns[order[i]];
+                if (col.Index == SubItem)
+                    break;
+                subItemX += col.Width;
+            }
+
+            subItemRect = new Rectangle(subItemX + (CONTROL_PADDING - 5), lviBounds.Top + (CONTROL_PADDING - 4), this.Columns[order[i]].Width, lviBounds.Height);
+
+            return subItemRect;
+        }
+
+        public void RemoveActiveItem(MaterialFlatButton button)
+        {
+            int activeButtonIndex = Convert.ToInt32(button.Tag);
+
+            var subItems = _embeddedControls.Select(kvp => kvp.Key).ToList();
+            var buttons = _embeddedControls.Select(kvp => kvp.Value).ToList();
+            var resetSubItem = subItems.Where(s => s.Row == activeButtonIndex).FirstOrDefault();
+
+            this._embeddedControls.Remove(resetSubItem);
+
+            for (int i = 0; i < subItems.Count; i++)
+            {
+                if (subItems[i].Row == activeButtonIndex)
+                    this.Controls.Remove(buttons[i]);
+                if (subItems[i].Row > activeButtonIndex)
+                {
+                    subItems[i].Row--;
+                    buttons[i].Tag = Convert.ToInt32(buttons[i].Tag) - 1;
+                }
+            }
+
+            this.Items.Remove(this.Items[activeButtonIndex]);
+        }
+
+        public MaterialListView AddEditControl(int columnIndex, Control control)
+        {
+            this._dynamicControls[columnIndex] = control;
             return this;
         }
     }

@@ -41,8 +41,19 @@ namespace SmartTools.Utils
         /// <param name="wParam"></param>
         /// <param name="lParam"></param>
         /// <returns></returns>
-        [DllImport("user32.dll", SetLastError = true)]
+        [DllImport("user32.dll", SetLastError = true, EntryPoint = "SendMessage")]
         public static extern int SendMessage(IntPtr hWnd, int messageID, int wParam, ref RECT lParam);
+
+        /// <summary>
+        /// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-sendmessage
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <param name="msg"></param>
+        /// <param name="wPar"></param>
+        /// <param name="lPar"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll", SetLastError = true, EntryPoint = "SendMessage")]
+        public static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wPar, IntPtr lPar);
 
         /// <summary>
         /// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setfocus

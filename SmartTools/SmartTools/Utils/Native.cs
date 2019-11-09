@@ -49,6 +49,29 @@ namespace SmartTools.Utils
         }
 
         /// <summary>
+        /// 深拷贝对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="oModel"></param>
+        /// <returns></returns>
+        public T CloneModel<T>(T oModel)
+        {
+            var oRes = default(T);
+            var oType = typeof(T);
+
+            oRes = (T)Activator.CreateInstance(oType);
+
+            var lstPro = oType.GetProperties();
+            foreach (var oPro in lstPro)
+            {
+                var oValue = oPro.GetValue(oModel);
+                oPro.SetValue(oRes, oValue);
+            }
+
+            return oRes;
+        }
+
+        /// <summary>
         /// 获取堆栈调用信息
         /// https://www.cnblogs.com/huangtailang/p/4550177.html
         /// </summary>
