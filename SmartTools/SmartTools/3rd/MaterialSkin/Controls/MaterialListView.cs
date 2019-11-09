@@ -219,7 +219,7 @@ namespace MaterialSkin.Controls
             e.Graphics.DrawString(e.Header.Text,
                 new Font("微软雅黑", 9f),
                 SkinManager.GetPrimaryTextBrush(),
-                new Rectangle(e.Header.Text == "操作"? e.Bounds.X + ITEM_PADDING + 25 : e.Bounds.X + ITEM_PADDING, e.Bounds.Y + ITEM_PADDING, e.Bounds.Width - ITEM_PADDING * 2, e.Bounds.Height - ITEM_PADDING * 2),
+                new Rectangle(e.Header.Text == "操作" ? e.Bounds.X + ITEM_PADDING + 25 : e.Bounds.X + ITEM_PADDING, e.Bounds.Y + ITEM_PADDING, e.Bounds.Width - ITEM_PADDING * 2, e.Bounds.Height - ITEM_PADDING * 2),
                 getStringFormat());
         }
 
@@ -406,15 +406,23 @@ namespace MaterialSkin.Controls
             _dynamicColumnIndex = -1;
         }
 
-        public MaterialListView AddEmbeddedButton(EventHandler handler, string columnName = "chAction_Default")
+        public MaterialListView AddEmbeddedButtons(EventHandler handler, string columnName = "chAction_Default")
         {
-            // Add Column header.
-            ColumnHeader header = new ColumnHeader();
-            header.Name = columnName;
-            header.Text = "操作";
-            header.Width = 105;
-            header.TextAlign = HorizontalAlignment.Center;
-            this.Columns.Add(header);
+            ColumnHeader header;
+            if (!this.Columns.ContainsKey(columnName))
+            {
+                // Add Column header.
+                header = new ColumnHeader();
+                header.Name = columnName;
+                header.Text = "操作";
+                header.Width = 105;
+                header.TextAlign = HorizontalAlignment.Center;
+                this.Columns.Add(header);
+            }
+            else
+            {
+                header = this.Columns[columnName];
+            }
 
             for (int i = 0; i < this.Items.Count; i++)
             {
@@ -423,7 +431,6 @@ namespace MaterialSkin.Controls
                 button.Text = "点击删除";
                 button.Primary = true;
                 button.Click += handler;
-                button.Tag = i;
 
                 SubItem subItem = new SubItem() { Column = header.Index, Row = i };
                 _embeddedControls[subItem] = button;
@@ -431,6 +438,21 @@ namespace MaterialSkin.Controls
                 this.Controls.Add(button);
             }
 
+            return this;
+        }
+
+        public MaterialListView AddEmbeddedButton(EventHandler handler, string columnName = "chAction_Default")
+        {
+            MaterialFlatButton button = new MaterialFlatButton();
+            button.CustomFont = new Font("微软雅黑", 9f);
+            button.Text = "点击删除";
+            button.Primary = true;
+            button.Click += handler;
+
+            SubItem subItem = new SubItem() { Column = 4, Row = this.Items.Count == 0 ? 0 : this.Items.Count - 1 };
+            _embeddedControls[subItem] = button;
+
+            this.Controls.Add(button);
             return this;
         }
 
@@ -494,26 +516,21 @@ namespace MaterialSkin.Controls
 
         public void RemoveActiveItem(MaterialFlatButton button)
         {
-            int activeButtonIndex = Convert.ToInt32(button.Tag);
-
+            var activeSubItem = _embeddedControls.Where(kvp => kvp.Value == button).FirstOrDefault().Key;
             var subItems = _embeddedControls.Select(kvp => kvp.Key).ToList();
-            var buttons = _embeddedControls.Select(kvp => kvp.Value).ToList();
-            var resetSubItem = subItems.Where(s => s.Row == activeButtonIndex).FirstOrDefault();
 
-            this._embeddedControls.Remove(resetSubItem);
+            this.Controls.Remove(this._embeddedControls[activeSubItem]);
+            this._embeddedControls.Remove(activeSubItem);
 
             for (int i = 0; i < subItems.Count; i++)
             {
-                if (subItems[i].Row == activeButtonIndex)
-                    this.Controls.Remove(buttons[i]);
-                if (subItems[i].Row > activeButtonIndex)
+                if (subItems[i].Row > activeSubItem.Row)
                 {
                     subItems[i].Row--;
-                    buttons[i].Tag = Convert.ToInt32(buttons[i].Tag) - 1;
                 }
             }
 
-            this.Items.Remove(this.Items[activeButtonIndex]);
+            this.Items.Remove(this.Items[activeSubItem.Row]);
         }
 
         public MaterialListView AddEditControl(int columnIndex, Control control)

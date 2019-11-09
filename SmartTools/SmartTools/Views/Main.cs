@@ -44,7 +44,7 @@ namespace SmartTools.Views
                 mlvData_Default.Items.Add(item);
             }
 
-            this.mlvData_Default.AddEmbeddedButton(delegate (object sender, EventArgs args)
+            this.mlvData_Default.AddEmbeddedButtons(delegate (object sender, EventArgs args)
             {
                 this.mlvData_Default.RemoveActiveItem(sender as MaterialFlatButton);
             });
@@ -65,9 +65,6 @@ namespace SmartTools.Views
 
         private void CbUserProxy_Default_CheckedChanged(object sender, EventArgs e)
         {
-            // 66   1
-
-            // 393
             if (this.cbUserProxy_Default.Checked)
             {
                 System.Threading.Timer timer = null;
@@ -75,8 +72,6 @@ namespace SmartTools.Views
                 {
                     Action action = () =>
                     {
-                        //if (this.pnlProxy_Default.Height >= 15)
-                        //    this.pnlProxy_Default.Visible = true;
                         this.pnlProxy_Default.Width += 9;
                     };
                     pnlProxy_Default.BeginInvoke(action);
@@ -92,8 +87,6 @@ namespace SmartTools.Views
                 {
                     Action action = () =>
                     {
-                        //if (this.pnlProxy_Default.Height <= 15)
-                        //    this.pnlProxy_Default.Visible = false;
                         this.pnlProxy_Default.Width -= 9;
                     };
                     pnlProxy_Default.BeginInvoke(action);
@@ -102,6 +95,36 @@ namespace SmartTools.Views
                         timer.Change(1, System.Threading.Timeout.Infinite);
                 }, this, 1, System.Threading.Timeout.Infinite);
             }
+        }
+
+        private void BtnAdd_Click(object sender, EventArgs e)
+        {
+            int lastItemIndex;
+            if (this.mlvData_Default.Items.Count == 0)
+            {
+                lastItemIndex = 1;
+            }
+            else
+            {
+                var lastListViewItem = this.mlvData_Default.Items[mlvData_Default.Items.Count - 1];
+                lastItemIndex = Convert.ToInt32(lastListViewItem.SubItems[0].Text);
+            }
+
+            var actionNew = CustomAction.GetDefaultCustomAction();
+            actionNew.ActionIndex = this.mlvData_Default.Items.Count == 0 ? lastItemIndex : ++lastItemIndex;
+
+            var listViewItem = new ListViewItem(actionNew.ConvertToArrary());
+            this.mlvData_Default.Items.Add(listViewItem);
+
+            this.mlvData_Default.AddEmbeddedButton(delegate (object o, EventArgs args)
+            {
+                this.mlvData_Default.RemoveActiveItem(o as MaterialFlatButton);
+            });
+        }
+
+        private void CbMoneyWarning_Default_CheckedChanged(object sender, EventArgs e)
+        {
+            this.txtMoneyWarning_Default.Enabled = !this.cbMoneyWarning_Default.Checked;
         }
     }
 }

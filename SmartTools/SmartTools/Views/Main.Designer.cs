@@ -59,6 +59,7 @@ namespace SmartTools.Views
             this.tsMaster = new MaterialSkin.Controls.MaterialTabSelector();
             this.materialDivider1 = new MaterialSkin.Controls.MaterialDivider();
             this.btnStart = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.btnAdd = new MaterialSkin.Controls.MaterialRaisedButton();
             this.tcMaster.SuspendLayout();
             this.lblMoney_Title_Default.SuspendLayout();
             this.pnlProxy_Default.SuspendLayout();
@@ -296,6 +297,7 @@ namespace SmartTools.Views
             this.cbMoneyWarning_Default.Size = new System.Drawing.Size(26, 30);
             this.cbMoneyWarning_Default.TabIndex = 9;
             this.cbMoneyWarning_Default.UseVisualStyleBackColor = true;
+            this.cbMoneyWarning_Default.CheckedChanged += new System.EventHandler(this.CbMoneyWarning_Default_CheckedChanged);
             // 
             // label1
             // 
@@ -343,7 +345,7 @@ namespace SmartTools.Views
             // 
             this.btnHow_Default.AutoSize = true;
             this.btnHow_Default.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnHow_Default.CustomFont = new System.Drawing.Font("Roboto", 10F);
+            this.btnHow_Default.CustomFont = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.btnHow_Default.Depth = 0;
             this.btnHow_Default.Icon = null;
             this.btnHow_Default.Location = new System.Drawing.Point(612, 67);
@@ -474,12 +476,29 @@ namespace SmartTools.Views
             this.btnStart.Text = "开始启动";
             this.btnStart.UseVisualStyleBackColor = true;
             // 
+            // btnAdd
+            // 
+            this.btnAdd.AutoSize = true;
+            this.btnAdd.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnAdd.Depth = 0;
+            this.btnAdd.Icon = null;
+            this.btnAdd.Location = new System.Drawing.Point(695, 731);
+            this.btnAdd.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Primary = true;
+            this.btnAdd.Size = new System.Drawing.Size(98, 36);
+            this.btnAdd.TabIndex = 5;
+            this.btnAdd.Text = "新增动作";
+            this.btnAdd.UseVisualStyleBackColor = true;
+            this.btnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(937, 779);
+            this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.materialDivider1);
             this.Controls.Add(this.tsMaster);
@@ -528,5 +547,6 @@ namespace SmartTools.Views
         private System.Windows.Forms.ColumnHeader chBetType_Default;
         private System.Windows.Forms.ColumnHeader chDelay_Default;
         private System.Windows.Forms.ColumnHeader chMoney_Default;
+        private MaterialSkin.Controls.MaterialRaisedButton btnAdd;
     }
 }

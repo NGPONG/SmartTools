@@ -34,6 +34,22 @@ namespace SmartTools.Model
 
             return strReturn;
         }
+
+        public string[] ConvertToArrary()
+        {
+            return new string[4] { this.ActionIndex.ToString(), this.GetBetString(), this.Delay.ToString(), this.Money.ToString() };
+        }
+
+        public static CustomAction GetDefaultCustomAction()
+        {
+            return new CustomAction()
+            {
+                ActionIndex = 0,
+                BetType = Bet.停,
+                Delay = 0,
+                Money = 0
+            };
+        }
     }
 
     public enum Bet
