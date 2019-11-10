@@ -21,9 +21,9 @@ namespace SmartTools.Common.Helper
                     streamWriter.Write(data, 0, data.Length);
                 }
             }
-            catch
+            catch (Exception objException)
             {
-                throw;
+                LogHelper.Error(objException);
             }
         }
 
@@ -54,9 +54,10 @@ namespace SmartTools.Common.Helper
 
                 return destination;
             }
-            catch
+            catch(Exception objException)
             {
-                throw;
+                LogHelper.Error(objException);
+                return null;
             }
         }
 

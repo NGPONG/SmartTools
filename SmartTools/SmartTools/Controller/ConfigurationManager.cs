@@ -36,6 +36,11 @@ namespace SmartTools.Controller
             return manager;
         }
 
+        public List<Configuration> GetUserConfigs()
+        {
+            return Configs;
+        }
+
         public ConfigurationManager Save()
         {
             string strJson = JsonConvert.SerializeObject(Configs);

@@ -443,6 +443,17 @@ namespace MaterialSkin.Controls
 
         public MaterialListView AddEmbeddedButton(EventHandler handler, string columnName = "chAction_Default")
         {
+            if (!this.Columns.ContainsKey(columnName))
+            {
+                // Add Column header.
+                ColumnHeader header = new ColumnHeader();
+                header.Name = columnName;
+                header.Text = "操作";
+                header.Width = 105;
+                header.TextAlign = HorizontalAlignment.Center;
+                this.Columns.Add(header);
+            }
+
             MaterialFlatButton button = new MaterialFlatButton();
             button.CustomFont = new Font("微软雅黑", 9f);
             button.Text = "点击删除";

@@ -124,6 +124,7 @@
     <Compile Include="3rd\MaterialSkin\DrawHelper.cs" />
     <Compile Include="3rd\MaterialSkin\IMaterialControl.cs" />
     <Compile Include="3rd\MaterialSkin\MaterialSkinManager.cs" />
+    <Compile Include="Controller\FormManager.cs" />
     <Compile Include="Model\Configuration.cs" />
     <Compile Include="Controller\ConfigurationManager.cs" />
     <Compile Include="Model\CustomAction.cs" />

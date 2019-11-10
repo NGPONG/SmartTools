@@ -10,9 +10,10 @@ namespace SmartTools.Model
     {
         public string ConfigurationName { get; set; }
         public string Authentication { get; set; }
+        public string Url { get; set; }
         public double StopMoney { get; set; }
         public bool IsCycle { get; set; }
         public Proxy Proxy { get; set; }
-        public CustomAction Action { get; set; }
+        public List<CustomAction> Action { get; set; }
     }
 }

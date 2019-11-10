@@ -26,7 +26,7 @@ namespace SmartTools.Controller
         private NotifyIcon _notifyIcon;
         #endregion
 
-        private FormController() { }
+        private FormController() { FormManager.Instance().OnMainFormClosed += this.FormController_OnMainFormClosed; }
 
         public static FormController Instance()
         {
@@ -46,8 +46,7 @@ namespace SmartTools.Controller
 
         public void Start()
         {
-            Init(new Main(FormController_FormClosed))
-                .InitNotify(false);
+            ShowMainForm();
         }
 
         public FormController InitNotify(bool visible)
@@ -72,6 +71,14 @@ namespace SmartTools.Controller
 
             return this;
         }
+
+        //public Main InitMainForm()
+        //{
+        //    Main mainForm = new Main(FormController_FormClosed);
+
+
+        //    return mainForm;
+        //}
 
         public FormController Init<T>(T frm)
             where T : Form
@@ -149,18 +156,24 @@ namespace SmartTools.Controller
             return this;
         }
 
+        private void ShowMainForm()
+        {
+            Main mainForm = FormManager.Instance().GetDefaultMainForm();
+            FormManager.Instance().InitializeComponent(mainForm);
+
+            Init(mainForm)
+                .InitNotify(false);
+        }
 
         #region Event Handler
         private void _notifyIcon_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                Init(new Main(FormController_FormClosed))
-                    .InitNotify(false);
+                ShowMainForm();
             }
         }
-
-        private void FormController_FormClosed(object sender, FormClosedEventArgs e)
+        private void FormController_OnMainFormClosed()
         {
             Native.ReleaseMemory();
             InitNotify(true);

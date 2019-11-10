@@ -4,50 +4,52 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using SmartTools.Utils.Extensions;
+using SmartTools.Controller;
 
 namespace SmartTools.Views
 {
     public partial class Main : MaterialForm
     {
-        public Main(FormClosedEventHandler handler)
+        public Main()
         {
-            InitializeComponent();
+            // InitializeComponent();
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            this.FormClosed += handler;
+            SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            //this.FormClosed += handler;
 
-            this.mlvData_Default.AddEditControl(0, new TextBox())
-                                .AddEditControl(1, new ComboBox() { DataSource = new List<string>() { "庄", "闲", "和", "停" } })
-                                .AddEditControl(2, new TextBox())
-                                .AddEditControl(3, new TextBox())
-                                .InitializeCustomControl();
+            //this.mlvData_Default.AddEditControl(0, new TextBox())
+            //                    .AddEditControl(1, new ComboBox() { DataSource = new List<string>() { "庄", "闲", "和", "停" } })
+            //                    .AddEditControl(2, new TextBox())
+            //                    .AddEditControl(3, new TextBox())
+            //                    .InitializeCustomControl();
 
-            var data = new List<CustomAction>()
-            {
-                new CustomAction(){ ActionIndex=1 , BetType=Bet.闲 , Delay=1000 , Money=100  },
-                new CustomAction(){ ActionIndex=2 , BetType=Bet.和 , Delay=1000 , Money=50   },
-                new CustomAction(){ ActionIndex=3 , BetType=Bet.闲 , Delay=1000 , Money=10   },
-                new CustomAction(){ ActionIndex=4 , BetType=Bet.庄 , Delay=1000 , Money=20   },
-                new CustomAction(){ ActionIndex=5 , BetType=Bet.闲 , Delay=1000 , Money=200  },
-                new CustomAction(){ ActionIndex=6 , BetType=Bet.闲 , Delay=1000 , Money=200  },
-                new CustomAction(){ ActionIndex=7 , BetType=Bet.闲 , Delay=1000 , Money=200  },
-                new CustomAction(){ ActionIndex=8 , BetType=Bet.闲 , Delay=1000 , Money=200  },
-                new CustomAction(){ ActionIndex=9 , BetType=Bet.闲 , Delay=1000 , Money=200  },
-                new CustomAction(){ ActionIndex=10 , BetType=Bet.闲 , Delay=1000 , Money=200 },
-                new CustomAction(){ ActionIndex=11 , BetType=Bet.闲 , Delay=1000 , Money=200 }
-            }
-            .ConvertByJagged();
+            //var data = new List<CustomAction>()
+            //{
+            //    new CustomAction(){ ActionIndex=1 , BetType=Bet.闲 , Delay=1000 , Money=100  },
+            //    new CustomAction(){ ActionIndex=2 , BetType=Bet.和 , Delay=1000 , Money=50   },
+            //    new CustomAction(){ ActionIndex=3 , BetType=Bet.闲 , Delay=1000 , Money=10   },
+            //    new CustomAction(){ ActionIndex=4 , BetType=Bet.庄 , Delay=1000 , Money=20   },
+            //    new CustomAction(){ ActionIndex=5 , BetType=Bet.闲 , Delay=1000 , Money=200  },
+            //    new CustomAction(){ ActionIndex=6 , BetType=Bet.闲 , Delay=1000 , Money=200  },
+            //    new CustomAction(){ ActionIndex=7 , BetType=Bet.闲 , Delay=1000 , Money=200  },
+            //    new CustomAction(){ ActionIndex=8 , BetType=Bet.闲 , Delay=1000 , Money=200  },
+            //    new CustomAction(){ ActionIndex=9 , BetType=Bet.闲 , Delay=1000 , Money=200  },
+            //    new CustomAction(){ ActionIndex=10 , BetType=Bet.闲 , Delay=1000 , Money=200 },
+            //    new CustomAction(){ ActionIndex=11 , BetType=Bet.闲 , Delay=1000 , Money=200 }
+            //}
+            //.ConvertByJagged();
 
-            //Add
-            foreach (string[] version in data)
-            {
-                var item = new ListViewItem(version);
-                mlvData_Default.Items.Add(item);
-            }
+            ////Add
+            //foreach (string[] version in data)
+            //{
+            //    var item = new ListViewItem(version);
+            //    mlvData_Default.Items.Add(item);
+            //}
 
-            this.mlvData_Default.AddEmbeddedButtons(delegate (object sender, EventArgs args)
-            {
-                this.mlvData_Default.RemoveActiveItem(sender as MaterialFlatButton);
-            });
+            //this.mlvData_Default.AddEmbeddedButtons(delegate (object sender, EventArgs args)
+            //{
+            //    this.mlvData_Default.RemoveActiveItem(sender as MaterialFlatButton);
+            //});
 
         }
 

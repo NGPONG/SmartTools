@@ -32,6 +32,11 @@ namespace SmartTools.Views
         {
             this.tcMaster = new MaterialSkin.Controls.MaterialTabControl();
             this.lblMoney_Title_Default = new System.Windows.Forms.TabPage();
+            this.btnOpenBrowser = new MaterialSkin.Controls.MaterialFlatButton();
+            this.lblUrl = new MaterialSkin.Controls.MaterialLabel();
+            this.txtUrl = new MaterialSkin.Controls.MaterialSingleLineTextField();
+            this.lblIsCycle = new MaterialSkin.Controls.MaterialLabel();
+            this.cblblIsCycle = new MaterialSkin.Controls.MaterialCheckBox();
             this.mlvData_Default = new MaterialSkin.Controls.MaterialListView();
             this.chActionIndex_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.chBetType_Default = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -47,7 +52,7 @@ namespace SmartTools.Views
             this.lblMoneyWarning_Default = new MaterialSkin.Controls.MaterialLabel();
             this.txtMoneyWarning_Default = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.cbMoneyWarning_Default = new MaterialSkin.Controls.MaterialCheckBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lbldescription_Default = new System.Windows.Forms.Label();
             this.txtMoney_Default = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.lblMoney_Default = new MaterialSkin.Controls.MaterialLabel();
             this.btnHow_Default = new MaterialSkin.Controls.MaterialFlatButton();
@@ -79,6 +84,11 @@ namespace SmartTools.Views
             // lblMoney_Title_Default
             // 
             this.lblMoney_Title_Default.BackColor = System.Drawing.Color.White;
+            this.lblMoney_Title_Default.Controls.Add(this.btnOpenBrowser);
+            this.lblMoney_Title_Default.Controls.Add(this.lblUrl);
+            this.lblMoney_Title_Default.Controls.Add(this.txtUrl);
+            this.lblMoney_Title_Default.Controls.Add(this.lblIsCycle);
+            this.lblMoney_Title_Default.Controls.Add(this.cblblIsCycle);
             this.lblMoney_Title_Default.Controls.Add(this.mlvData_Default);
             this.lblMoney_Title_Default.Controls.Add(this.pnlProxy_Default);
             this.lblMoney_Title_Default.Controls.Add(this.lblUserProxy_Default);
@@ -86,7 +96,7 @@ namespace SmartTools.Views
             this.lblMoney_Title_Default.Controls.Add(this.lblMoneyWarning_Default);
             this.lblMoney_Title_Default.Controls.Add(this.txtMoneyWarning_Default);
             this.lblMoney_Title_Default.Controls.Add(this.cbMoneyWarning_Default);
-            this.lblMoney_Title_Default.Controls.Add(this.label1);
+            this.lblMoney_Title_Default.Controls.Add(this.lbldescription_Default);
             this.lblMoney_Title_Default.Controls.Add(this.txtMoney_Default);
             this.lblMoney_Title_Default.Controls.Add(this.lblMoney_Default);
             this.lblMoney_Title_Default.Controls.Add(this.btnHow_Default);
@@ -101,6 +111,83 @@ namespace SmartTools.Views
             this.lblMoney_Title_Default.Size = new System.Drawing.Size(898, 530);
             this.lblMoney_Title_Default.TabIndex = 0;
             this.lblMoney_Title_Default.Text = "默认配置";
+            // 
+            // btnOpenBrowser
+            // 
+            this.btnOpenBrowser.AutoSize = true;
+            this.btnOpenBrowser.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnOpenBrowser.CustomFont = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.btnOpenBrowser.Depth = 0;
+            this.btnOpenBrowser.Icon = null;
+            this.btnOpenBrowser.Location = new System.Drawing.Point(829, 18);
+            this.btnOpenBrowser.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnOpenBrowser.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnOpenBrowser.Name = "btnOpenBrowser";
+            this.btnOpenBrowser.Primary = false;
+            this.btnOpenBrowser.Size = new System.Drawing.Size(60, 36);
+            this.btnOpenBrowser.TabIndex = 21;
+            this.btnOpenBrowser.Text = "打开";
+            this.btnOpenBrowser.UseVisualStyleBackColor = true;
+            // 
+            // lblUrl
+            // 
+            this.lblUrl.AutoSize = true;
+            this.lblUrl.Depth = 0;
+            this.lblUrl.Font = new System.Drawing.Font("Roboto", 11F);
+            this.lblUrl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblUrl.Location = new System.Drawing.Point(451, 23);
+            this.lblUrl.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblUrl.Name = "lblUrl";
+            this.lblUrl.Size = new System.Drawing.Size(50, 24);
+            this.lblUrl.TabIndex = 20;
+            this.lblUrl.Text = "网址";
+            // 
+            // txtUrl
+            // 
+            this.txtUrl.Depth = 0;
+            this.txtUrl.Enabled = false;
+            this.txtUrl.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.txtUrl.Hint = "";
+            this.txtUrl.Location = new System.Drawing.Point(508, 16);
+            this.txtUrl.MaxLength = 32767;
+            this.txtUrl.MouseState = MaterialSkin.MouseState.HOVER;
+            this.txtUrl.Name = "txtUrl";
+            this.txtUrl.PasswordChar = '\0';
+            this.txtUrl.SelectedText = "";
+            this.txtUrl.SelectionLength = 0;
+            this.txtUrl.SelectionStart = 0;
+            this.txtUrl.Size = new System.Drawing.Size(314, 30);
+            this.txtUrl.TabIndex = 19;
+            this.txtUrl.TabStop = false;
+            this.txtUrl.UseSystemPasswordChar = false;
+            // 
+            // lblIsCycle
+            // 
+            this.lblIsCycle.AutoSize = true;
+            this.lblIsCycle.Depth = 0;
+            this.lblIsCycle.Font = new System.Drawing.Font("Roboto", 11F);
+            this.lblIsCycle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.lblIsCycle.Location = new System.Drawing.Point(37, 181);
+            this.lblIsCycle.MouseState = MaterialSkin.MouseState.HOVER;
+            this.lblIsCycle.Name = "lblIsCycle";
+            this.lblIsCycle.Size = new System.Drawing.Size(90, 24);
+            this.lblIsCycle.TabIndex = 18;
+            this.lblIsCycle.Text = "动作循环";
+            // 
+            // cblblIsCycle
+            // 
+            this.cblblIsCycle.AutoSize = true;
+            this.cblblIsCycle.Depth = 0;
+            this.cblblIsCycle.Font = new System.Drawing.Font("Roboto", 10F);
+            this.cblblIsCycle.Location = new System.Drawing.Point(5, 178);
+            this.cblblIsCycle.Margin = new System.Windows.Forms.Padding(0);
+            this.cblblIsCycle.MouseLocation = new System.Drawing.Point(-1, -1);
+            this.cblblIsCycle.MouseState = MaterialSkin.MouseState.HOVER;
+            this.cblblIsCycle.Name = "cblblIsCycle";
+            this.cblblIsCycle.Ripple = true;
+            this.cblblIsCycle.Size = new System.Drawing.Size(26, 30);
+            this.cblblIsCycle.TabIndex = 17;
+            this.cblblIsCycle.UseVisualStyleBackColor = true;
             // 
             // mlvData_Default
             // 
@@ -117,12 +204,12 @@ namespace SmartTools.Views
             this.mlvData_Default.FullRowSelect = true;
             this.mlvData_Default.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.mlvData_Default.HoveredItem = null;
-            this.mlvData_Default.Location = new System.Drawing.Point(3, 239);
+            this.mlvData_Default.Location = new System.Drawing.Point(3, 182);
             this.mlvData_Default.MouseLocation = new System.Drawing.Point(-1, -1);
             this.mlvData_Default.MouseState = MaterialSkin.MouseState.OUT;
             this.mlvData_Default.Name = "mlvData_Default";
             this.mlvData_Default.OwnerDraw = true;
-            this.mlvData_Default.Size = new System.Drawing.Size(892, 288);
+            this.mlvData_Default.Size = new System.Drawing.Size(892, 345);
             this.mlvData_Default.TabIndex = 16;
             this.mlvData_Default.UseCompatibleStateImageBehavior = false;
             this.mlvData_Default.View = System.Windows.Forms.View.Details;
@@ -156,7 +243,7 @@ namespace SmartTools.Views
             this.pnlProxy_Default.Controls.Add(this.txtIP_Default);
             this.pnlProxy_Default.Controls.Add(this.lblPort_Default);
             this.pnlProxy_Default.Controls.Add(this.lblIP_Deafult);
-            this.pnlProxy_Default.Location = new System.Drawing.Point(135, 167);
+            this.pnlProxy_Default.Location = new System.Drawing.Point(280, 161);
             this.pnlProxy_Default.Name = "pnlProxy_Default";
             this.pnlProxy_Default.Size = new System.Drawing.Size(1, 66);
             this.pnlProxy_Default.TabIndex = 15;
@@ -173,7 +260,7 @@ namespace SmartTools.Views
             this.txtPort_Default.SelectedText = "";
             this.txtPort_Default.SelectionLength = 0;
             this.txtPort_Default.SelectionStart = 0;
-            this.txtPort_Default.Size = new System.Drawing.Size(70, 28);
+            this.txtPort_Default.Size = new System.Drawing.Size(70, 30);
             this.txtPort_Default.TabIndex = 11;
             this.txtPort_Default.TabStop = false;
             this.txtPort_Default.UseSystemPasswordChar = false;
@@ -190,7 +277,7 @@ namespace SmartTools.Views
             this.txtIP_Default.SelectedText = "";
             this.txtIP_Default.SelectionLength = 0;
             this.txtIP_Default.SelectionStart = 0;
-            this.txtIP_Default.Size = new System.Drawing.Size(175, 28);
+            this.txtIP_Default.Size = new System.Drawing.Size(175, 30);
             this.txtIP_Default.TabIndex = 9;
             this.txtIP_Default.TabStop = false;
             this.txtIP_Default.UseSystemPasswordChar = false;
@@ -227,7 +314,7 @@ namespace SmartTools.Views
             this.lblUserProxy_Default.Depth = 0;
             this.lblUserProxy_Default.Font = new System.Drawing.Font("Roboto", 11F);
             this.lblUserProxy_Default.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.lblUserProxy_Default.Location = new System.Drawing.Point(37, 188);
+            this.lblUserProxy_Default.Location = new System.Drawing.Point(182, 182);
             this.lblUserProxy_Default.MouseState = MaterialSkin.MouseState.HOVER;
             this.lblUserProxy_Default.Name = "lblUserProxy_Default";
             this.lblUserProxy_Default.Size = new System.Drawing.Size(90, 24);
@@ -239,7 +326,7 @@ namespace SmartTools.Views
             this.cbUserProxy_Default.AutoSize = true;
             this.cbUserProxy_Default.Depth = 0;
             this.cbUserProxy_Default.Font = new System.Drawing.Font("Roboto", 10F);
-            this.cbUserProxy_Default.Location = new System.Drawing.Point(5, 184);
+            this.cbUserProxy_Default.Location = new System.Drawing.Point(150, 178);
             this.cbUserProxy_Default.Margin = new System.Windows.Forms.Padding(0);
             this.cbUserProxy_Default.MouseLocation = new System.Drawing.Point(-1, -1);
             this.cbUserProxy_Default.MouseState = MaterialSkin.MouseState.HOVER;
@@ -276,7 +363,7 @@ namespace SmartTools.Views
             this.txtMoneyWarning_Default.SelectedText = "";
             this.txtMoneyWarning_Default.SelectionLength = 0;
             this.txtMoneyWarning_Default.SelectionStart = 0;
-            this.txtMoneyWarning_Default.Size = new System.Drawing.Size(60, 28);
+            this.txtMoneyWarning_Default.Size = new System.Drawing.Size(60, 30);
             this.txtMoneyWarning_Default.TabIndex = 10;
             this.txtMoneyWarning_Default.TabStop = false;
             this.txtMoneyWarning_Default.UseSystemPasswordChar = false;
@@ -299,16 +386,16 @@ namespace SmartTools.Views
             this.cbMoneyWarning_Default.UseVisualStyleBackColor = true;
             this.cbMoneyWarning_Default.CheckedChanged += new System.EventHandler(this.CbMoneyWarning_Default_CheckedChanged);
             // 
-            // label1
+            // lbldescription_Default
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("微软雅黑", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label1.ForeColor = System.Drawing.Color.Blue;
-            this.label1.Location = new System.Drawing.Point(245, 136);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(205, 19);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "输入完成授权身份后会自动同步";
+            this.lbldescription_Default.AutoSize = true;
+            this.lbldescription_Default.Font = new System.Drawing.Font("微软雅黑", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.lbldescription_Default.ForeColor = System.Drawing.Color.Blue;
+            this.lbldescription_Default.Location = new System.Drawing.Point(245, 136);
+            this.lbldescription_Default.Name = "lbldescription_Default";
+            this.lbldescription_Default.Size = new System.Drawing.Size(205, 19);
+            this.lbldescription_Default.TabIndex = 8;
+            this.lbldescription_Default.Text = "输入完成授权身份后会自动同步";
             // 
             // txtMoney_Default
             // 
@@ -323,7 +410,7 @@ namespace SmartTools.Views
             this.txtMoney_Default.SelectedText = "";
             this.txtMoney_Default.SelectionLength = 0;
             this.txtMoney_Default.SelectionStart = 0;
-            this.txtMoney_Default.Size = new System.Drawing.Size(137, 28);
+            this.txtMoney_Default.Size = new System.Drawing.Size(137, 30);
             this.txtMoney_Default.TabIndex = 7;
             this.txtMoney_Default.TabStop = false;
             this.txtMoney_Default.UseSystemPasswordChar = false;
@@ -403,7 +490,7 @@ namespace SmartTools.Views
             this.txtConfigName_Default.SelectedText = "";
             this.txtConfigName_Default.SelectionLength = 0;
             this.txtConfigName_Default.SelectionStart = 0;
-            this.txtConfigName_Default.Size = new System.Drawing.Size(236, 28);
+            this.txtConfigName_Default.Size = new System.Drawing.Size(236, 30);
             this.txtConfigName_Default.TabIndex = 2;
             this.txtConfigName_Default.TabStop = false;
             this.txtConfigName_Default.UseSystemPasswordChar = false;
@@ -421,7 +508,7 @@ namespace SmartTools.Views
             this.txtAuthentication_Default.SelectedText = "";
             this.txtAuthentication_Default.SelectionLength = 0;
             this.txtAuthentication_Default.SelectionStart = 0;
-            this.txtAuthentication_Default.Size = new System.Drawing.Size(499, 28);
+            this.txtAuthentication_Default.Size = new System.Drawing.Size(499, 30);
             this.txtAuthentication_Default.TabIndex = 1;
             this.txtAuthentication_Default.TabStop = false;
             this.txtAuthentication_Default.UseSystemPasswordChar = false;
@@ -467,13 +554,13 @@ namespace SmartTools.Views
             this.btnStart.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnStart.Depth = 0;
             this.btnStart.Icon = null;
-            this.btnStart.Location = new System.Drawing.Point(820, 731);
+            this.btnStart.Location = new System.Drawing.Point(859, 731);
             this.btnStart.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnStart.Name = "btnStart";
             this.btnStart.Primary = true;
-            this.btnStart.Size = new System.Drawing.Size(98, 36);
+            this.btnStart.Size = new System.Drawing.Size(60, 36);
             this.btnStart.TabIndex = 4;
-            this.btnStart.Text = "开始启动";
+            this.btnStart.Text = "开始";
             this.btnStart.UseVisualStyleBackColor = true;
             // 
             // btnAdd
@@ -482,7 +569,7 @@ namespace SmartTools.Views
             this.btnAdd.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnAdd.Depth = 0;
             this.btnAdd.Icon = null;
-            this.btnAdd.Location = new System.Drawing.Point(695, 731);
+            this.btnAdd.Location = new System.Drawing.Point(734, 731);
             this.btnAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Primary = true;
@@ -529,7 +616,7 @@ namespace SmartTools.Views
         private MaterialSkin.Controls.MaterialLabel lblConfigName_Default;
         private MaterialSkin.Controls.MaterialCheckBox cbConfigLock_Default;
         private MaterialSkin.Controls.MaterialFlatButton btnHow_Default;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label lbldescription_Default;
         private MaterialSkin.Controls.MaterialSingleLineTextField txtMoney_Default;
         private MaterialSkin.Controls.MaterialLabel lblMoney_Default;
         private MaterialSkin.Controls.MaterialCheckBox cbMoneyWarning_Default;
@@ -548,5 +635,10 @@ namespace SmartTools.Views
         private System.Windows.Forms.ColumnHeader chDelay_Default;
         private System.Windows.Forms.ColumnHeader chMoney_Default;
         private MaterialSkin.Controls.MaterialRaisedButton btnAdd;
+        private MaterialSkin.Controls.MaterialLabel lblIsCycle;
+        private MaterialSkin.Controls.MaterialCheckBox cblblIsCycle;
+        private MaterialSkin.Controls.MaterialLabel lblUrl;
+        private MaterialSkin.Controls.MaterialSingleLineTextField txtUrl;
+        private MaterialSkin.Controls.MaterialFlatButton btnOpenBrowser;
     }
 }
