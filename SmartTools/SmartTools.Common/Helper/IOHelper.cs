@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartTools.Common.Helper
 {
@@ -11,8 +7,8 @@ namespace SmartTools.Common.Helper
     {
         public static void SaveToFile(string path, string name, byte[] data)
         {
-            CreateIfNotExists(path, name);
-            string complete = Path.Combine(path, name);
+            string complete = AppDomain.CurrentDomain.BaseDirectory + Path.Combine(path, name);
+            CreateIfNotExists(AppDomain.CurrentDomain.BaseDirectory + path);
 
             try
             {
@@ -34,7 +30,7 @@ namespace SmartTools.Common.Helper
                 byte[] destination;
                 int offset_Dst = 0;
 
-                string complete = Path.Combine(path, name);
+                string complete = AppDomain.CurrentDomain.BaseDirectory + Path.Combine(path, name);
                 using (FileStream streamReader = new FileStream(complete, FileMode.OpenOrCreate, FileAccess.Read))
                 {
                     destination = new byte[streamReader.Length];
@@ -61,11 +57,11 @@ namespace SmartTools.Common.Helper
             }
         }
 
-        public static void CreateIfNotExists(string path, string name)
+        public static void CreateIfNotExists(string path)
         {
             if (!Directory.Exists(path))
             {
-                Directory.CreateDirectory(Path.Combine(path, name));
+                Directory.CreateDirectory(path);
             }
         }
     }

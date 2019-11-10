@@ -8,10 +8,10 @@ namespace SmartTools.Model
 {
     public class CustomAction
     {
-        public int ActionIndex { get; set; }
+        public string ActionIndex { get; set; }
         public Bet BetType { get; set; }
-        public int Delay { get; set; }
-        public double Money { get; set; }
+        public string Delay { get; set; }
+        public string Money { get; set; }
 
         public string GetBetString()
         {
@@ -35,6 +35,28 @@ namespace SmartTools.Model
             return strReturn;
         }
 
+        public static Bet ToBet(string source)
+        {
+            Bet bet = new Bet();
+            switch (source)
+            {
+                case "庄":
+                    bet = Bet.庄;
+                    break;
+                case "闲":
+                    bet = Bet.闲;
+                    break;
+                case "和":
+                    bet = Bet.和;
+                    break;
+                case "停":
+                    bet = Bet.停;
+                    break;
+            }
+
+            return bet;
+        }
+
         public string[] ConvertToArrary()
         {
             return new string[4] { this.ActionIndex.ToString(), this.GetBetString(), this.Delay.ToString(), this.Money.ToString() };
@@ -44,10 +66,10 @@ namespace SmartTools.Model
         {
             return new CustomAction()
             {
-                ActionIndex = 0,
+                ActionIndex = "0",
                 BetType = Bet.停,
-                Delay = 0,
-                Money = 0
+                Delay = "0",
+                Money = "0"
             };
         }
     }

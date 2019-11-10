@@ -72,14 +72,6 @@ namespace SmartTools.Controller
             return this;
         }
 
-        //public Main InitMainForm()
-        //{
-        //    Main mainForm = new Main(FormController_FormClosed);
-
-
-        //    return mainForm;
-        //}
-
         public FormController Init<T>(T frm)
             where T : Form
         {

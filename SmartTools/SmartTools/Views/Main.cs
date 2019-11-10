@@ -113,7 +113,7 @@ namespace SmartTools.Views
             }
 
             var actionNew = CustomAction.GetDefaultCustomAction();
-            actionNew.ActionIndex = this.mlvData_Default.Items.Count == 0 ? lastItemIndex : ++lastItemIndex;
+            actionNew.ActionIndex = this.mlvData_Default.Items.Count == 0 ? lastItemIndex.ToString() : (++lastItemIndex).ToString();
 
             var listViewItem = new ListViewItem(actionNew.ConvertToArrary());
             this.mlvData_Default.Items.Add(listViewItem);

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,6 +16,8 @@ namespace SmartTools.Controller
         #region member
         private static FormManager manager = null;
         private static object locker = new object();
+
+        public Dictionary<string, TabPage> _userConfigs = new Dictionary<string, TabPage>();
         #endregion
 
         private FormManager() { }
@@ -89,19 +92,16 @@ namespace SmartTools.Controller
             var configs = ConfigurationManager.Instance().Load().GetUserConfigs();
             if (configs == null)
             {
-                CreateConfigControls("Default",
-                                     "默认配置",
+                CreateConfigControls("默认配置",
                                      tsMaster,
                                      tcMaster,
                                      mlvData);
             }
             else
             {
-                var index = 1;
                 foreach (var config in configs)
                 {
-                    CreateConfigControls($"Config{index.ToString()}",
-                                         config.ConfigurationName,
+                    CreateConfigControls(config.ConfigurationName,
                                          tsMaster,
                                          tcMaster,
                                          mlvData,
@@ -159,7 +159,7 @@ namespace SmartTools.Controller
                 }
 
                 var actionNew = CustomAction.GetDefaultCustomAction();
-                actionNew.ActionIndex = mlvData.Items.Count == 0 ? lastItemIndex : ++lastItemIndex;
+                actionNew.ActionIndex = mlvData.Items.Count == 0 ? lastItemIndex.ToString() : (++lastItemIndex).ToString();
 
                 var listViewItem = new ListViewItem(actionNew.ConvertToArrary());
                 mlvData.Items.Add(listViewItem);
@@ -199,19 +199,18 @@ namespace SmartTools.Controller
             mainForm.PerformLayout();
         }
 
-        public void CreateConfigControls(string controlName, 
-                                         string ConfigurationName, 
+        public void CreateConfigControls(string ConfigurationName, 
                                          MaterialSkin.Controls.MaterialTabSelector tsMaster,
                                          MaterialSkin.Controls.MaterialTabControl tcMaster,
                                          MaterialSkin.Controls.MaterialListView mlvData,
                                          string Authentication = "",
                                          string Url = "",
-                                         double StopMoney = 0, 
+                                         string StopMoney = "", 
                                          bool IsCycle = false, 
                                          Proxy proxy = null, 
                                          List<CustomAction> source = null)
         {
-            var lblMoney_Title = new System.Windows.Forms.TabPage();
+            var lblMoney_Title = new TabPage();
             var chActionIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             var chBetType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             var chDelay = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -275,7 +274,7 @@ namespace SmartTools.Controller
             lblMoney_Title.Controls.Add(lblUrl);
             lblMoney_Title.Controls.Add(btnOpenBrowser);
             lblMoney_Title.Location = new System.Drawing.Point(4, 25);
-            lblMoney_Title.Name = $"lblMoney_Title_{controlName}";
+            lblMoney_Title.Name = $"lblMoney_Title_{ConfigurationName}";
             lblMoney_Title.Padding = new System.Windows.Forms.Padding(3);
             lblMoney_Title.Size = new System.Drawing.Size(898, 530);
             lblMoney_Title.TabIndex = 0;
@@ -290,7 +289,7 @@ namespace SmartTools.Controller
             lblIsCycle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             lblIsCycle.Location = new System.Drawing.Point(37, 181);
             lblIsCycle.MouseState = MaterialSkin.MouseState.HOVER;
-            lblIsCycle.Name = $"lblIsCycle{controlName}";
+            lblIsCycle.Name = $"lblIsCycle{ConfigurationName}";
             lblIsCycle.Size = new System.Drawing.Size(90, 24);
             lblIsCycle.TabIndex = 18;
             lblIsCycle.Text = "动作循环";
@@ -305,7 +304,7 @@ namespace SmartTools.Controller
             cbIsCycle.Margin = new System.Windows.Forms.Padding(0);
             cbIsCycle.MouseLocation = new System.Drawing.Point(-1, -1);
             cbIsCycle.MouseState = MaterialSkin.MouseState.HOVER;
-            cbIsCycle.Name = $"cblblIsCycle_{controlName}";
+            cbIsCycle.Name = $"cblblIsCycle_{ConfigurationName}";
             cbIsCycle.Ripple = true;
             cbIsCycle.Size = new System.Drawing.Size(26, 30);
             cbIsCycle.TabIndex = 17;
@@ -346,7 +345,7 @@ namespace SmartTools.Controller
             mlvData.Location = new System.Drawing.Point(3, 239);
             mlvData.MouseLocation = new System.Drawing.Point(-1, -1);
             mlvData.MouseState = MaterialSkin.MouseState.OUT;
-            mlvData.Name = $"mlvData_{controlName}";
+            mlvData.Name = $"mlvData_{ConfigurationName}";
             mlvData.OwnerDraw = true;
             mlvData.Size = new System.Drawing.Size(892, 345);
             mlvData.TabIndex = 16;
@@ -361,7 +360,7 @@ namespace SmartTools.Controller
             txtPort.Location = new System.Drawing.Point(292, 17);
             txtPort.MaxLength = 32767;
             txtPort.MouseState = MaterialSkin.MouseState.HOVER;
-            txtPort.Name = $"txtPort_{controlName}";
+            txtPort.Name = $"txtPort_{ConfigurationName}";
             txtPort.PasswordChar = '\0';
             txtPort.SelectedText = "";
             txtPort.SelectionLength = 0;
@@ -380,7 +379,7 @@ namespace SmartTools.Controller
             txtIP.Location = new System.Drawing.Point(39, 17);
             txtIP.MaxLength = 32767;
             txtIP.MouseState = MaterialSkin.MouseState.HOVER;
-            txtIP.Name = $"txtIP_{controlName}";
+            txtIP.Name = $"txtIP_{ConfigurationName}";
             txtIP.PasswordChar = '\0';
             txtIP.SelectedText = "";
             txtIP.SelectionLength = 0;
@@ -400,7 +399,7 @@ namespace SmartTools.Controller
             lblPort.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             lblPort.Location = new System.Drawing.Point(243, 21);
             lblPort.MouseState = MaterialSkin.MouseState.HOVER;
-            lblPort.Name = $"lblPort_{controlName}";
+            lblPort.Name = $"lblPort_{ConfigurationName}";
             lblPort.Size = new System.Drawing.Size(45, 24);
             lblPort.TabIndex = 10;
             lblPort.Text = "Port";
@@ -414,7 +413,7 @@ namespace SmartTools.Controller
             lblIP.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             lblIP.Location = new System.Drawing.Point(9, 21);
             lblIP.MouseState = MaterialSkin.MouseState.HOVER;
-            lblIP.Name = $"lblIP_{controlName}";
+            lblIP.Name = $"lblIP_{ConfigurationName}";
             lblIP.Size = new System.Drawing.Size(27, 24);
             lblIP.TabIndex = 8;
             lblIP.Text = "IP";
@@ -427,7 +426,7 @@ namespace SmartTools.Controller
             pnlProxy.Controls.Add(lblPort);
             pnlProxy.Controls.Add(lblIP);
             pnlProxy.Location = new System.Drawing.Point(280, 161);
-            pnlProxy.Name = $"pnlProxy_{controlName}";
+            pnlProxy.Name = $"pnlProxy_{ConfigurationName}";
             pnlProxy.Size = new System.Drawing.Size(1, 66);
             pnlProxy.TabIndex = 15;
 
@@ -440,7 +439,7 @@ namespace SmartTools.Controller
             lblUserProxy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             lblUserProxy.Location = new System.Drawing.Point(182, 182);
             lblUserProxy.MouseState = MaterialSkin.MouseState.HOVER;
-            lblUserProxy.Name = $"lblUserProxy_{controlName}";
+            lblUserProxy.Name = $"lblUserProxy_{ConfigurationName}";
             lblUserProxy.Size = new System.Drawing.Size(90, 24);
             lblUserProxy.TabIndex = 14;
             lblUserProxy.Text = "启用代理";
@@ -503,7 +502,7 @@ namespace SmartTools.Controller
             lblMoneyWarning.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             lblMoneyWarning.Location = new System.Drawing.Point(520, 133);
             lblMoneyWarning.MouseState = MaterialSkin.MouseState.HOVER;
-            lblMoneyWarning.Name = $"lblMoneyWarning_{controlName}";
+            lblMoneyWarning.Name = $"lblMoneyWarning_{ConfigurationName}";
             lblMoneyWarning.Size = new System.Drawing.Size(90, 24);
             lblMoneyWarning.TabIndex = 11;
             lblMoneyWarning.Text = "余额预警";
@@ -517,7 +516,7 @@ namespace SmartTools.Controller
             txtMoneyWarning.Location = new System.Drawing.Point(616, 129);
             txtMoneyWarning.MaxLength = 32767;
             txtMoneyWarning.MouseState = MaterialSkin.MouseState.HOVER;
-            txtMoneyWarning.Name = $"txtMoneyWarning_{controlName}";
+            txtMoneyWarning.Name = $"txtMoneyWarning_{ConfigurationName}";
             txtMoneyWarning.PasswordChar = '\0';
             txtMoneyWarning.SelectedText = "";
             txtMoneyWarning.SelectionLength = 0;
@@ -526,7 +525,7 @@ namespace SmartTools.Controller
             txtMoneyWarning.TabIndex = 10;
             txtMoneyWarning.TabStop = false;
             txtMoneyWarning.UseSystemPasswordChar = false;
-            txtMoneyWarning.Text = StopMoney == 0 ? string.Empty : StopMoney.ToString();
+            txtMoneyWarning.Text = StopMoney;
 
             // 
             // cbMoneyWarning
@@ -540,7 +539,7 @@ namespace SmartTools.Controller
             cbMoneyWarning.Margin = new System.Windows.Forms.Padding(0);
             cbMoneyWarning.MouseLocation = new System.Drawing.Point(-1, -1);
             cbMoneyWarning.MouseState = MaterialSkin.MouseState.HOVER;
-            cbMoneyWarning.Name = $"cbMoneyWarning_{controlName}";
+            cbMoneyWarning.Name = $"cbMoneyWarning_{ConfigurationName}";
             cbMoneyWarning.Ripple = true;
             cbMoneyWarning.Size = new System.Drawing.Size(26, 30);
             cbMoneyWarning.TabIndex = 9;
@@ -557,7 +556,7 @@ namespace SmartTools.Controller
             lbldescription.Font = new System.Drawing.Font("微软雅黑", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             lbldescription.ForeColor = System.Drawing.Color.Blue;
             lbldescription.Location = new System.Drawing.Point(245, 136);
-            lbldescription.Name = $"lbldescription_{controlName}";
+            lbldescription.Name = $"lbldescription_{ConfigurationName}";
             lbldescription.Size = new System.Drawing.Size(205, 19);
             lbldescription.TabIndex = 8;
             lbldescription.Text = "输入完成授权身份后会自动同步";
@@ -571,7 +570,7 @@ namespace SmartTools.Controller
             txtMoney.Location = new System.Drawing.Point(102, 133);
             txtMoney.MaxLength = 32767;
             txtMoney.MouseState = MaterialSkin.MouseState.HOVER;
-            txtMoney.Name = $"txtMoney_{controlName}";
+            txtMoney.Name = $"txtMoney_{ConfigurationName}";
             txtMoney.PasswordChar = '\0';
             txtMoney.SelectedText = "";
             txtMoney.SelectionLength = 0;
@@ -590,7 +589,7 @@ namespace SmartTools.Controller
             lblMoney.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             lblMoney.Location = new System.Drawing.Point(6, 131);
             lblMoney.MouseState = MaterialSkin.MouseState.HOVER;
-            lblMoney.Name = $"lblMoney_{controlName}";
+            lblMoney.Name = $"lblMoney_{ConfigurationName}";
             lblMoney.Size = new System.Drawing.Size(90, 24);
             lblMoney.TabIndex = 6;
             lblMoney.Text = "账户余额";
@@ -606,7 +605,7 @@ namespace SmartTools.Controller
             btnHow.Location = new System.Drawing.Point(612, 73);
             btnHow.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             btnHow.MouseState = MaterialSkin.MouseState.HOVER;
-            btnHow.Name = $"btnHow_{controlName}";
+            btnHow.Name = $"btnHow_{ConfigurationName}";
             btnHow.Primary = false;
             btnHow.Size = new System.Drawing.Size(165, 36);
             btnHow.TabIndex = 5;
@@ -625,7 +624,7 @@ namespace SmartTools.Controller
             cbConfigLock.Margin = new System.Windows.Forms.Padding(0);
             cbConfigLock.MouseLocation = new System.Drawing.Point(-1, -1);
             cbConfigLock.MouseState = MaterialSkin.MouseState.HOVER;
-            cbConfigLock.Name = "cbConfigLock_Default";
+            cbConfigLock.Name = $"cbConfigLock_{ConfigurationName}";
             cbConfigLock.Ripple = true;
             cbConfigLock.Size = new System.Drawing.Size(26, 30);
             cbConfigLock.TabIndex = 4;
@@ -645,7 +644,7 @@ namespace SmartTools.Controller
             lblConfigName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             lblConfigName.Location = new System.Drawing.Point(6, 23);
             lblConfigName.MouseState = MaterialSkin.MouseState.HOVER;
-            lblConfigName.Name = $"lblConfigName_{controlName}";
+            lblConfigName.Name = $"lblConfigName_{ConfigurationName}";
             lblConfigName.Size = new System.Drawing.Size(90, 24);
             lblConfigName.TabIndex = 3;
             lblConfigName.Text = "配置名称";
@@ -660,7 +659,7 @@ namespace SmartTools.Controller
             txtConfigName.Location = new System.Drawing.Point(102, 22);
             txtConfigName.MaxLength = 32767;
             txtConfigName.MouseState = MaterialSkin.MouseState.HOVER;
-            txtConfigName.Name = $"txtConfigName_{controlName}";
+            txtConfigName.Name = $"txtConfigName_{ConfigurationName}";
             txtConfigName.Text = ConfigurationName;
             txtConfigName.PasswordChar = '\0';
             txtConfigName.SelectedText = "";
@@ -684,7 +683,7 @@ namespace SmartTools.Controller
             txtAuthentication.Location = new System.Drawing.Point(102, 74);
             txtAuthentication.MaxLength = 32767;
             txtAuthentication.MouseState = MaterialSkin.MouseState.HOVER;
-            txtAuthentication.Name = $"txtAuthentication_{controlName}";
+            txtAuthentication.Name = $"txtAuthentication_{ConfigurationName}";
             txtAuthentication.PasswordChar = '\0';
             txtAuthentication.SelectedText = "";
             txtAuthentication.SelectionLength = 0;
@@ -704,7 +703,7 @@ namespace SmartTools.Controller
             lblAuthentication.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             lblAuthentication.Location = new System.Drawing.Point(6, 73);
             lblAuthentication.MouseState = MaterialSkin.MouseState.HOVER;
-            lblAuthentication.Name = $"lblAuthentication_{controlName}";
+            lblAuthentication.Name = $"lblAuthentication_{ConfigurationName}";
             lblAuthentication.Size = new System.Drawing.Size(90, 24);
             lblAuthentication.TabIndex = 0;
             lblAuthentication.Text = "授权身份";
@@ -718,7 +717,7 @@ namespace SmartTools.Controller
             txtUrl.Location = new System.Drawing.Point(508, 22);
             txtUrl.MaxLength = 32767;
             txtUrl.MouseState = MaterialSkin.MouseState.HOVER;
-            txtUrl.Name = $"txtUrl_{controlName}";
+            txtUrl.Name = $"txtUrl_{ConfigurationName}";
             txtUrl.PasswordChar = '\0';
             txtUrl.SelectedText = "";
             txtUrl.SelectionLength = 0;
@@ -738,7 +737,7 @@ namespace SmartTools.Controller
             lblUrl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             lblUrl.Location = new System.Drawing.Point(451, 23);
             lblUrl.MouseState = MaterialSkin.MouseState.HOVER;
-            lblUrl.Name = $"lblUrl_{controlName}";
+            lblUrl.Name = $"lblUrl_{ConfigurationName}";
             lblUrl.Size = new System.Drawing.Size(50, 24);
             lblUrl.TabIndex = 20;
             lblUrl.Text = "网址";
@@ -754,7 +753,7 @@ namespace SmartTools.Controller
             btnOpenBrowser.Location = new System.Drawing.Point(829, 18);
             btnOpenBrowser.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             btnOpenBrowser.MouseState = MaterialSkin.MouseState.HOVER;
-            btnOpenBrowser.Name = $"btnOpenBrowser_{controlName}";
+            btnOpenBrowser.Name = $"btnOpenBrowser_{ConfigurationName}";
             btnOpenBrowser.Primary = false;
             btnOpenBrowser.Size = new System.Drawing.Size(60, 36);
             btnOpenBrowser.TabIndex = 21;
@@ -791,6 +790,7 @@ namespace SmartTools.Controller
             lblMoney_Title.PerformLayout();
             pnlProxy.ResumeLayout(false);
             pnlProxy.PerformLayout();
+            _userConfigs[ConfigurationName] = lblMoney_Title;
         }
 
         public event Action OnMainFormClosed;
@@ -798,6 +798,7 @@ namespace SmartTools.Controller
         #region Event Handler
         private void FormController_FormClosed(object sender, FormClosedEventArgs e)
         {
+            ConfigurationManager.Instance()._saveConfig.Start();
             OnMainFormClosed?.Invoke();
         } 
         #endregion

@@ -90,7 +90,6 @@ namespace SmartTools.Utils
                     if (StackFrame.OFFSET_UNKNOWN == sfs[i].GetILOffset())
                         break;
                     _methodName = sfs[i].GetMethod().Name;
-                    //sfs[i].GetFileLineNumber();
                     if (_filterdName.Contains(_methodName))
                         continue;
 
