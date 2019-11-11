@@ -151,7 +151,7 @@ namespace SmartTools.Controller
         private void ShowMainForm()
         {
             Main mainForm = FormManager.Instance().GetDefaultMainForm();
-            FormManager.Instance().InitializeComponent(mainForm);
+            FormManager.Instance().InitializeComponent();
 
             Init(mainForm)
                 .InitNotify(false);

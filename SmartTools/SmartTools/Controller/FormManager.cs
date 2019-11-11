@@ -17,7 +17,7 @@ namespace SmartTools.Controller
         private static FormManager manager = null;
         private static object locker = new object();
 
-        public Dictionary<string, TabPage> _userConfigs = new Dictionary<string, TabPage>();
+        private Main mainForm;
         #endregion
 
         private FormManager() { }
@@ -39,12 +39,12 @@ namespace SmartTools.Controller
 
         public Main GetDefaultMainForm()
         {
-            Main mainForm = new Main();
+            mainForm = new Main();
             mainForm.FormClosed += FormController_FormClosed;
             return mainForm;
         }
 
-        public void InitializeComponent(Main mainForm)
+        public void InitializeComponent()
         {
             var tcMaster = new MaterialSkin.Controls.MaterialTabControl();
             var tsMaster = new MaterialSkin.Controls.MaterialTabSelector();
@@ -90,7 +90,7 @@ namespace SmartTools.Controller
             // Configs
             //
             var configs = ConfigurationManager.Instance().Load().GetUserConfigs();
-            if (configs == null)
+            if (configs == null || configs.Count == 0)
             {
                 CreateConfigControls("默认配置",
                                      tsMaster,
@@ -145,7 +145,7 @@ namespace SmartTools.Controller
             btnAdd.TabIndex = 5;
             btnAdd.Text = "新增动作";
             btnAdd.UseVisualStyleBackColor = true;
-            btnAdd.Click += delegate(object sender, EventArgs e)
+            btnAdd.Click += delegate (object sender, EventArgs e)
             {
                 int lastItemIndex;
                 if (mlvData.Items.Count == 0)
@@ -199,15 +199,15 @@ namespace SmartTools.Controller
             mainForm.PerformLayout();
         }
 
-        public void CreateConfigControls(string ConfigurationName, 
+        public void CreateConfigControls(string ConfigurationName,
                                          MaterialSkin.Controls.MaterialTabSelector tsMaster,
                                          MaterialSkin.Controls.MaterialTabControl tcMaster,
                                          MaterialSkin.Controls.MaterialListView mlvData,
                                          string Authentication = "",
                                          string Url = "",
-                                         string StopMoney = "", 
-                                         bool IsCycle = false, 
-                                         Proxy proxy = null, 
+                                         string StopMoney = "",
+                                         bool IsCycle = false,
+                                         Proxy proxy = null,
                                          List<CustomAction> source = null)
         {
             var lblMoney_Title = new TabPage();
@@ -246,7 +246,7 @@ namespace SmartTools.Controller
             // 
             lblMoney_Title.SuspendLayout();
             pnlProxy.SuspendLayout();
-            tcMaster.Controls.Add(lblMoney_Title);
+            tcMaster.TabPages.Add(lblMoney_Title);
 
             // 
             // lblMoney_Title
@@ -357,7 +357,7 @@ namespace SmartTools.Controller
             // 
             txtPort.Depth = 0;
             txtPort.Hint = "";
-            txtPort.Location = new System.Drawing.Point(292, 17);
+            txtPort.Location = new System.Drawing.Point(296, 20);
             txtPort.MaxLength = 32767;
             txtPort.MouseState = MaterialSkin.MouseState.HOVER;
             txtPort.Name = $"txtPort_{ConfigurationName}";
@@ -376,7 +376,7 @@ namespace SmartTools.Controller
             // 
             txtIP.Depth = 0;
             txtIP.Hint = "";
-            txtIP.Location = new System.Drawing.Point(39, 17);
+            txtIP.Location = new System.Drawing.Point(39, 20);
             txtIP.MaxLength = 32767;
             txtIP.MouseState = MaterialSkin.MouseState.HOVER;
             txtIP.Name = $"txtIP_{ConfigurationName}";
@@ -427,7 +427,7 @@ namespace SmartTools.Controller
             pnlProxy.Controls.Add(lblIP);
             pnlProxy.Location = new System.Drawing.Point(280, 161);
             pnlProxy.Name = $"pnlProxy_{ConfigurationName}";
-            pnlProxy.Size = new System.Drawing.Size(1, 66);
+            pnlProxy.Size = new System.Drawing.Size(proxy == null ? 1 : 393, 66);
             pnlProxy.TabIndex = 15;
 
             // 
@@ -459,6 +459,7 @@ namespace SmartTools.Controller
             cbUserProxy.Size = new System.Drawing.Size(26, 30);
             cbUserProxy.TabIndex = 13;
             cbUserProxy.UseVisualStyleBackColor = true;
+            cbUserProxy.Checked = proxy == null ? false : true;
             cbUserProxy.CheckedChanged += delegate (object sender, EventArgs e)
             {
                 if (cbUserProxy.Checked)
@@ -790,7 +791,70 @@ namespace SmartTools.Controller
             lblMoney_Title.PerformLayout();
             pnlProxy.ResumeLayout(false);
             pnlProxy.PerformLayout();
-            _userConfigs[ConfigurationName] = lblMoney_Title;
+        }
+
+        private void convertControlByList()
+        {
+            ConfigurationManager.Instance().Configs.Clear();
+
+            var tabControl = this.mainForm.Controls["tcMaster"] as MaterialSkin.Controls.MaterialTabControl;
+            if (tabControl == null)
+                return;
+
+            foreach (TabPage page in tabControl.TabPages)
+            {
+                var subControls = page.Controls.OfType<Control>();
+
+                var config = new Configuration()
+                {
+                    ConfigurationName = page.Text,
+                    Authentication = subControls.Where(c => c.Name == $"txtAuthentication_{page.Text}").Select(c => c.Text).FirstOrDefault(),
+                    Url = subControls.Where(c => c.Name == $"txtUrl_{page.Text}").Select(c => c.Text).FirstOrDefault(),
+                    StopMoney = subControls.Where(c => c.Name == $"txtMoneyWarning_{page.Text}").Select(c => c.Text).FirstOrDefault(),
+                    IsCycle = (subControls.Where(c => c.Name == $"cblblIsCycle_{page.Text}").FirstOrDefault() as MaterialSkin.Controls.MaterialCheckBox).Checked,
+                    Proxy = new Proxy()
+                    {
+                        IP = subControls.Where(c => c.Name == $"pnlProxy_{page.Text}")
+                                        .Select(c => c.Controls)
+                                        .FirstOrDefault()
+                                        .OfType<System.Windows.Forms.Control>()
+                                        .Where(c => c.Name == $"txtIP_{page.Text}")
+                                        .Select(c => c.Text).FirstOrDefault(),
+                        Port = subControls.Where(c => c.Name == $"pnlProxy_{page.Text}")
+                                          .Select(c => c.Controls)
+                                          .FirstOrDefault()
+                                          .OfType<System.Windows.Forms.Control>()
+                                          .Where(c => c.Name == $"txtPort_{page.Text}")
+                                          .Select(c => c.Text).FirstOrDefault()
+                    },
+                    Action = new List<CustomAction>()
+                };
+
+                var listView = subControls.Where(c => c.Name == $"mlvData_{page.Text}").FirstOrDefault() as MaterialSkin.Controls.MaterialListView;
+                if (listView != null)
+                {
+                    foreach (ListViewItem item in listView.Items)
+                    {
+                        CustomAction action = new CustomAction()
+                        {
+                            ActionIndex = item.SubItems[0].Text,
+                            BetType = CustomAction.ToBet(item.SubItems[1].Text),
+                            Delay = item.SubItems[2].Text,
+                            Money = item.SubItems[3].Text
+                        };
+                        config.Action.Add(action);
+                    }
+                }
+
+
+                ConfigurationManager.Instance().Configs.Add(config);
+            }
+        }
+
+        private void Close()
+        {
+            convertControlByList();
+            ConfigurationManager.Instance().SaveConfig();
         }
 
         public event Action OnMainFormClosed;
@@ -798,9 +862,9 @@ namespace SmartTools.Controller
         #region Event Handler
         private void FormController_FormClosed(object sender, FormClosedEventArgs e)
         {
-            ConfigurationManager.Instance()._saveConfig.Start();
+            Close();
             OnMainFormClosed?.Invoke();
-        } 
+        }
         #endregion
     }
 }

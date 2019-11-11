@@ -12,7 +12,7 @@ namespace SmartTools.Common.Helper
 
             try
             {
-                using (FileStream streamWriter = new FileStream(complete, FileMode.OpenOrCreate, FileAccess.Write))
+                using (FileStream streamWriter = new FileStream(complete, FileMode.Create, FileAccess.Write))
                 {
                     streamWriter.Write(data, 0, data.Length);
                 }
