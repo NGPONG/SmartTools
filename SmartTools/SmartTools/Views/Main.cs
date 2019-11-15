@@ -12,7 +12,7 @@ namespace SmartTools.Views
     {
         public Main()
         {
-            // InitializeComponent();
+            //InitializeComponent();
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             //this.FormClosed += handler;

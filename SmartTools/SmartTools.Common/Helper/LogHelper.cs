@@ -14,14 +14,9 @@ namespace SmartTools.Common.Helper
             Logger.Error(message);
         }
 
-        public static void Info(Exception objException)
+        public static void Info(string message)
         {
-            string message = objException.InnerException == null ? objException.Message : objException.InnerException.Message;
-#if DEBUG
-            Logger.Debug(message, objException);
-#else
-            Logger.Info(message, objException);
-#endif
+            Logger.Info(message);
         }
 
         public static void Warn(Exception objException)

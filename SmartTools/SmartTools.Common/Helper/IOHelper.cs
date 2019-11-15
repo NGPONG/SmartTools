@@ -53,7 +53,7 @@ namespace SmartTools.Common.Helper
             catch(Exception objException)
             {
                 LogHelper.Error(objException);
-                return null;
+                return new byte[0];
             }
         }
 

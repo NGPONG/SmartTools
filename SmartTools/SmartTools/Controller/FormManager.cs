@@ -1,8 +1,10 @@
-﻿using SmartTools.Model;
+﻿using SmartTools.Common.Helper;
+using SmartTools.Model;
 using SmartTools.Utils.Extensions;
 using SmartTools.Views;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -50,8 +52,8 @@ namespace SmartTools.Controller
             var tsMaster = new MaterialSkin.Controls.MaterialTabSelector();
             var materialDivider = new MaterialSkin.Controls.MaterialDivider();
             var btnStart = new MaterialSkin.Controls.MaterialRaisedButton();
-            var btnAdd = new MaterialSkin.Controls.MaterialRaisedButton();
-            var mlvData = new MaterialSkin.Controls.MaterialListView();
+            var btnAddConfig = new MaterialSkin.Controls.MaterialRaisedButton();
+            var btnDeleteConfig = new MaterialSkin.Controls.MaterialRaisedButton();
 
             // 
             // START
@@ -94,8 +96,7 @@ namespace SmartTools.Controller
             {
                 CreateConfigControls("默认配置",
                                      tsMaster,
-                                     tcMaster,
-                                     mlvData);
+                                     tcMaster);
             }
             else
             {
@@ -104,7 +105,6 @@ namespace SmartTools.Controller
                     CreateConfigControls(config.ConfigurationName,
                                          tsMaster,
                                          tcMaster,
-                                         mlvData,
                                          config.Authentication,
                                          config.Url,
                                          config.StopMoney,
@@ -131,43 +131,47 @@ namespace SmartTools.Controller
             btnStart.UseVisualStyleBackColor = true;
 
             // 
-            // btnAdd
+            // btnAddConfig
             // 
-            btnAdd.AutoSize = true;
-            btnAdd.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            btnAdd.Depth = 0;
-            btnAdd.Icon = null;
-            btnAdd.Location = new System.Drawing.Point(734, 731);
-            btnAdd.MouseState = MaterialSkin.MouseState.HOVER;
-            btnAdd.Name = "btnAdd";
-            btnAdd.Primary = true;
-            btnAdd.Size = new System.Drawing.Size(98, 36);
-            btnAdd.TabIndex = 5;
-            btnAdd.Text = "新增动作";
-            btnAdd.UseVisualStyleBackColor = true;
-            btnAdd.Click += delegate (object sender, EventArgs e)
+            btnAddConfig.AutoSize = true;
+            btnAddConfig.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            btnAddConfig.Depth = 0;
+            btnAddConfig.Icon = null;
+            btnAddConfig.Location = new System.Drawing.Point(680, 731);
+            btnAddConfig.MouseState = MaterialSkin.MouseState.HOVER;
+            btnAddConfig.Name = "btnAddConfig";
+            btnAddConfig.Primary = true;
+            btnAddConfig.Size = new System.Drawing.Size(173, 36);
+            btnAddConfig.TabIndex = 6;
+            btnAddConfig.Text = "添加一页新的配置";
+            btnAddConfig.UseVisualStyleBackColor = true;
+            btnAddConfig.Click += delegate (object sender, EventArgs e)
             {
-                int lastItemIndex;
-                if (mlvData.Items.Count == 0)
-                {
-                    lastItemIndex = 1;
-                }
-                else
-                {
-                    var lastListViewItem = mlvData.Items[mlvData.Items.Count - 1];
-                    lastItemIndex = Convert.ToInt32(lastListViewItem.SubItems[0].Text);
-                }
+                CreateConfigControls($"Config_{tcMaster.TabPages.Count + 1}",
+                                     tsMaster,
+                                     tcMaster);
+                tsMaster.Refresh();
+            };
 
-                var actionNew = CustomAction.GetDefaultCustomAction();
-                actionNew.ActionIndex = mlvData.Items.Count == 0 ? lastItemIndex.ToString() : (++lastItemIndex).ToString();
-
-                var listViewItem = new ListViewItem(actionNew.ConvertToArrary());
-                mlvData.Items.Add(listViewItem);
-
-                mlvData.AddEmbeddedButton(delegate (object o, EventArgs args)
-                {
-                    mlvData.RemoveActiveItem(o as MaterialSkin.Controls.MaterialFlatButton);
-                });
+            // 
+            // btnDeleteConfig
+            // 
+            btnDeleteConfig.AutoSize = true;
+            btnDeleteConfig.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            btnDeleteConfig.Depth = 0;
+            btnDeleteConfig.Icon = null;
+            btnDeleteConfig.Location = new System.Drawing.Point(482, 731);
+            btnDeleteConfig.MouseState = MaterialSkin.MouseState.HOVER;
+            btnDeleteConfig.Name = "materialRaisedButton1";
+            btnDeleteConfig.Primary = true;
+            btnDeleteConfig.Size = new System.Drawing.Size(192, 36);
+            btnDeleteConfig.TabIndex = 7;
+            btnDeleteConfig.Text = "删除当前激活的配置";
+            btnDeleteConfig.UseVisualStyleBackColor = true;
+            btnDeleteConfig.Click += delegate (object sender, EventArgs e)
+            {
+                var activeIndex = tcMaster.SelectedIndex;
+                tcMaster.TabPages.Remove(tcMaster.TabPages[activeIndex]);
             };
 
             // 
@@ -185,8 +189,9 @@ namespace SmartTools.Controller
             //
             // Add controls.
             // 
-            mainForm.Controls.Add(btnAdd);
             mainForm.Controls.Add(btnStart);
+            mainForm.Controls.Add(btnAddConfig);
+            mainForm.Controls.Add(btnDeleteConfig);
             mainForm.Controls.Add(materialDivider);
             mainForm.Controls.Add(tsMaster);
             mainForm.Controls.Add(tcMaster);
@@ -202,7 +207,6 @@ namespace SmartTools.Controller
         public void CreateConfigControls(string ConfigurationName,
                                          MaterialSkin.Controls.MaterialTabSelector tsMaster,
                                          MaterialSkin.Controls.MaterialTabControl tcMaster,
-                                         MaterialSkin.Controls.MaterialListView mlvData,
                                          string Authentication = "",
                                          string Url = "",
                                          string StopMoney = "",
@@ -210,11 +214,12 @@ namespace SmartTools.Controller
                                          Proxy proxy = null,
                                          List<CustomAction> source = null)
         {
+            var mlvData = new MaterialSkin.Controls.MaterialListView();
             var lblMoney_Title = new TabPage();
-            var chActionIndex = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            var chBetType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            var chDelay = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            var chMoney = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            var chActionIndex = new ColumnHeader();
+            var chBetType = new ColumnHeader();
+            var chDelay = new ColumnHeader();
+            var chMoney = new ColumnHeader();
             var lblIsCycle = new MaterialSkin.Controls.MaterialLabel();
             var cbIsCycle = new MaterialSkin.Controls.MaterialCheckBox();
             var pnlProxy = new System.Windows.Forms.Panel();
@@ -239,7 +244,7 @@ namespace SmartTools.Controller
             var txtUrl = new MaterialSkin.Controls.MaterialSingleLineTextField();
             var lblUrl = new MaterialSkin.Controls.MaterialLabel();
             var btnOpenBrowser = new MaterialSkin.Controls.MaterialFlatButton();
-
+            var btnAdd = new MaterialSkin.Controls.MaterialFlatButton();
 
             //
             // START
@@ -273,6 +278,7 @@ namespace SmartTools.Controller
             lblMoney_Title.Controls.Add(txtUrl);
             lblMoney_Title.Controls.Add(lblUrl);
             lblMoney_Title.Controls.Add(btnOpenBrowser);
+            lblMoney_Title.Controls.Add(btnAdd);
             lblMoney_Title.Location = new System.Drawing.Point(4, 25);
             lblMoney_Title.Name = $"lblMoney_Title_{ConfigurationName}";
             lblMoney_Title.Padding = new System.Windows.Forms.Padding(3);
@@ -368,7 +374,7 @@ namespace SmartTools.Controller
             txtPort.Size = new System.Drawing.Size(70, 28);
             txtPort.TabIndex = 11;
             txtPort.TabStop = false;
-            txtPort.Text = proxy == null ? string.Empty : proxy.Port.ToString();
+            txtPort.Text = proxy == null || (string.IsNullOrEmpty(proxy.IP) && string.IsNullOrEmpty(proxy.Port)) ? string.Empty : proxy.Port.ToString();
             txtPort.UseSystemPasswordChar = false;
 
             // 
@@ -387,7 +393,7 @@ namespace SmartTools.Controller
             txtIP.Size = new System.Drawing.Size(175, 28);
             txtIP.TabIndex = 9;
             txtIP.TabStop = false;
-            txtIP.Text = proxy == null ? string.Empty : proxy.IP;
+            txtIP.Text = proxy == null || (string.IsNullOrEmpty(proxy.IP) && string.IsNullOrEmpty(proxy.Port)) ? string.Empty : proxy.IP.ToString();
             txtIP.UseSystemPasswordChar = false;
 
             // 
@@ -427,7 +433,7 @@ namespace SmartTools.Controller
             pnlProxy.Controls.Add(lblIP);
             pnlProxy.Location = new System.Drawing.Point(280, 161);
             pnlProxy.Name = $"pnlProxy_{ConfigurationName}";
-            pnlProxy.Size = new System.Drawing.Size(proxy == null ? 1 : 393, 66);
+            pnlProxy.Size = new System.Drawing.Size(proxy == null || (string.IsNullOrEmpty(proxy.IP) && string.IsNullOrEmpty(proxy.Port)) ? 1 : 393, 66);
             pnlProxy.TabIndex = 15;
 
             // 
@@ -459,7 +465,7 @@ namespace SmartTools.Controller
             cbUserProxy.Size = new System.Drawing.Size(26, 30);
             cbUserProxy.TabIndex = 13;
             cbUserProxy.UseVisualStyleBackColor = true;
-            cbUserProxy.Checked = proxy == null ? false : true;
+            cbUserProxy.Checked = proxy == null || (string.IsNullOrEmpty(proxy.IP) && string.IsNullOrEmpty(proxy.Port)) ? false : true;
             cbUserProxy.CheckedChanged += delegate (object sender, EventArgs e)
             {
                 if (cbUserProxy.Checked)
@@ -761,6 +767,49 @@ namespace SmartTools.Controller
             btnOpenBrowser.Text = "OPEN";
             btnOpenBrowser.UseVisualStyleBackColor = true;
 
+            // 
+            // btnAdd
+            // 
+            btnAdd.AutoSize = true;
+            btnAdd.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            btnAdd.CustomFont = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            btnAdd.Depth = 0;
+            btnAdd.Icon = null;
+            btnAdd.Location = new System.Drawing.Point(876, 225);
+            btnAdd.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            btnAdd.MouseState = MaterialSkin.MouseState.HOVER;
+            btnAdd.Name = $"btnAdd_{ConfigurationName}";
+            btnAdd.Primary = false;
+            btnAdd.Size = new System.Drawing.Size(32, 36);
+            btnAdd.TabIndex = 6;
+            btnAdd.Text = "+";
+            btnAdd.UseVisualStyleBackColor = true;
+            btnAdd.BringToFront();
+            btnAdd.Click += delegate (object sender, EventArgs e)
+            {
+                int lastItemIndex;
+                if (mlvData.Items.Count == 0)
+                {
+                    lastItemIndex = 1;
+                }
+                else
+                {
+                    var lastListViewItem = mlvData.Items[mlvData.Items.Count - 1];
+                    lastItemIndex = Convert.ToInt32(lastListViewItem.SubItems[0].Text);
+                }
+
+                var actionNew = CustomAction.GetDefaultCustomAction();
+                actionNew.ActionIndex = mlvData.Items.Count == 0 ? lastItemIndex.ToString() : (++lastItemIndex).ToString();
+
+                var listViewItem = new ListViewItem(actionNew.ConvertToArrary());
+                mlvData.Items.Add(listViewItem);
+
+                mlvData.AddEmbeddedButton(delegate (object o, EventArgs args)
+                {
+                    mlvData.RemoveActiveItem(o as MaterialSkin.Controls.MaterialFlatButton);
+                });
+            };
+
             // Init ListView
             mlvData.AddEditControl(0, new TextBox())
                    .AddEditControl(1, new ComboBox() { DataSource = new List<string>() { "庄", "闲", "和", "停" } })
@@ -793,7 +842,7 @@ namespace SmartTools.Controller
             pnlProxy.PerformLayout();
         }
 
-        private void convertControlByList()
+        private void ConvertControlByList()
         {
             ConfigurationManager.Instance().Configs.Clear();
 
@@ -853,7 +902,7 @@ namespace SmartTools.Controller
 
         private void Close()
         {
-            convertControlByList();
+            ConvertControlByList();
             ConfigurationManager.Instance().SaveConfig();
         }
 

@@ -71,8 +71,8 @@ namespace SmartTools.Controller
         {
             var source = Encoding.UTF8.GetString(Convert.FromBase64String(Encoding.UTF8.GetString(IOHelper.ReadToFile("/Temp", Global.__CONFIGFILE))));
             if (!string.IsNullOrEmpty(source))
-
                 Configs = JsonConvert.DeserializeObject<List<Configuration>>(source);
+
             return this;
         }
     }

@@ -32,6 +32,7 @@ namespace SmartTools.Views
         {
             this.tcMaster = new MaterialSkin.Controls.MaterialTabControl();
             this.lblMoney_Title_Default = new System.Windows.Forms.TabPage();
+            this.materialFlatButton1 = new MaterialSkin.Controls.MaterialFlatButton();
             this.btnOpenBrowser = new MaterialSkin.Controls.MaterialFlatButton();
             this.lblUrl = new MaterialSkin.Controls.MaterialLabel();
             this.txtUrl = new MaterialSkin.Controls.MaterialSingleLineTextField();
@@ -65,6 +66,8 @@ namespace SmartTools.Views
             this.materialDivider1 = new MaterialSkin.Controls.MaterialDivider();
             this.btnStart = new MaterialSkin.Controls.MaterialRaisedButton();
             this.btnAdd = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.btnAddConfig = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.materialRaisedButton1 = new MaterialSkin.Controls.MaterialRaisedButton();
             this.tcMaster.SuspendLayout();
             this.lblMoney_Title_Default.SuspendLayout();
             this.pnlProxy_Default.SuspendLayout();
@@ -84,6 +87,7 @@ namespace SmartTools.Views
             // lblMoney_Title_Default
             // 
             this.lblMoney_Title_Default.BackColor = System.Drawing.Color.White;
+            this.lblMoney_Title_Default.Controls.Add(this.materialFlatButton1);
             this.lblMoney_Title_Default.Controls.Add(this.btnOpenBrowser);
             this.lblMoney_Title_Default.Controls.Add(this.lblUrl);
             this.lblMoney_Title_Default.Controls.Add(this.txtUrl);
@@ -111,6 +115,23 @@ namespace SmartTools.Views
             this.lblMoney_Title_Default.Size = new System.Drawing.Size(898, 530);
             this.lblMoney_Title_Default.TabIndex = 0;
             this.lblMoney_Title_Default.Text = "默认配置";
+            // 
+            // materialFlatButton1
+            // 
+            this.materialFlatButton1.AutoSize = true;
+            this.materialFlatButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialFlatButton1.CustomFont = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.materialFlatButton1.Depth = 0;
+            this.materialFlatButton1.Icon = null;
+            this.materialFlatButton1.Location = new System.Drawing.Point(867, 185);
+            this.materialFlatButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialFlatButton1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialFlatButton1.Name = "materialFlatButton1";
+            this.materialFlatButton1.Primary = false;
+            this.materialFlatButton1.Size = new System.Drawing.Size(32, 36);
+            this.materialFlatButton1.TabIndex = 6;
+            this.materialFlatButton1.Text = "+";
+            this.materialFlatButton1.UseVisualStyleBackColor = true;
             // 
             // btnOpenBrowser
             // 
@@ -235,7 +256,7 @@ namespace SmartTools.Views
             // 
             this.chMoney_Default.Text = "金额";
             this.chMoney_Default.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.chMoney_Default.Width = 150;
+            this.chMoney_Default.Width = 151;
             // 
             // pnlProxy_Default
             // 
@@ -569,7 +590,7 @@ namespace SmartTools.Views
             this.btnAdd.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnAdd.Depth = 0;
             this.btnAdd.Icon = null;
-            this.btnAdd.Location = new System.Drawing.Point(734, 731);
+            this.btnAdd.Location = new System.Drawing.Point(225, 731);
             this.btnAdd.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Primary = true;
@@ -579,12 +600,44 @@ namespace SmartTools.Views
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.BtnAdd_Click);
             // 
+            // btnAddConfig
+            // 
+            this.btnAddConfig.AutoSize = true;
+            this.btnAddConfig.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnAddConfig.Depth = 0;
+            this.btnAddConfig.Icon = null;
+            this.btnAddConfig.Location = new System.Drawing.Point(680, 731);
+            this.btnAddConfig.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnAddConfig.Name = "btnAddConfig";
+            this.btnAddConfig.Primary = true;
+            this.btnAddConfig.Size = new System.Drawing.Size(173, 36);
+            this.btnAddConfig.TabIndex = 6;
+            this.btnAddConfig.Text = "添加一页新的配置";
+            this.btnAddConfig.UseVisualStyleBackColor = true;
+            // 
+            // materialRaisedButton1
+            // 
+            this.materialRaisedButton1.AutoSize = true;
+            this.materialRaisedButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialRaisedButton1.Depth = 0;
+            this.materialRaisedButton1.Icon = null;
+            this.materialRaisedButton1.Location = new System.Drawing.Point(482, 731);
+            this.materialRaisedButton1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialRaisedButton1.Name = "materialRaisedButton1";
+            this.materialRaisedButton1.Primary = true;
+            this.materialRaisedButton1.Size = new System.Drawing.Size(192, 36);
+            this.materialRaisedButton1.TabIndex = 7;
+            this.materialRaisedButton1.Text = "删除当前激活的配置";
+            this.materialRaisedButton1.UseVisualStyleBackColor = true;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(937, 779);
+            this.Controls.Add(this.materialRaisedButton1);
+            this.Controls.Add(this.btnAddConfig);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.materialDivider1);
@@ -640,5 +693,8 @@ namespace SmartTools.Views
         private MaterialSkin.Controls.MaterialLabel lblUrl;
         private MaterialSkin.Controls.MaterialSingleLineTextField txtUrl;
         private MaterialSkin.Controls.MaterialFlatButton btnOpenBrowser;
+        private MaterialSkin.Controls.MaterialFlatButton materialFlatButton1;
+        private MaterialSkin.Controls.MaterialRaisedButton btnAddConfig;
+        private MaterialSkin.Controls.MaterialRaisedButton materialRaisedButton1;
     }
 }

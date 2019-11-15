@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Linq;
 using static MaterialSkin.Controls.MaterialForm;
+using SmartTools.Common.Helper;
 
 namespace MaterialSkin.Controls
 {
@@ -141,6 +142,7 @@ namespace MaterialSkin.Controls
                 {
                     ComboBox combo = control as ComboBox;
                     combo.DropDownStyle = ComboBoxStyle.DropDownList;
+                    combo.Font = new Font("微软雅黑", 10f);
                     combo.SelectedIndexChanged += delegate (object sender, EventArgs e)
                     {
                         if (combo.SelectedIndex > -1)
@@ -167,10 +169,10 @@ namespace MaterialSkin.Controls
         protected override void WndProc(ref Message m)
         {
             if (IsShowing
-                          && (m.Msg == Native.WM_MOUSEWHEEL ||
-                              m.Msg == Native.WM_HSCROLL ||
-                              m.Msg == Native.WM_VSCROLL ||
-                             (m.Msg == Native.WM_KEYDOWN && (m.WParam == (IntPtr)40 || m.WParam == (IntPtr)35))))
+                  && (m.Msg == Native.WM_MOUSEWHEEL ||
+                      m.Msg == Native.WM_HSCROLL ||
+                      m.Msg == Native.WM_VSCROLL ||
+                     (m.Msg == Native.WM_KEYDOWN && (m.WParam == (IntPtr)40 || m.WParam == (IntPtr)35))))
             {
                 // Tracking Scroll ball Active
             }
@@ -355,7 +357,7 @@ namespace MaterialSkin.Controls
         {
             if (this._dynamicRowIndex != -1 && this._dynamicColumnIndex != -1)
             {
-                control.Location = _dynamicColumnIndex == 0 ? new Point(0 + CONTROL_PADDING, rect.top + CONTROL_PADDING) : new Point(rect.left + CONTROL_PADDING, rect.top + CONTROL_PADDING);
+                control.Location = _dynamicColumnIndex == 0 ? new Point(0 + CONTROL_PADDING - 1, rect.top + CONTROL_PADDING - 1) : new Point(rect.left + CONTROL_PADDING - 1, rect.top + CONTROL_PADDING - 1);
                 control.Text = this.Items[_dynamicRowIndex].SubItems[_dynamicColumnIndex].Text;
                 control.Show();
                 ChangeEditControlWidth(control);
