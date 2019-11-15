@@ -52,7 +52,7 @@ namespace MaterialSkin.Controls
                 if (HoveredItem != currentHoveredItem)
                 {
                     HoveredItem = currentHoveredItem;
-                    Refresh();
+                    Invalidate();
                 }
             };
         }

@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using MaterialSkin.Animations;
 
@@ -36,10 +39,16 @@ namespace MaterialSkin.Controls
                 };
                 _baseTabControl.ControlAdded += delegate
                 {
-                    Invalidate();
+                    //Invalidate();
                 };
-                _baseTabControl.ControlRemoved += delegate
+                _baseTabControl.ControlRemoved += delegate (object sender, ControlEventArgs e)
                 {
+                    var container = (sender as MaterialTabControl).TabPages;
+
+                    var removing_Index = container.IndexOf(e.Control as TabPage);
+                    if (removing_Index == _previousSelectedTabIndex && removing_Index == container.Count - 1)
+                        _previousSelectedTabIndex--;
+
                     Invalidate();
                 };
             }
@@ -63,7 +72,11 @@ namespace MaterialSkin.Controls
                 AnimationType = AnimationType.EaseOut,
                 Increment = 0.04
             };
-            _animationManager.OnAnimationProgress += sender => Invalidate();
+            _animationManager.OnAnimationProgress += (object sender) =>
+            {
+                SmartTools.Common.Helper.LogHelper.Info("ready");
+                Invalidate();
+            };
         }
 
         protected override void OnPaint(PaintEventArgs e)

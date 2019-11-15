@@ -56,13 +56,13 @@ namespace SmartTools.Views
         private void CbConfigLock_Default_CheckedChanged(object sender, EventArgs e)
         {
             this.txtConfigName_Default.Enabled = !this.cbConfigLock_Default.Checked;
-            this.txtConfigName_Default.Refresh();
+            this.txtConfigName_Default.Invalidate();
         }
 
         private void TxtConfigName_Default_TextChanged(object sender, EventArgs e)
         {
             this.lblMoney_Title_Default.Text = this.txtConfigName_Default.Text;
-            this.tsMaster.Refresh();
+            this.tsMaster.Invalidate();
         }
 
         private void CbUserProxy_Default_CheckedChanged(object sender, EventArgs e)

@@ -48,6 +48,7 @@ namespace SmartTools.Controller
 
         public void InitializeComponent()
         {
+            #region Init control
             var tcMaster = new MaterialSkin.Controls.MaterialTabControl();
             var tsMaster = new MaterialSkin.Controls.MaterialTabSelector();
             var materialDivider = new MaterialSkin.Controls.MaterialDivider();
@@ -150,7 +151,8 @@ namespace SmartTools.Controller
                 CreateConfigControls($"Config_{tcMaster.TabPages.Count + 1}",
                                      tsMaster,
                                      tcMaster);
-                tsMaster.Refresh();
+                tcMaster.SelectedIndex = tcMaster.TabPages.Count - 1;
+                tsMaster.Invalidate();
             };
 
             // 
@@ -166,12 +168,33 @@ namespace SmartTools.Controller
             btnDeleteConfig.Primary = true;
             btnDeleteConfig.Size = new System.Drawing.Size(192, 36);
             btnDeleteConfig.TabIndex = 7;
-            btnDeleteConfig.Text = "删除当前激活的配置";
+            btnDeleteConfig.Text = "删除当前选中的配置";
             btnDeleteConfig.UseVisualStyleBackColor = true;
             btnDeleteConfig.Click += delegate (object sender, EventArgs e)
             {
+                btnDeleteConfig.Enabled = false;
+
                 var activeIndex = tcMaster.SelectedIndex;
-                tcMaster.TabPages.Remove(tcMaster.TabPages[activeIndex]);
+                if (tcMaster.TabPages[activeIndex].Text == "默认配置")
+                {
+                    btnDeleteConfig.Enabled = true;
+                    MessageBoxExt.Show("无法删除默认配置", MessageboxType.Info);
+                    return;
+                }
+
+                tcMaster.SelectedIndex = activeIndex - 1;
+                tsMaster.Invalidate();
+                Application.DoEvents();
+
+                Task.Run(() =>
+                {
+                    Thread.Sleep(250);
+                    mainForm.Invoke(new Action(() =>
+                    {
+                        tcMaster.TabPages.Remove(tcMaster.TabPages[activeIndex]);
+                        btnDeleteConfig.Enabled = true;
+                    }));
+                });
             };
 
             // 
@@ -201,7 +224,8 @@ namespace SmartTools.Controller
             //
             tcMaster.ResumeLayout(false);
             mainForm.ResumeLayout(false);
-            mainForm.PerformLayout();
+            mainForm.PerformLayout(); 
+            #endregion
         }
 
         public void CreateConfigControls(string ConfigurationName,
@@ -639,7 +663,7 @@ namespace SmartTools.Controller
             cbConfigLock.CheckedChanged += delegate (object sender, EventArgs e)
             {
                 txtConfigName.Enabled = !cbConfigLock.Checked;
-                txtConfigName.Refresh();
+                txtConfigName.Invalidate();
             };
 
             // 
@@ -679,7 +703,7 @@ namespace SmartTools.Controller
             txtConfigName.TextChanged += delegate (object sender, EventArgs e)
             {
                 lblMoney_Title.Text = txtConfigName.Text;
-                tsMaster.Refresh();
+                tsMaster.Invalidate();
             };
 
             // 
@@ -696,7 +720,7 @@ namespace SmartTools.Controller
             txtAuthentication.SelectionLength = 0;
             txtAuthentication.SelectionStart = 0;
             txtAuthentication.Size = new System.Drawing.Size(499, 28);
-            txtAuthentication.TabIndex = 1;
+            txtAuthentication.TabIndex = 2;
             txtAuthentication.TabStop = false;
             txtAuthentication.Text = Authentication;
             txtAuthentication.UseSystemPasswordChar = false;
@@ -730,7 +754,7 @@ namespace SmartTools.Controller
             txtUrl.SelectionLength = 0;
             txtUrl.SelectionStart = 0;
             txtUrl.Size = new System.Drawing.Size(314, 30);
-            txtUrl.TabIndex = 19;
+            txtUrl.TabIndex = 1;
             txtUrl.TabStop = false;
             txtUrl.UseSystemPasswordChar = false;
             txtUrl.Text = Url;
@@ -826,11 +850,12 @@ namespace SmartTools.Controller
                     mlvData.Items.Add(item);
                 }
 
-                // Add click button.
-                mlvData.AddEmbeddedButtons(delegate (object sender, EventArgs args)
-                {
-                    mlvData.RemoveActiveItem(sender as MaterialSkin.Controls.MaterialFlatButton);
-                });
+                if(data.Cast<string[]>().Count() > 0)
+                    // Add click button.
+                    mlvData.AddEmbeddedButtons(delegate (object sender, EventArgs args)
+                    {
+                        mlvData.RemoveActiveItem(sender as MaterialSkin.Controls.MaterialFlatButton);
+                    });
             }
 
             //
