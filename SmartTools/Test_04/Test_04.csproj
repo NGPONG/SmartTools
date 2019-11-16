@@ -129,6 +129,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\chromedriver.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Resources\Image_测试_测试.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

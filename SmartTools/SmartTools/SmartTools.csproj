@@ -125,6 +125,7 @@
     <Compile Include="3rd\MaterialSkin\IMaterialControl.cs" />
     <Compile Include="3rd\MaterialSkin\MaterialSkinManager.cs" />
     <Compile Include="Controller\AutomateController.cs" />
+    <Compile Include="Controller\ChromeController.cs" />
     <Compile Include="Controller\FormManager.cs" />
     <Compile Include="Controller\IWebDriverController.cs" />
     <Compile Include="Model\Configuration.cs" />

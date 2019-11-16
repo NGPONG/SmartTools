@@ -5,6 +5,65 @@ namespace SmartTools.Common.Helper
 {
     public class IOHelper
     {
+        public static string SearchFile(string fileName)
+        {
+            string filePath = string.Empty;
+            foreach (var disk in DriveInfo.GetDrives())
+            {
+                filePath = SeachFile(disk.Name, fileName);
+                if (!string.IsNullOrEmpty(filePath))
+                    break;
+            }
+
+            return filePath;
+        }
+
+        private static string SeachFile(string path,string name)
+        {
+            try
+            {
+                string fileName = string.Empty;
+
+                // Check recycle bin and other unsafe places.
+                var dirInfo = new DirectoryInfo(path);
+                if (!dirInfo.Root.FullName.Equals(dirInfo.FullName) &&
+                    dirInfo.Attributes.HasFlag(FileAttributes.System))
+                    return fileName;
+
+                var directorys = Directory.GetDirectories(path);
+                foreach (var directory in directorys)
+                {
+                    fileName = SeachFile(directory, name);
+                    if (!string.IsNullOrEmpty(fileName))
+                        break;
+                }
+
+                // Exit if the upper function captures the file name
+                if (!string.IsNullOrEmpty(fileName))
+                    return fileName;
+
+                var files = Directory.GetFiles(path);
+                foreach (var file in files)
+                {
+                    if (Path.GetFileName(file).Equals(name))
+                    {
+                        fileName = file;
+                        break;
+                    }
+                }
+
+                return fileName;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return string.Empty;
+            }
+            catch (Exception)
+            {
+                return string.Empty;
+            }
+        }
+
         public static void SaveToFile(string path, string name, byte[] data)
         {
             string complete = AppDomain.CurrentDomain.BaseDirectory + Path.Combine(path, name);

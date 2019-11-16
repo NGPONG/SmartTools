@@ -74,7 +74,6 @@ namespace MaterialSkin.Controls
             };
             _animationManager.OnAnimationProgress += (object sender) =>
             {
-                SmartTools.Common.Helper.LogHelper.Info("ready");
                 Invalidate();
             };
         }

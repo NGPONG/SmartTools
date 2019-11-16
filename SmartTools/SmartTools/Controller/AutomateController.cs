@@ -21,10 +21,5 @@ namespace SmartTools.Controller
         {
 
         }
-
-        private IWebDriver CreateChromeDriver()
-        {
-            var driver = new WebDriver
-        }
     }
 }
