@@ -790,6 +790,17 @@ namespace SmartTools.Controller
             btnOpenBrowser.TabIndex = 21;
             btnOpenBrowser.Text = "OPEN";
             btnOpenBrowser.UseVisualStyleBackColor = true;
+            btnOpenBrowser.Click += delegate (object sender, EventArgs e)
+            {
+                try
+                {
+                    AutomateController.Instance().Open(ConfigurationName, txtUrl.Text);
+                }
+                catch (Exception ex)
+                {
+                    MessageBoxExt.Show(ex.Message, MessageboxType.Error);
+                }
+            };
 
             // 
             // btnAdd

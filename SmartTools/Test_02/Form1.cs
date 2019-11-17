@@ -37,6 +37,7 @@ namespace Test_02
 
             // 根据当前屏幕尺寸 分辨率 ddi 点距 计算出窗口的具体尺寸
             driver.Manage().Window.Size = new System.Drawing.Size(800, 600);
+
         }
 
         private void Button2_Click(object sender, EventArgs e)

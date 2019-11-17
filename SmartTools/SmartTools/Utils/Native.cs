@@ -49,6 +49,28 @@ namespace SmartTools.Utils
         }
 
         /// <summary>
+        /// 屏幕点距计算 (存在部分误差)
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="diag"></param>
+        /// <returns></returns>
+        private double CalcDpi(double x, double y, double diag)
+        {
+            if (y == 0 || x == 0)
+                return 0;
+
+            double ratio = y / x;
+            double xd = Math.Sqrt(Math.Pow(diag, 2) / (1 + Math.Pow(ratio, 2)));
+            double dotPitch = 25.4 / (x / xd);
+
+            double dopi = Math.Round(dotPitch * 10000) / 10000;
+            double metricDiag = diag * 2.54;
+
+            return metricDiag;
+        }
+
+        /// <summary>
         /// 深拷贝对象
         /// </summary>
         /// <typeparam name="T"></typeparam>

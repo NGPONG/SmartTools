@@ -15,19 +15,19 @@ namespace SmartTools.Controller
         IWebDriver CreateDrvier();
     }
 
-    public class WebDriver
+    public class WebDriverFactory
     {
-        public static IWebDriverController GetDriver(string browser)
+        public static IWebDriverController Get(string browser)
         {
-            IWebDriverController webDriver = null;
+            IWebDriverController controller = null;
             switch (browser.ToLower())
             {
                 case "chrome":
-                    webDriver = new ChromeController();
+                    controller = new ChromeController();
                     break;
             }
 
-            return webDriver;
+            return controller;
         }
     }
 }
