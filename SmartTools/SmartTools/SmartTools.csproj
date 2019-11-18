@@ -107,6 +107,9 @@
     <Compile Include="3rd\MaterialSkin\Controls\MaterialProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="3rd\MaterialSkin\Controls\MaterialProgressSpinner.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="3rd\MaterialSkin\Controls\MaterialRadioButton.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -164,6 +167,12 @@
     <Compile Include="Views\MessageBoxExt.Designer.cs">
       <DependentUpon>MessageBoxExt.cs</DependentUpon>
     </Compile>
+    <Compile Include="Views\Test.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Views\Test.Designer.cs">
+      <DependentUpon>Test.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="3rd\MaterialSkin\Controls\MaterialForm.resx">
       <DependentUpon>MaterialForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -197,9 +206,15 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\en-US.json" />
-    <None Include="Resources\Roboto-Medium.ttf" />
-    <None Include="Resources\Roboto-Regular.ttf" />
+    <None Include="Resources\en-US.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Roboto-Medium.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Roboto-Regular.ttf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="tessdata\chi_sim.traineddata">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -208,10 +223,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\minus.png" />
+    <None Include="Resources\minus.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\plus.png" />
+    <None Include="Resources\plus.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SmartTools.Common\SmartTools.Common.csproj">
@@ -220,8 +239,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Sleep.png" />
-    <None Include="Resources\Active.png" />
+    <None Include="Resources\Sleep.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Resources\Active.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />

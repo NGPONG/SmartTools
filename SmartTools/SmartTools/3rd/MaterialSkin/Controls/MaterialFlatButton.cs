@@ -86,7 +86,7 @@ namespace MaterialSkin.Controls
             set
             {
                 base.Text = value;
-                _textSize = CreateGraphics().MeasureString(value.ToUpper(), SkinManager.ROBOTO_MEDIUM_10);
+                _textSize = CreateGraphics().MeasureString(value.ToUpper(), this.CustomFont);
                 if (AutoSize)
                     Size = GetPreferredSize();
                 Invalidate();

@@ -15,6 +15,7 @@ namespace SmartTools.Views
             //InitializeComponent();
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
+            //this.materialProgressSpinner1.Start();
             //this.FormClosed += handler;
 
             //this.mlvData_Default.AddEditControl(0, new TextBox())
@@ -127,6 +128,16 @@ namespace SmartTools.Views
         private void CbMoneyWarning_Default_CheckedChanged(object sender, EventArgs e)
         {
             this.txtMoneyWarning_Default.Enabled = !this.cbMoneyWarning_Default.Checked;
+        }
+
+        private void BtnOpenBrowser_Click(object sender, EventArgs e)
+        {
+            this.materialProgressSpinner1.Stop();
+        }
+
+        private void MaterialRaisedButton1_Click(object sender, EventArgs e)
+        {
+            this.materialProgressSpinner1.Start();
         }
     }
 }

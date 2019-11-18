@@ -32,6 +32,7 @@ namespace SmartTools.Views
         {
             this.tcMaster = new MaterialSkin.Controls.MaterialTabControl();
             this.lblMoney_Title_Default = new System.Windows.Forms.TabPage();
+            this.materialProgressSpinner1 = new MaterialSkin.Controls.MaterialProgressSpinner();
             this.materialFlatButton1 = new MaterialSkin.Controls.MaterialFlatButton();
             this.btnOpenBrowser = new MaterialSkin.Controls.MaterialFlatButton();
             this.lblUrl = new MaterialSkin.Controls.MaterialLabel();
@@ -87,6 +88,7 @@ namespace SmartTools.Views
             // lblMoney_Title_Default
             // 
             this.lblMoney_Title_Default.BackColor = System.Drawing.Color.White;
+            this.lblMoney_Title_Default.Controls.Add(this.materialProgressSpinner1);
             this.lblMoney_Title_Default.Controls.Add(this.materialFlatButton1);
             this.lblMoney_Title_Default.Controls.Add(this.btnOpenBrowser);
             this.lblMoney_Title_Default.Controls.Add(this.lblUrl);
@@ -115,6 +117,17 @@ namespace SmartTools.Views
             this.lblMoney_Title_Default.Size = new System.Drawing.Size(898, 530);
             this.lblMoney_Title_Default.TabIndex = 0;
             this.lblMoney_Title_Default.Text = "默认配置";
+            // 
+            // materialProgressSpinner1
+            // 
+            this.materialProgressSpinner1.CustomBackground = false;
+            this.materialProgressSpinner1.Location = new System.Drawing.Point(890, 27);
+            this.materialProgressSpinner1.Maximum = 100;
+            this.materialProgressSpinner1.Name = "materialProgressSpinner1";
+            this.materialProgressSpinner1.Size = new System.Drawing.Size(16, 16);
+            this.materialProgressSpinner1.TabIndex = 22;
+            this.materialProgressSpinner1.Value = 50;
+            this.materialProgressSpinner1.Visible = false;
             // 
             // materialFlatButton1
             // 
@@ -149,6 +162,7 @@ namespace SmartTools.Views
             this.btnOpenBrowser.TabIndex = 21;
             this.btnOpenBrowser.Text = "打开";
             this.btnOpenBrowser.UseVisualStyleBackColor = true;
+            this.btnOpenBrowser.Click += new System.EventHandler(this.BtnOpenBrowser_Click);
             // 
             // lblUrl
             // 
@@ -629,6 +643,7 @@ namespace SmartTools.Views
             this.materialRaisedButton1.TabIndex = 7;
             this.materialRaisedButton1.Text = "删除当前激活的配置";
             this.materialRaisedButton1.UseVisualStyleBackColor = true;
+            this.materialRaisedButton1.Click += new System.EventHandler(this.MaterialRaisedButton1_Click);
             // 
             // Main
             // 
@@ -696,5 +711,6 @@ namespace SmartTools.Views
         private MaterialSkin.Controls.MaterialFlatButton materialFlatButton1;
         private MaterialSkin.Controls.MaterialRaisedButton btnAddConfig;
         private MaterialSkin.Controls.MaterialRaisedButton materialRaisedButton1;
+        private MaterialSkin.Controls.MaterialProgressSpinner materialProgressSpinner1;
     }
 }

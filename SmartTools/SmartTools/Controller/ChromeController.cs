@@ -20,11 +20,26 @@ namespace SmartTools.Controller
 
         public string DriverDownloadFile => "chromedriver_win32.zip";
 
-        public IWebDriver Instance { get => this.Instance; set => this.Instance = value; }
+        private IWebDriver _instance;
+        public IWebDriver Instance
+        {
+            get
+            {
+                return this._instance;
+            }
+            set
+            {
+                this._instance = value;
+            }
+        }
+
+        public event Action OnWebDriverOpened;
+
+        public event Action OnWebDriverClosed;
 
         public IWebDriver CreateDrvier()
         {
-            if (!File.Exists($"{AppDomain.CurrentDomain.BaseDirectory}\\Resources\\chromedriver.exe"))
+            if (!File.Exists($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver\\chromedriver.exe"))
             {
                 string filePath = IOHelper.SearchFile("chrome.exe");
                 if (string.IsNullOrEmpty(filePath))
@@ -35,13 +50,15 @@ namespace SmartTools.Controller
 
             try
             {
-                Instance = new ChromeDriver($"{AppDomain.CurrentDomain.BaseDirectory}\\Resources");
+                Instance = new ChromeDriver($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver");
             }
             catch (Exception e)
             {
                 LogHelper.Error(e);
                 return null;
             }
+            OnWebDriverOpened?.Invoke();
+
             return Instance;
         }
 
@@ -60,7 +77,7 @@ namespace SmartTools.Controller
                 using (HttpClient httpClient = new HttpClient())
                 {
                     // XHR version address.
-                    var versionContent = httpClient.GetAsync(DriverDownloadURL).Result.Content.ReadAsStreamAsync().Result;
+                    var versionContent = httpClient.GetAsync($"{DriverDownloadURL}?delimiter=/&prefix=").Result.Content.ReadAsStreamAsync().Result;
                     XmlDocument doc = new XmlDocument();
                     doc.Load(versionContent);
 
@@ -115,7 +132,10 @@ namespace SmartTools.Controller
                             ZipArchiveEntry entry = archive.GetEntry("chromedriver.exe");
                             using (var entry_Stream = entry.Open())
                             {
-                                var output = new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}\\Resources\\chromedriver.exe", FileMode.CreateNew, FileAccess.Write);
+                                if (!Directory.Exists($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver"))
+                                    Directory.CreateDirectory($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver");
+
+                                var output = new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver\\chromedriver.exe", FileMode.CreateNew, FileAccess.Write);
 
                                 int stream_Available;
                                 while (true)
@@ -134,7 +154,16 @@ namespace SmartTools.Controller
                     }
                 }
             }
+
+            GC.Collect();
         }
 
+        public void Close()
+        {
+            Instance.Close();
+            Instance.Dispose();
+
+            OnWebDriverClosed?.Invoke();
+        }
     }
 }

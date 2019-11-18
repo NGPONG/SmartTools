@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -224,7 +225,7 @@ namespace SmartTools.Controller
             //
             tcMaster.ResumeLayout(false);
             mainForm.ResumeLayout(false);
-            mainForm.PerformLayout(); 
+            mainForm.PerformLayout();
             #endregion
         }
 
@@ -269,6 +270,7 @@ namespace SmartTools.Controller
             var lblUrl = new MaterialSkin.Controls.MaterialLabel();
             var btnOpenBrowser = new MaterialSkin.Controls.MaterialFlatButton();
             var btnAdd = new MaterialSkin.Controls.MaterialFlatButton();
+            var psWait = new MaterialSkin.Controls.MaterialProgressSpinner();
 
             //
             // START
@@ -303,6 +305,7 @@ namespace SmartTools.Controller
             lblMoney_Title.Controls.Add(lblUrl);
             lblMoney_Title.Controls.Add(btnOpenBrowser);
             lblMoney_Title.Controls.Add(btnAdd);
+            lblMoney_Title.Controls.Add(psWait);
             lblMoney_Title.Location = new System.Drawing.Point(4, 25);
             lblMoney_Title.Name = $"lblMoney_Title_{ConfigurationName}";
             lblMoney_Title.Padding = new System.Windows.Forms.Padding(3);
@@ -630,7 +633,7 @@ namespace SmartTools.Controller
             // 
             btnHow.AutoSize = true;
             btnHow.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            btnHow.CustomFont = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            btnHow.CustomFont = new System.Drawing.Font("微软雅黑", 10F);
             btnHow.Depth = 0;
             btnHow.Icon = null;
             btnHow.Location = new System.Drawing.Point(612, 73);
@@ -640,7 +643,7 @@ namespace SmartTools.Controller
             btnHow.Primary = false;
             btnHow.Size = new System.Drawing.Size(165, 36);
             btnHow.TabIndex = 5;
-            btnHow.Text = "How can i get it";
+            btnHow.Text = "HOW CAN I GET IT";
             btnHow.UseVisualStyleBackColor = true;
 
             // 
@@ -745,7 +748,7 @@ namespace SmartTools.Controller
             txtUrl.Depth = 0;
             txtUrl.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             txtUrl.Hint = "";
-            txtUrl.Location = new System.Drawing.Point(508, 22);
+            txtUrl.Location = new System.Drawing.Point(498, 22);
             txtUrl.MaxLength = 32767;
             txtUrl.MouseState = MaterialSkin.MouseState.HOVER;
             txtUrl.Name = $"txtUrl_{ConfigurationName}";
@@ -766,7 +769,7 @@ namespace SmartTools.Controller
             lblUrl.Depth = 0;
             lblUrl.Font = new System.Drawing.Font("Roboto", 11F);
             lblUrl.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            lblUrl.Location = new System.Drawing.Point(451, 23);
+            lblUrl.Location = new System.Drawing.Point(441, 23);
             lblUrl.MouseState = MaterialSkin.MouseState.HOVER;
             lblUrl.Name = $"lblUrl_{ConfigurationName}";
             lblUrl.Size = new System.Drawing.Size(50, 24);
@@ -778,27 +781,65 @@ namespace SmartTools.Controller
             // 
             btnOpenBrowser.AutoSize = true;
             btnOpenBrowser.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            btnOpenBrowser.CustomFont = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            btnOpenBrowser.CustomFont = new System.Drawing.Font("微软雅黑", 10F);
             btnOpenBrowser.Depth = 0;
             btnOpenBrowser.Icon = null;
-            btnOpenBrowser.Location = new System.Drawing.Point(829, 18);
+            btnOpenBrowser.Location = new System.Drawing.Point(814, 20);
             btnOpenBrowser.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             btnOpenBrowser.MouseState = MaterialSkin.MouseState.HOVER;
             btnOpenBrowser.Name = $"btnOpenBrowser_{ConfigurationName}";
             btnOpenBrowser.Primary = false;
-            btnOpenBrowser.Size = new System.Drawing.Size(60, 36);
             btnOpenBrowser.TabIndex = 21;
             btnOpenBrowser.Text = "OPEN";
+            btnOpenBrowser.Tag = false; // Browser open state.
             btnOpenBrowser.UseVisualStyleBackColor = true;
             btnOpenBrowser.Click += delegate (object sender, EventArgs e)
             {
-                try
+                if (!VerifyURLValidity(txtUrl.Text))
                 {
-                    AutomateController.Instance().Open(ConfigurationName, txtUrl.Text);
+                    MessageBoxExt.Show("请输入正确的地址", MessageboxType.Info);
+                    return;
                 }
-                catch (Exception ex)
+
+                psWait.Start();
+                if (!(bool)btnOpenBrowser.Tag)
                 {
-                    MessageBoxExt.Show(ex.Message, MessageboxType.Error);
+                    Task.Factory.StartNew(() =>
+                    {
+                        try
+                        {
+                            AutomateController.Instance().Open(ConfigurationName, txtUrl.Text,
+                            () =>
+                            {
+                                psWait.Invoke(new Action(() =>
+                                {
+                                    psWait.Stop();
+                                    btnOpenBrowser.Text = "CLOS";
+                                    btnOpenBrowser.Tag = true;
+                                }));
+                            },
+                            () =>
+                            {
+                                psWait.Invoke(new Action(() =>
+                                {
+                                    psWait.Stop();
+                                    btnOpenBrowser.Text = "OPEN";
+                                    btnOpenBrowser.Tag = false;
+                                }));
+                            });
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBoxExt.Show(ex.Message, MessageboxType.Error);
+                        }
+                    }, TaskCreationOptions.LongRunning);
+                }
+                else
+                {
+                    Task.Run(()=> 
+                    {
+                        AutomateController.Instance().Close(ConfigurationName);
+                    });
                 }
             };
 
@@ -807,7 +848,7 @@ namespace SmartTools.Controller
             // 
             btnAdd.AutoSize = true;
             btnAdd.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            btnAdd.CustomFont = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            btnAdd.CustomFont = new System.Drawing.Font("微软雅黑", 10F);
             btnAdd.Depth = 0;
             btnAdd.Icon = null;
             btnAdd.Location = new System.Drawing.Point(876, 225);
@@ -845,6 +886,18 @@ namespace SmartTools.Controller
                 });
             };
 
+            // 
+            // psWait
+            // 
+            psWait.CustomBackground = false;
+            psWait.Location = new System.Drawing.Point(890, 30);
+            psWait.Maximum = 100;
+            psWait.Name = $"psWait_{ConfigurationName}";
+            psWait.Size = new System.Drawing.Size(16, 16);
+            psWait.TabIndex = 22;
+            psWait.Value = 50;
+            psWait.Visible = false;
+
             // Init ListView
             mlvData.AddEditControl(0, new TextBox())
                    .AddEditControl(1, new ComboBox() { DataSource = new List<string>() { "庄", "闲", "和", "停" } })
@@ -861,7 +914,7 @@ namespace SmartTools.Controller
                     mlvData.Items.Add(item);
                 }
 
-                if(data.Cast<string[]>().Count() > 0)
+                if (data.Cast<string[]>().Count() > 0)
                     // Add click button.
                     mlvData.AddEmbeddedButtons(delegate (object sender, EventArgs args)
                     {
@@ -940,6 +993,17 @@ namespace SmartTools.Controller
         {
             ConvertControlByList();
             ConfigurationManager.Instance().SaveConfig();
+        }
+
+        private bool VerifyURLValidity(string url)
+        {
+            if (string.IsNullOrEmpty(url))
+                return false;
+
+            if (!Regex.IsMatch(url, @"(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]"))
+                return false;
+
+            return true;
         }
 
         public event Action OnMainFormClosed;

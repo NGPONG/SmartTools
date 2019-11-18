@@ -13,6 +13,10 @@ namespace SmartTools.Controller
         string DriverDownloadFile { get; }
         IWebDriver Instance { get; set; }
         IWebDriver CreateDrvier();
+        void Close();
+
+        event Action OnWebDriverOpened;
+        event Action OnWebDriverClosed;
     }
 
     public class WebDriverFactory

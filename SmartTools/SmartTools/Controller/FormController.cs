@@ -53,7 +53,7 @@ namespace SmartTools.Controller
         {
             if (!visible)
             {
-                if(this._notifyIcon == null)
+                if (this._notifyIcon == null)
                     this._notifyIcon = new NotifyIcon();
                 this._notifyIcon.Visible = visible;
                 this._notifyIcon.Text = "Smart Tool ✔";

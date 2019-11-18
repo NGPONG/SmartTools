@@ -17,7 +17,7 @@ namespace SmartTools.Controller
         private static AutomateController manager = null;
         #endregion
 
-        private Dictionary<string, IWebDriver> _driverHandler = new Dictionary<string, IWebDriver>();
+        private Dictionary<string, IWebDriverController> _driverHandler = new Dictionary<string, IWebDriverController>();
 
         private AutomateController() { }
 
@@ -37,21 +37,22 @@ namespace SmartTools.Controller
             return manager;
         }
 
-        public void Open(string configName, string url)
+        public void Open(string configName, string url, Action OnWebDriverOpened = null, Action OnWebDriverClosed = null)
         {
             try
             {
                 var driverController = WebDriverFactory.Get(Global.__BROWSERSUPPORT);
-                if (driverController == null)
-                    throw new Exception("驱动启动失败!检查日志");
+                driverController.OnWebDriverOpened += OnWebDriverOpened;
+                driverController.OnWebDriverClosed += OnWebDriverClosed;
 
                 var webDriver = driverController.CreateDrvier();
-
+                if (webDriver == null)
+                    throw new Exception("驱动启动失败!检查日志");
                 webDriver.Manage().Window.Size = Global.__BROWSER_WINDOWSIZE;
                 webDriver.Url = url;
                 SetDriverPostion(webDriver);
 
-                _driverHandler[configName] = webDriver;
+                _driverHandler[configName] = driverController;
             }
             catch (Exception e)
             {
@@ -93,14 +94,10 @@ namespace SmartTools.Controller
             }
         }
 
-        public void Close()
+        public void Close(string configName)
         {
-            foreach (KeyValuePair<string, IWebDriver> driver in _driverHandler)
-            {
-                driver.Value.Quit();
-                driver.Value.Close();
-                driver.Value.Dispose();
-            }
+            _driverHandler[configName].Close();
+            _driverHandler.Remove(configName);
         }
     }
 }
