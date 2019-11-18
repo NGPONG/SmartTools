@@ -43,7 +43,7 @@ namespace SmartTools.Controller
         public Main GetDefaultMainForm()
         {
             mainForm = new Main();
-            mainForm.FormClosed += FormController_FormClosed;
+            mainForm.FormClosing += this.MainForm_FormClosing;
             return mainForm;
         }
 
@@ -992,8 +992,15 @@ namespace SmartTools.Controller
             }
         }
 
+        public void Show()
+        {
+            this.mainForm.Show();
+            this.mainForm.Visible = true;
+        }
+
         private void Close()
         {
+            mainForm.Visible = false;
             ConvertControlByList();
             ConfigurationManager.Instance().SaveConfig();
         }
@@ -1009,13 +1016,14 @@ namespace SmartTools.Controller
             return true;
         }
 
-        public event Action OnMainFormClosed;
+        public event Action OnMainFormClosing;
 
         #region Event Handler
-        private void FormController_FormClosed(object sender, FormClosedEventArgs e)
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            e.Cancel = true;
             Close();
-            OnMainFormClosed?.Invoke();
+            OnMainFormClosing?.Invoke();
         }
         #endregion
     }

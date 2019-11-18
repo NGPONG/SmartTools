@@ -73,21 +73,16 @@ namespace SmartTools.Controller
 
                 int x = -7;
                 int y = 0;
-                bool isCycle = false;
                 for (int i = 1; i <= _driverHandler.Count; i++)
                 {
-                    if (isCycle)
+                    if (i % (int)Math.Round((double)(windows_Width / Global.__BROWSER_WINDOWSIZE.Width)) == 0)
                     {
                         x = -7;
                         y += Global.__BROWSER_WINDOWSIZE.Height;
+                        continue;
                     }
 
-                    if (i % (int)Math.Round((double)(windows_Height / Global.__BROWSER_WINDOWSIZE.Width)) == 0)
-                        isCycle = true;
-                    else
-                        isCycle = false;
-
-                    x += Global.__BROWSER_WINDOWSIZE.Width;
+                    x += (Global.__BROWSER_WINDOWSIZE.Width - 9);
                 }
 
                 webDriver.Manage().Window.Position = new Point(x, y);

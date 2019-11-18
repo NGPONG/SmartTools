@@ -26,7 +26,7 @@ namespace SmartTools.Controller
         private NotifyIcon _notifyIcon;
         #endregion
 
-        private FormController() { FormManager.Instance().OnMainFormClosed += this.FormController_OnMainFormClosed; }
+        private FormController() { FormManager.Instance().OnMainFormClosing += this.FormController_OnMainFormClosing; }
 
         public static FormController Instance()
         {
@@ -46,7 +46,7 @@ namespace SmartTools.Controller
 
         public void Start()
         {
-            ShowMainForm();
+            CreateNewMainForm();
         }
 
         public FormController InitNotify(bool visible)
@@ -148,7 +148,7 @@ namespace SmartTools.Controller
             return this;
         }
 
-        private void ShowMainForm()
+        private void CreateNewMainForm()
         {
             Main mainForm = FormManager.Instance().GetDefaultMainForm();
             FormManager.Instance().InitializeComponent();
@@ -162,10 +162,10 @@ namespace SmartTools.Controller
         {
             if (e.Button == MouseButtons.Left)
             {
-                ShowMainForm();
+                FormManager.Instance().Show();
             }
         }
-        private void FormController_OnMainFormClosed()
+        private void FormController_OnMainFormClosing()
         {
             Native.ReleaseMemory();
             InitNotify(true);

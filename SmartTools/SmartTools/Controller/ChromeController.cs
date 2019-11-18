@@ -160,9 +160,7 @@ namespace SmartTools.Controller
 
         public void Close()
         {
-            Instance.Close();
-            Instance.Dispose();
-
+            Instance.Quit();
             OnWebDriverClosed?.Invoke();
         }
     }
