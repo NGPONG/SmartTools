@@ -801,6 +801,7 @@ namespace SmartTools.Controller
                     return;
                 }
 
+                btnOpenBrowser.Enabled = false;
                 psWait.Start();
                 if (!(bool)btnOpenBrowser.Tag)
                 {
@@ -816,6 +817,7 @@ namespace SmartTools.Controller
                                     psWait.Stop();
                                     btnOpenBrowser.Text = "CLOS";
                                     btnOpenBrowser.Tag = true;
+                                    btnOpenBrowser.Enabled = true;
                                 }));
                             },
                             () =>
@@ -825,6 +827,7 @@ namespace SmartTools.Controller
                                     psWait.Stop();
                                     btnOpenBrowser.Text = "OPEN";
                                     btnOpenBrowser.Tag = false;
+                                    btnOpenBrowser.Enabled = true;
                                 }));
                             });
                         }
