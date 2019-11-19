@@ -40,14 +40,7 @@ namespace SmartTools.Controller
             return manager;
         }
 
-        public Main GetDefaultMainForm()
-        {
-            mainForm = new Main();
-            mainForm.FormClosing += this.MainForm_FormClosing;
-            return mainForm;
-        }
-
-        public void InitializeComponent()
+        private void InitializeComponent()
         {
             #region Init control
             var tcMaster = new MaterialSkin.Controls.MaterialTabControl();
@@ -229,15 +222,15 @@ namespace SmartTools.Controller
             #endregion
         }
 
-        public void CreateConfigControls(string ConfigurationName,
-                                         MaterialSkin.Controls.MaterialTabSelector tsMaster,
-                                         MaterialSkin.Controls.MaterialTabControl tcMaster,
-                                         string Authentication = "",
-                                         string Url = "",
-                                         string StopMoney = "",
-                                         bool IsCycle = false,
-                                         Proxy proxy = null,
-                                         List<CustomAction> source = null)
+        private void CreateConfigControls(string ConfigurationName,
+                                          MaterialSkin.Controls.MaterialTabSelector tsMaster,
+                                          MaterialSkin.Controls.MaterialTabControl tcMaster,
+                                          string Authentication = "",
+                                          string Url = "",
+                                          string StopMoney = "",
+                                          bool IsCycle = false,
+                                          Proxy proxy = null,
+                                          List<CustomAction> source = null)
         {
             var mlvData = new MaterialSkin.Controls.MaterialListView();
             var lblMoney_Title = new TabPage();
@@ -308,6 +301,7 @@ namespace SmartTools.Controller
             lblMoney_Title.Controls.Add(psWait);
             lblMoney_Title.Location = new System.Drawing.Point(4, 25);
             lblMoney_Title.Name = $"lblMoney_Title_{ConfigurationName}";
+            lblMoney_Title.Tag = false; // Action status.
             lblMoney_Title.Padding = new System.Windows.Forms.Padding(3);
             lblMoney_Title.Size = new System.Drawing.Size(898, 530);
             lblMoney_Title.TabIndex = 0;
@@ -934,7 +928,7 @@ namespace SmartTools.Controller
             pnlProxy.PerformLayout();
         }
 
-        private void ConvertControlByList()
+        private void ConvertControlToList()
         {
             ConfigurationManager.Instance().Configs.Clear();
 
@@ -992,19 +986,6 @@ namespace SmartTools.Controller
             }
         }
 
-        public void Show()
-        {
-            this.mainForm.Show();
-            this.mainForm.Visible = true;
-        }
-
-        private void Close()
-        {
-            mainForm.Visible = false;
-            ConvertControlByList();
-            ConfigurationManager.Instance().SaveConfig();
-        }
-
         private bool VerifyURLValidity(string url)
         {
             if (string.IsNullOrEmpty(url))
@@ -1016,11 +997,31 @@ namespace SmartTools.Controller
             return true;
         }
 
-        public event Action OnMainFormClosing;
+        public void Show()
+        {
+            this.mainForm.Show();
+            this.mainForm.Visible = true;
+        }
+
+        public void Close()
+        {
+            ConvertControlToList();
+            ConfigurationManager.Instance().SaveConfig();
+        }
+
+        public Main GetDefaultMainForm()
+        {
+            mainForm = new Main();
+            mainForm.FormClosing += this.MainForm_FormClosing;
+            InitializeComponent();
+            return mainForm;
+        }
 
         #region Event Handler
+        public event Action OnMainFormClosing;
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            mainForm.Visible = false;
             e.Cancel = true;
             Close();
             OnMainFormClosing?.Invoke();

@@ -94,5 +94,7 @@ namespace SmartTools.Controller
             _driverHandler[configName].Close();
             _driverHandler.Remove(configName);
         }
+
+
     }
 }
