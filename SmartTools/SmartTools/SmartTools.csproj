@@ -140,6 +140,8 @@
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Controller\FormController.cs" />
     <Compile Include="Model\Header.cs" />
+    <Compile Include="Utils\Extensions\CancellationTokenSourceExtension.cs" />
+    <Compile Include="Utils\Extensions\DictionaryExtension.cs" />
     <Compile Include="Utils\Extensions\EnumerableExtension.cs" />
     <Compile Include="Utils\Native.cs" />
     <Compile Include="Utils\Win32.cs" />

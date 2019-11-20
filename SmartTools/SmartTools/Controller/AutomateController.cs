@@ -3,10 +3,11 @@ using SmartTools.Model;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SmartTools.Utils.Extensions;
+using Tesseract;
 
 namespace SmartTools.Controller
 {
@@ -18,6 +19,8 @@ namespace SmartTools.Controller
         #endregion
 
         private Dictionary<string, IWebDriverController> _driverHandler = new Dictionary<string, IWebDriverController>();
+
+        public CancellationToken EngineCancelToken = new CancellationToken();
 
         private AutomateController() { }
 
@@ -53,6 +56,7 @@ namespace SmartTools.Controller
                 webDriver.Manage().Window.Size = Global.__BROWSER_WINDOWSIZE;
                 webDriver.Url = url;
                 SetDriverPostion(webDriver);
+                driverController.Status = DriverState.Open;
 
                 _driverHandler[configName] = driverController;
             }
@@ -61,11 +65,26 @@ namespace SmartTools.Controller
                 throw new Exception(e.Message);
             }
         }
+
         public void Close(string configName)
         {
             _driverHandler[configName].Close();
             _driverHandler.Remove(configName);
         }
+
+        public void StartAction(string configName, List<CustomAction> actions)
+        {
+            var driverController = _driverHandler.TryGet(configName);
+            // This is caused by the fact that WebDriver has not been opened yet.
+            if (driverController == null)
+                return;
+
+            Task.Factory.StartNew(() =>
+            {
+                driverController.Start(actions);
+            }, driverController.ControllerCancelToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+        }
+
         public void SetDriverPostion(IWebDriver webDriver)
         {
             if (_driverHandler.Count == 0)
@@ -94,7 +113,5 @@ namespace SmartTools.Controller
                 webDriver.Manage().Window.Position = new Point(x, y);
             }
         }
-
-
     }
 }

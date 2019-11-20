@@ -109,11 +109,11 @@ namespace Test_02
             //913, 534
             actions.MoveToElement(driver.FindElement(By.TagName("canvas")), 602, 360).Click().Perform(); // 1139,663
             Actions actions2 = new Actions(driver);
-            actions2.MoveToElement(driver.FindElement(By.TagName("canvas")), 632, 360).Click().Perform(); // 1139,663
+            actions2.Click().Perform(); // 1139,663
             Actions actions3 = new Actions(driver);
-            actions3.MoveToElement(driver.FindElement(By.TagName("canvas")), 662, 360).Click().Perform(); // 1139,663
+            actions3.Click().Perform(); // 1139,663
             Actions actions4 = new Actions(driver);
-            actions4.MoveToElement(driver.FindElement(By.TagName("canvas")), 732, 360).Click().Perform(); // 1139,663
+            actions4.Click().Perform(); // 1139,663
         }
 
         private void Button6_Click(object sender, EventArgs e)

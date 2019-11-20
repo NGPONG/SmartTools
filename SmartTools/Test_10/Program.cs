@@ -18,17 +18,7 @@ namespace Test_10
     {
         static void Main(string[] args)
         {
-            var a = 1;
-            if (a % 1 > 0)
-            {
-                Console.WriteLine("OK");
-            }
-            else
-            {
-                Console.WriteLine("NO");
-            }
-
-            Console.ReadKey();
+            //var i = Math.Round(100 / 10);
         }
 
         static string ScanFile(string path)

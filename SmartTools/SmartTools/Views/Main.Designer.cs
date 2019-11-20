@@ -32,6 +32,7 @@ namespace SmartTools.Views
         {
             this.tcMaster = new MaterialSkin.Controls.MaterialTabControl();
             this.lblMoney_Title_Default = new System.Windows.Forms.TabPage();
+            this.materialProgressSpinner2 = new MaterialSkin.Controls.MaterialProgressSpinner();
             this.materialProgressSpinner1 = new MaterialSkin.Controls.MaterialProgressSpinner();
             this.materialFlatButton1 = new MaterialSkin.Controls.MaterialFlatButton();
             this.btnOpenBrowser = new MaterialSkin.Controls.MaterialFlatButton();
@@ -82,12 +83,13 @@ namespace SmartTools.Views
             this.tcMaster.MouseState = MaterialSkin.MouseState.HOVER;
             this.tcMaster.Name = "tcMaster";
             this.tcMaster.SelectedIndex = 0;
-            this.tcMaster.Size = new System.Drawing.Size(906, 559);
+            this.tcMaster.Size = new System.Drawing.Size(913, 580);
             this.tcMaster.TabIndex = 0;
             // 
             // lblMoney_Title_Default
             // 
             this.lblMoney_Title_Default.BackColor = System.Drawing.Color.White;
+            this.lblMoney_Title_Default.Controls.Add(this.materialProgressSpinner2);
             this.lblMoney_Title_Default.Controls.Add(this.materialProgressSpinner1);
             this.lblMoney_Title_Default.Controls.Add(this.materialFlatButton1);
             this.lblMoney_Title_Default.Controls.Add(this.btnOpenBrowser);
@@ -114,9 +116,21 @@ namespace SmartTools.Views
             this.lblMoney_Title_Default.Location = new System.Drawing.Point(4, 25);
             this.lblMoney_Title_Default.Name = "lblMoney_Title_Default";
             this.lblMoney_Title_Default.Padding = new System.Windows.Forms.Padding(3);
-            this.lblMoney_Title_Default.Size = new System.Drawing.Size(898, 530);
+            this.lblMoney_Title_Default.Size = new System.Drawing.Size(905, 551);
             this.lblMoney_Title_Default.TabIndex = 0;
             this.lblMoney_Title_Default.Text = "默认配置";
+            // 
+            // materialProgressSpinner2
+            // 
+            this.materialProgressSpinner2.CustomBackground = false;
+            this.materialProgressSpinner2.Location = new System.Drawing.Point(880, 185);
+            this.materialProgressSpinner2.Maximum = 100;
+            this.materialProgressSpinner2.Name = "materialProgressSpinner2";
+            this.materialProgressSpinner2.Size = new System.Drawing.Size(22, 23);
+            this.materialProgressSpinner2.Speed = 2F;
+            this.materialProgressSpinner2.TabIndex = 23;
+            this.materialProgressSpinner2.Value = 50;
+            this.materialProgressSpinner2.Visible = false;
             // 
             // materialProgressSpinner1
             // 
@@ -136,7 +150,7 @@ namespace SmartTools.Views
             this.materialFlatButton1.CustomFont = new System.Drawing.Font("Microsoft Sans Serif", 10F);
             this.materialFlatButton1.Depth = 0;
             this.materialFlatButton1.Icon = null;
-            this.materialFlatButton1.Location = new System.Drawing.Point(867, 185);
+            this.materialFlatButton1.Location = new System.Drawing.Point(876, 225);
             this.materialFlatButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.materialFlatButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialFlatButton1.Name = "materialFlatButton1";
@@ -239,12 +253,12 @@ namespace SmartTools.Views
             this.mlvData_Default.FullRowSelect = true;
             this.mlvData_Default.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.mlvData_Default.HoveredItem = null;
-            this.mlvData_Default.Location = new System.Drawing.Point(3, 182);
+            this.mlvData_Default.Location = new System.Drawing.Point(3, 203);
             this.mlvData_Default.MouseLocation = new System.Drawing.Point(-1, -1);
             this.mlvData_Default.MouseState = MaterialSkin.MouseState.OUT;
             this.mlvData_Default.Name = "mlvData_Default";
             this.mlvData_Default.OwnerDraw = true;
-            this.mlvData_Default.Size = new System.Drawing.Size(892, 345);
+            this.mlvData_Default.Size = new System.Drawing.Size(899, 345);
             this.mlvData_Default.TabIndex = 16;
             this.mlvData_Default.UseCompatibleStateImageBehavior = false;
             this.mlvData_Default.View = System.Windows.Forms.View.Details;
@@ -475,7 +489,7 @@ namespace SmartTools.Views
             this.btnHow_Default.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnHow_Default.Name = "btnHow_Default";
             this.btnHow_Default.Primary = false;
-            this.btnHow_Default.Size = new System.Drawing.Size(165, 36);
+            this.btnHow_Default.Size = new System.Drawing.Size(174, 36);
             this.btnHow_Default.TabIndex = 5;
             this.btnHow_Default.Text = "How can i get it";
             this.btnHow_Default.UseVisualStyleBackColor = true;
@@ -597,6 +611,7 @@ namespace SmartTools.Views
             this.btnStart.TabIndex = 4;
             this.btnStart.Text = "开始";
             this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Click += new System.EventHandler(this.BtnStart_Click);
             // 
             // btnAdd
             // 
@@ -712,5 +727,6 @@ namespace SmartTools.Views
         private MaterialSkin.Controls.MaterialRaisedButton btnAddConfig;
         private MaterialSkin.Controls.MaterialRaisedButton materialRaisedButton1;
         private MaterialSkin.Controls.MaterialProgressSpinner materialProgressSpinner1;
+        private MaterialSkin.Controls.MaterialProgressSpinner materialProgressSpinner2;
     }
 }

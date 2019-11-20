@@ -51,7 +51,7 @@ namespace SmartTools.Views
             //{
             //    this.mlvData_Default.RemoveActiveItem(sender as MaterialFlatButton);
             //});
-
+            //materialProgressSpinner2.Start();
         }
 
         private void CbConfigLock_Default_CheckedChanged(object sender, EventArgs e)
@@ -138,6 +138,10 @@ namespace SmartTools.Views
         private void MaterialRaisedButton1_Click(object sender, EventArgs e)
         {
             this.materialProgressSpinner1.Start();
+        }
+
+        private void BtnStart_Click(object sender, EventArgs e)
+        {
         }
     }
 }

@@ -62,5 +62,13 @@ namespace SmartTools.Utils
         /// <returns></returns>
         [DllImport("user32.dll")]
         public static extern IntPtr SetFocus(IntPtr hWnd);
+
+        /// <summary>
+        /// https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setactivewindow
+        /// </summary>
+        /// <param name="hWnd"></param>
+        /// <returns></returns>
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr SetActiveWindow(IntPtr hWnd);
     }
 }

@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using OpenQA.Selenium;
@@ -13,6 +17,8 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using SmartTools.Common.Helper;
 using SmartTools.Model;
+using SmartTools.Utils.Extensions;
+using Tesseract;
 
 namespace SmartTools.Controller
 {
@@ -23,12 +29,15 @@ namespace SmartTools.Controller
         private IWebDriver _instance;
         private IWebElement _actionElement;
         private ActionPoint _postion;
+        private TesseractEngine _tesseract;
+        private CancellationTokenSource _controllerCancelToken;
+        private DriverState _status;
         #endregion
 
         #region Property
         public string DriverDownloadURL => "http://chromedriver.storage.googleapis.com/";
         public string DriverDownloadFile => "chromedriver_win32.zip";
-        public Actions CustomActions => new Actions(Instance);
+        public Actions Actions => new Actions(Instance);
         public IWebElement ActionElement
         {
             get
@@ -43,7 +52,7 @@ namespace SmartTools.Controller
                         }
                     }
                 }
-                    
+
                 return this._actionElement;
             }
         }
@@ -68,12 +77,90 @@ namespace SmartTools.Controller
                 return this._postion;
             }
         }
+
+        public TesseractEngine Tesseract
+        {
+            get
+            {
+                return this._tesseract;
+            }
+            set
+            {
+                this._tesseract = value;
+            }
+        }
+        public CancellationTokenSource ControllerCancelToken
+        {
+            get
+            {
+                return this._controllerCancelToken;
+            }
+            set
+            {
+                this._controllerCancelToken = value;
+            }
+        }
+
+        public DriverState Status
+        {
+            get
+            {
+                return this._status;
+            }
+            set
+            {
+                this._status = value;
+                switch (this._status)
+                {
+                    case DriverState.Open:
+                        OnWebDriverOpened?.Invoke();
+                        break;
+                    case DriverState.Close:
+                        OnWebDriverClosed?.Invoke();
+                        break;
+                    case DriverState.Start:
+                        OnWebDriverStarted?.Invoke();
+                        break;
+                    case DriverState.Stop:
+                        OnWebDriverStopped?.Invoke();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
         #endregion
 
         public event Action OnWebDriverOpened;
         public event Action OnWebDriverClosed;
         public event Action OnWebDriverStarted;
         public event Action OnWebDriverStopped;
+
+        public ChromeController()
+        {
+            this.Tesseract = new TesseractEngine("./tessdata", "chi_sim", EngineMode.Default);
+            this.ControllerCancelToken = new CancellationTokenSource();
+        }
+
+        public void Close()
+        {
+            Instance.Quit();
+            Status = DriverState.Close;
+        }
+
+        public void Stop()
+        {
+            ControllerCancelToken.Cancel();
+        }
+
+        public void Start(List<CustomAction> actions)
+        {
+            if (Status != DriverState.Open)
+                return;
+
+            Status = DriverState.Start;
+            Do(actions);
+        }
 
         public IWebDriver CreateDrvier()
         {
@@ -95,9 +182,82 @@ namespace SmartTools.Controller
                 LogHelper.Error(e);
                 return null;
             }
-            OnWebDriverOpened?.Invoke();
 
             return Instance;
+        }
+
+        public void Do(List<CustomAction> actions)
+        {
+            try
+            {
+                if (ControllerCancelToken.IsCancellationRequested)
+                {
+                    Status = DriverState.Stop;
+                    ControllerCancelToken.Reset();
+                    return;
+                }
+
+                var picBuffer = ((ITakesScreenshot)Instance).GetScreenshot().AsByteArray;
+                MemoryStream memoryProcess = new MemoryStream(picBuffer);
+                var bitmap_Source = new Bitmap(memoryProcess);
+                var bitmap_Cut = new Bitmap(371, 110, PixelFormat.Format24bppRgb);
+
+                Graphics g = Graphics.FromImage(bitmap_Cut);
+                g.DrawImage(bitmap_Source, new Rectangle(0, 0, 371, 110), new Rectangle(609, 392, 371, 100), GraphicsUnit.Pixel);
+
+                var page = Tesseract.Process(bitmap_Cut, PageSegMode.SingleBlock);
+                var readByPic = page.GetText();
+
+                // Dispose Unmanaged variable because of the calling recursive functions
+                Array.Clear(picBuffer, 0, picBuffer.Length);
+                page.Dispose();
+                memoryProcess.Close();
+                memoryProcess.Dispose();
+                bitmap_Source.Dispose();
+                bitmap_Cut.Dispose();
+
+                GC.WaitForFullGCComplete();
+
+                if (!Regex.IsMatch(readByPic, "开局"))
+                {
+                    // Call back.
+                    Do(actions);
+                    return;
+                }
+
+                // Move and Click the first chip.
+                this.Actions.MoveToElement(ActionElement, Postion.One.X, Postion.One.Y).Click().Perform();
+
+                foreach (var action in actions)
+                {
+                    if (action.BetType != Bet.停)
+                    {
+                        var action_ChipCount = Math.Round(Convert.ToDouble(action.Money) / 10);
+
+                        var action_Bet = this.Actions;
+                        for (int i = 0; i < action_ChipCount; i++)
+                        {
+                            var postion = Postion.BetPoint(action.BetType);
+                            action_Bet.MoveToElement(ActionElement, postion.X, postion.Y).Click();
+                        }
+                        action_Bet.Perform();
+
+                        // 点击下注
+
+                    }
+
+                    Thread.Sleep(Convert.ToInt32(action.Delay));
+                }
+
+                // Call back.
+                Do(actions);
+            }
+            catch (Exception e)
+            {
+                Status = DriverState.Stop;
+                LogHelper.Error(e);
+                return;
+            }
         }
 
         public void DownLoadFile(string filePath)
@@ -194,22 +354,6 @@ namespace SmartTools.Controller
             }
 
             GC.Collect();
-        }
-
-        public void Close()
-        {
-            Instance.Quit();
-            OnWebDriverClosed?.Invoke();
-        }
-
-        public void Start()
-        {
-            
-        }
-
-        public void Stop()
-        {
-            throw new NotImplementedException();
         }
     }
 }

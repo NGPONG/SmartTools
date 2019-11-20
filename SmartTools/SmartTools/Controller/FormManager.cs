@@ -1,5 +1,6 @@
 ﻿using SmartTools.Common.Helper;
 using SmartTools.Model;
+using SmartTools.Utils;
 using SmartTools.Utils.Extensions;
 using SmartTools.Views;
 using System;
@@ -11,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.ListViewItem;
 
 namespace SmartTools.Controller
 {
@@ -104,7 +106,8 @@ namespace SmartTools.Controller
             {
                 CreateConfigControls("默认配置",
                                      tsMaster,
-                                     tcMaster);
+                                     tcMaster,
+                                     btnStart);
             }
             else
             {
@@ -113,6 +116,7 @@ namespace SmartTools.Controller
                     CreateConfigControls(config.ConfigurationName,
                                          tsMaster,
                                          tcMaster,
+                                         btnStart,
                                          config.Authentication,
                                          config.Url,
                                          config.StopMoney,
@@ -139,7 +143,31 @@ namespace SmartTools.Controller
             btnStart.UseVisualStyleBackColor = true;
             btnStart.Click += delegate (object sender, EventArgs e)
             {
-                throw new NotImplementedException();
+                var configName = tcMaster.SelectedTab.Text;
+
+                var listView = tcMaster.SelectedTab.Controls.OfType<Control>().Where(c => c.Name == $"mlvData_{configName}").FirstOrDefault() as MaterialSkin.Controls.MaterialListView;
+                var listConfig = new List<CustomAction>();
+
+                foreach (ListViewItem item in listView.Items)
+                {
+                    if (item.SubItems[3].Text == "0")
+                        continue;
+
+                    CustomAction customAction = new CustomAction();
+                    for (int i = 0; i < item.SubItems.Count; i++)
+                    {
+                        customAction.ActionIndex = item.SubItems[0].Text;
+                        customAction.BetType = CustomAction.ToBet(item.SubItems[1].Text);
+                        customAction.Delay = item.SubItems[2].Text;
+                        customAction.Money = item.SubItems[3].Text;
+                    }
+                    listConfig.Add(customAction);
+                }
+
+                if (listConfig.Count == 0)
+                    return;
+
+                AutomateController.Instance().StartAction(configName, listConfig);
             };
 
 
@@ -162,7 +190,8 @@ namespace SmartTools.Controller
             {
                 CreateConfigControls($"Config_{tcMaster.TabPages.Count + 1}",
                                      tsMaster,
-                                     tcMaster);
+                                     tcMaster,
+                                     btnStart);
                 tcMaster.SelectedIndex = tcMaster.TabPages.Count - 1;
                 tsMaster.Invalidate();
             };
@@ -243,6 +272,7 @@ namespace SmartTools.Controller
         private void CreateConfigControls(string ConfigurationName,
                                           MaterialSkin.Controls.MaterialTabSelector tsMaster,
                                           MaterialSkin.Controls.MaterialTabControl tcMaster,
+                                          MaterialSkin.Controls.MaterialRaisedButton btnStart,
                                           string Authentication = "",
                                           string Url = "",
                                           string StopMoney = "",
@@ -281,7 +311,8 @@ namespace SmartTools.Controller
             var lblUrl = new MaterialSkin.Controls.MaterialLabel();
             var btnOpenBrowser = new MaterialSkin.Controls.MaterialFlatButton();
             var btnAdd = new MaterialSkin.Controls.MaterialFlatButton();
-            var psWait = new MaterialSkin.Controls.MaterialProgressSpinner();
+            var psWait_Open = new MaterialSkin.Controls.MaterialProgressSpinner();
+            var psWait_Start = new MaterialSkin.Controls.MaterialProgressSpinner();
 
             //
             // START
@@ -316,7 +347,8 @@ namespace SmartTools.Controller
             lblMoney_Title.Controls.Add(lblUrl);
             lblMoney_Title.Controls.Add(btnOpenBrowser);
             lblMoney_Title.Controls.Add(btnAdd);
-            lblMoney_Title.Controls.Add(psWait);
+            lblMoney_Title.Controls.Add(psWait_Open);
+            lblMoney_Title.Controls.Add(psWait_Start);
             lblMoney_Title.Location = new System.Drawing.Point(4, 25);
             lblMoney_Title.Name = $"lblMoney_Title_{ConfigurationName}";
             lblMoney_Title.Tag = false; // Action status.
@@ -814,7 +846,7 @@ namespace SmartTools.Controller
                 }
 
                 btnOpenBrowser.Enabled = false;
-                psWait.Start();
+                psWait_Open.Start();
                 if (!(bool)btnOpenBrowser.Tag)
                 {
                     Task.Factory.StartNew(() =>
@@ -822,24 +854,46 @@ namespace SmartTools.Controller
                         try
                         {
                             AutomateController.Instance().Open(ConfigurationName, txtUrl.Text,
-                            () =>
+                            () => // Opened
                             {
-                                psWait.Invoke(new Action(() =>
+                                psWait_Open.Invoke(new Action(() =>
                                 {
-                                    psWait.Stop();
+                                    //Win32.SetActiveWindow(mainForm.Handle);
+                                    mainForm.Activate();
+                                    psWait_Open.Stop();
                                     btnOpenBrowser.Text = "CLOS";
                                     btnOpenBrowser.Tag = true;
                                     btnOpenBrowser.Enabled = true;
                                 }));
                             },
-                            () =>
+                            () => // Closed
                             {
-                                psWait.Invoke(new Action(() =>
+                                psWait_Open.Invoke(new Action(() =>
                                 {
-                                    psWait.Stop();
+                                    psWait_Open.Stop();
                                     btnOpenBrowser.Text = "OPEN";
                                     btnOpenBrowser.Tag = false;
                                     btnOpenBrowser.Enabled = true;
+                                }));
+                            },
+                            ()=> // Start
+                            {
+                                psWait_Start.Invoke(new Action(() =>
+                                {
+                                    psWait_Start.Start();
+                                    btnStart.Text = "停止";
+                                    btnAdd.Enabled = false;
+                                    btnStart.Enabled = false;
+                                }));
+                            },
+                            ()=> // Stop
+                            {
+                                psWait_Start.Invoke(new Action(() =>
+                                {
+                                    psWait_Start.Stop();
+                                    btnStart.Text = "开始";
+                                    btnAdd.Enabled = true;
+                                    btnStart.Enabled = true;
                                 }));
                             });
                         }
@@ -902,16 +956,29 @@ namespace SmartTools.Controller
             };
 
             // 
-            // psWait
+            // psWait_Open
             // 
-            psWait.CustomBackground = false;
-            psWait.Location = new System.Drawing.Point(890, 30);
-            psWait.Maximum = 100;
-            psWait.Name = $"psWait_{ConfigurationName}";
-            psWait.Size = new System.Drawing.Size(16, 16);
-            psWait.TabIndex = 22;
-            psWait.Value = 50;
-            psWait.Visible = false;
+            psWait_Open.CustomBackground = false;
+            psWait_Open.Location = new System.Drawing.Point(890, 30);
+            psWait_Open.Maximum = 100;
+            psWait_Open.Name = $"psWait_Open_{ConfigurationName}";
+            psWait_Open.Size = new System.Drawing.Size(16, 16);
+            psWait_Open.TabIndex = 22;
+            psWait_Open.Value = 50;
+            psWait_Open.Visible = false;
+
+            // 
+            // psWait_Start
+            // 
+            psWait_Start.CustomBackground = false;
+            psWait_Start.Location = new System.Drawing.Point(880, 185);
+            psWait_Start.Maximum = 100;
+            psWait_Start.Name = $"psWait_Start_{ConfigurationName}";
+            psWait_Start.Size = new System.Drawing.Size(23, 23);
+            psWait_Start.TabIndex = 22;
+            psWait_Start.Value = 50;
+            psWait_Start.Speed = 2F;
+            psWait_Start.Visible = false;
 
             // Init ListView
             mlvData.AddEditControl(0, new TextBox())

@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Tesseract;
 
 namespace SmartTools.Controller
 {
@@ -13,18 +15,29 @@ namespace SmartTools.Controller
     {
         string DriverDownloadURL { get; }
         string DriverDownloadFile { get; }
-        Actions CustomActions { get; }
+        DriverState Status { get; set; }
+        Actions Actions { get; }
         ActionPoint Postion { get; }
+        TesseractEngine Tesseract { get; set; }
+        CancellationTokenSource ControllerCancelToken { get; set; }
         IWebDriver Instance { get; set; }
         IWebDriver CreateDrvier();
         void Close();
-        void Start();
+        void Start(List<CustomAction> actions);
         void Stop();
 
         event Action OnWebDriverOpened;
         event Action OnWebDriverClosed;
         event Action OnWebDriverStarted;
         event Action OnWebDriverStopped;
+    }
+
+    public enum DriverState
+    {
+        Open = 0,
+        Close = 1,
+        Start = 2,
+        Stop = 3
     }
 
     public class WebDriverFactory
