@@ -37,7 +37,6 @@ namespace Test_02
 
             // 根据当前屏幕尺寸 分辨率 ddi 点距 计算出窗口的具体尺寸
             driver.Manage().Window.Size = new System.Drawing.Size(800, 600);
-
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -108,7 +107,13 @@ namespace Test_02
             //var text = new Mat(source, roi);
             //Cv2.ImShow("text", text);
             //913, 534
-            actions.MoveToElement(driver.FindElement(By.TagName("canvas")), 732, 360).Click().Build().Perform(); // 1139,663
+            actions.MoveToElement(driver.FindElement(By.TagName("canvas")), 602, 360).Click().Perform(); // 1139,663
+            Actions actions2 = new Actions(driver);
+            actions2.MoveToElement(driver.FindElement(By.TagName("canvas")), 632, 360).Click().Perform(); // 1139,663
+            Actions actions3 = new Actions(driver);
+            actions3.MoveToElement(driver.FindElement(By.TagName("canvas")), 662, 360).Click().Perform(); // 1139,663
+            Actions actions4 = new Actions(driver);
+            actions4.MoveToElement(driver.FindElement(By.TagName("canvas")), 732, 360).Click().Perform(); // 1139,663
         }
 
         private void Button6_Click(object sender, EventArgs e)

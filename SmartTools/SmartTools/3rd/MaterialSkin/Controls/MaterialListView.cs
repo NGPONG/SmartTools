@@ -65,31 +65,33 @@ namespace MaterialSkin.Controls
             //TODO: should only redraw when the hovered line changed, this to reduce unnecessary redraws
             MouseLocation = new Point(-1, -1);
             MouseState = MouseState.OUT;
-            MouseDown += delegate { MouseState = MouseState.DOWN; };
-            MouseUp += delegate { MouseState = MouseState.HOVER; };
+            MouseEnter += delegate
+            {
+                MouseState = MouseState.HOVER;
+            };
+            MouseLeave += delegate
+            {
+                MouseState = MouseState.OUT;
+                MouseLocation = new Point(-1, -1);
+                HoveredItem = null;
+                Invalidate();
+            };
             #region Deprecated
-            //MouseEnter += delegate
-            //{
-            //    MouseState = MouseState.HOVER;
-            //};
-            //MouseLeave += delegate
-            //{
-            //    MouseState = MouseState.OUT;
-            //    MouseLocation = new Point(-1, -1);
-            //    HoveredItem = null;
-            //    Invalidate();
-            //}; 
+            //MouseDown += delegate { MouseState = MouseState.DOWN; };
+            //MouseUp += delegate { MouseState = MouseState.HOVER; };
             #endregion
             MouseMove += delegate (object sender, MouseEventArgs args)
             {
-                var currentHoveredItem = this.GetItemAt(args.Location.X, args.Location.Y);
+                MouseLocation = args.Location;
+                var currentHoveredItem = this.GetItemAt(MouseLocation.X, MouseLocation.Y);
                 if (HoveredItem != currentHoveredItem)
                 {
                     HoveredItem = currentHoveredItem;
+                    Invalidate();
                 }
             };
 
-            // Showning Component When Mouse DoubleClick Item
+            // Showning component when DoubleClick item
             MouseDoubleClick += delegate (object sender, MouseEventArgs e)
             {
                 RECT subItem_RECT = this.GetSubItemRECT(e.Location);
@@ -230,16 +232,17 @@ namespace MaterialSkin.Controls
             //We draw the current line of items (= item with subitems) on a temp bitmap, then draw the bitmap at once. This is to reduce flickering.
             var b = new Bitmap(e.Item.Bounds.Width, e.Item.Bounds.Height);
             var g = Graphics.FromImage(b);
-
+            
             //always draw default background
             g.FillRectangle(new SolidBrush(SkinManager.GetApplicationBackgroundColor()), new Rectangle(new Point(e.Bounds.X, 0), e.Bounds.Size));
 
-            if (e.State.HasFlag(ListViewItemStates.Selected))
-            {
-                //selected background
-                g.FillRectangle(SkinManager.GetFlatButtonPressedBackgroundBrush(), new Rectangle(new Point(e.Bounds.X, 0), e.Bounds.Size));
-            }
-            else if (e.Bounds.Contains(MouseLocation) && MouseState == MouseState.HOVER)
+            //if (e.State.HasFlag(ListViewItemStates.Selected))
+            //{
+            //    //selected background
+            //    g.FillRectangle(SkinManager.GetFlatButtonPressedBackgroundBrush(), new Rectangle(new Point(e.Bounds.X, 0), e.Bounds.Size));
+            //}
+            //else 
+            if (e.Bounds.Contains(MouseLocation) && MouseState == MouseState.HOVER)
             {
                 //hover background
                 g.FillRectangle(SkinManager.GetFlatButtonHoverBackgroundBrush(), new Rectangle(new Point(e.Bounds.X, 0), e.Bounds.Size));

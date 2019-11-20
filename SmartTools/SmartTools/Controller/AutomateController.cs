@@ -37,13 +37,15 @@ namespace SmartTools.Controller
             return manager;
         }
 
-        public void Open(string configName, string url, Action OnWebDriverOpened = null, Action OnWebDriverClosed = null)
+        public void Open(string configName, string url, Action OnWebDriverOpened = null, Action OnWebDriverClosed = null, Action OnWebDriverStarted = null, Action OnWebDriverStopped = null)
         {
             try
             {
                 var driverController = WebDriverFactory.Get(Global.__BROWSERSUPPORT);
                 driverController.OnWebDriverOpened += OnWebDriverOpened;
                 driverController.OnWebDriverClosed += OnWebDriverClosed;
+                driverController.OnWebDriverStarted += OnWebDriverStarted;
+                driverController.OnWebDriverStopped += OnWebDriverStopped;
 
                 var webDriver = driverController.CreateDrvier();
                 if (webDriver == null)
@@ -59,7 +61,11 @@ namespace SmartTools.Controller
                 throw new Exception(e.Message);
             }
         }
-
+        public void Close(string configName)
+        {
+            _driverHandler[configName].Close();
+            _driverHandler.Remove(configName);
+        }
         public void SetDriverPostion(IWebDriver webDriver)
         {
             if (_driverHandler.Count == 0)
@@ -87,12 +93,6 @@ namespace SmartTools.Controller
 
                 webDriver.Manage().Window.Position = new Point(x, y);
             }
-        }
-
-        public void Close(string configName)
-        {
-            _driverHandler[configName].Close();
-            _driverHandler.Remove(configName);
         }
 
 

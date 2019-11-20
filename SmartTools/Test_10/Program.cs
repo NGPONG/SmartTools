@@ -18,7 +18,17 @@ namespace Test_10
     {
         static void Main(string[] args)
         {
-            var i = 9 % 3;
+            var a = 1;
+            if (a % 1 > 0)
+            {
+                Console.WriteLine("OK");
+            }
+            else
+            {
+                Console.WriteLine("NO");
+            }
+
+            Console.ReadKey();
         }
 
         static string ScanFile(string path)

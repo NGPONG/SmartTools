@@ -10,17 +10,43 @@ using System.Threading.Tasks;
 using System.Xml;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
 using SmartTools.Common.Helper;
+using SmartTools.Model;
 
 namespace SmartTools.Controller
 {
     public class ChromeController : IWebDriverController
     {
-        public string DriverDownloadURL => "http://chromedriver.storage.googleapis.com/";
-
-        public string DriverDownloadFile => "chromedriver_win32.zip";
-
+        #region Fields
+        private static object _locker = new object();
         private IWebDriver _instance;
+        private IWebElement _actionElement;
+        private ActionPoint _postion;
+        #endregion
+
+        #region Property
+        public string DriverDownloadURL => "http://chromedriver.storage.googleapis.com/";
+        public string DriverDownloadFile => "chromedriver_win32.zip";
+        public Actions CustomActions => new Actions(Instance);
+        public IWebElement ActionElement
+        {
+            get
+            {
+                if (this._actionElement == null)
+                {
+                    lock (_locker)
+                    {
+                        if (this._actionElement == null)
+                        {
+                            _actionElement = Instance.FindElement(By.TagName("canvas"));
+                        }
+                    }
+                }
+                    
+                return this._actionElement;
+            }
+        }
         public IWebDriver Instance
         {
             get
@@ -33,9 +59,21 @@ namespace SmartTools.Controller
             }
         }
 
-        public event Action OnWebDriverOpened;
+        public ActionPoint Postion
+        {
+            get
+            {
+                if (this._postion == null)
+                    this._postion = new ActionPoint();
+                return this._postion;
+            }
+        }
+        #endregion
 
+        public event Action OnWebDriverOpened;
         public event Action OnWebDriverClosed;
+        public event Action OnWebDriverStarted;
+        public event Action OnWebDriverStopped;
 
         public IWebDriver CreateDrvier()
         {
@@ -162,6 +200,16 @@ namespace SmartTools.Controller
         {
             Instance.Quit();
             OnWebDriverClosed?.Invoke();
+        }
+
+        public void Start()
+        {
+            
+        }
+
+        public void Stop()
+        {
+            throw new NotImplementedException();
         }
     }
 }

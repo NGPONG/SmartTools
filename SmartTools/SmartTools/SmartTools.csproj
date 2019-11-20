@@ -132,6 +132,7 @@
     <Compile Include="Controller\ChromeController.cs" />
     <Compile Include="Controller\FormManager.cs" />
     <Compile Include="Controller\IWebDriverController.cs" />
+    <Compile Include="Model\ActionPoint.cs" />
     <Compile Include="Model\Configuration.cs" />
     <Compile Include="Controller\ConfigurationManager.cs" />
     <Compile Include="Model\CustomAction.cs" />

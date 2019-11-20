@@ -67,7 +67,9 @@ namespace SmartTools.Controller
             mainForm.Name = "Main";
             mainForm.Text = "Smart Tool";
 
+            //
             // Tab controler
+            //
             tcMaster.Depth = 0;
             tcMaster.Location = new System.Drawing.Point(12, 134);
             tcMaster.MouseState = MaterialSkin.MouseState.HOVER;
@@ -75,6 +77,17 @@ namespace SmartTools.Controller
             tcMaster.SelectedIndex = 0;
             tcMaster.Size = new System.Drawing.Size(906, 559);
             tcMaster.TabIndex = 0;
+            tcMaster.SelectedIndexChanged += delegate (object sender, EventArgs e)
+            {
+                if ((Boolean)tcMaster.SelectedTab.Tag)
+                    btnStart.Text = "停止";
+                else
+                    btnStart.Text = "开始";
+            };
+
+            //
+            // Tab selecteor
+            //
             tsMaster.BaseTabControl = tcMaster;
             tsMaster.Depth = 0;
             tsMaster.Location = new System.Drawing.Point(-2, 64);
@@ -124,6 +137,11 @@ namespace SmartTools.Controller
             btnStart.TabIndex = 4;
             btnStart.Text = "开始";
             btnStart.UseVisualStyleBackColor = true;
+            btnStart.Click += delegate (object sender, EventArgs e)
+            {
+                throw new NotImplementedException();
+            };
+
 
             // 
             // btnAddConfig
