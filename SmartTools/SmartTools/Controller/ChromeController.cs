@@ -32,6 +32,8 @@ namespace SmartTools.Controller
         private ActionPoint _postion;
         private TesseractEngine _tesseract;
         private CancellationTokenSource _controllerCancelToken;
+        private const double _thresh = 80;
+        private const double _thresholdMaxVal = 255;
         private DriverState _status;
         #endregion
 
