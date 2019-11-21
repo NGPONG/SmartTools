@@ -40,7 +40,12 @@ namespace SmartTools.Controller
             return manager;
         }
 
-        public void Open(string configName, string url, Action OnWebDriverOpened = null, Action OnWebDriverClosed = null, Action OnWebDriverStarted = null, Action OnWebDriverStopped = null)
+        public void Open(string configName,
+                         string url,
+                         Action OnWebDriverOpened = null,
+                         Action OnWebDriverClosed = null,
+                         Action OnWebDriverStarted = null,
+                         Action OnWebDriverStopped = null)
         {
             try
             {
@@ -79,10 +84,17 @@ namespace SmartTools.Controller
             if (driverController == null)
                 return;
 
-            Task.Factory.StartNew(() =>
-            {
-                driverController.Start(actions);
-            }, driverController.ControllerCancelToken.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            driverController.Start(actions);
+        }
+
+        public void StopAction(string configName)
+        {
+            var driverController = _driverHandler.TryGet(configName);
+            // This is caused by the fact that WebDriver has not been opened yet.
+            if (driverController == null)
+                return;
+
+            driverController.Stop();
         }
 
         public void SetDriverPostion(IWebDriver webDriver)

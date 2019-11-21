@@ -9,10 +9,10 @@ namespace SmartTools.Utils.Extensions
 {
     public static class CancellationTokenSourceExtension
     {
-        public static void Reset(this CancellationTokenSource cancelToken)
+        public static CancellationTokenSource Reset(this CancellationTokenSource cancelToken)
         {
             cancelToken.Dispose();
-            cancelToken = new CancellationTokenSource();
+            return new CancellationTokenSource();
         }
     }
 }

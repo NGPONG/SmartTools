@@ -7,6 +7,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -67,7 +68,6 @@ namespace SmartTools.Controller
                 this._instance = value;
             }
         }
-
         public ActionPoint Postion
         {
             get
@@ -77,7 +77,6 @@ namespace SmartTools.Controller
                 return this._postion;
             }
         }
-
         public TesseractEngine Tesseract
         {
             get
@@ -100,7 +99,6 @@ namespace SmartTools.Controller
                 this._controllerCancelToken = value;
             }
         }
-
         public DriverState Status
         {
             get
@@ -129,6 +127,7 @@ namespace SmartTools.Controller
                 }
             }
         }
+        public Func<List<CustomAction>, List<CustomAction>> StartCallerAsync { get; set; }
         #endregion
 
         public event Action OnWebDriverOpened;
@@ -140,6 +139,7 @@ namespace SmartTools.Controller
         {
             this.Tesseract = new TesseractEngine("./tessdata", "chi_sim", EngineMode.Default);
             this.ControllerCancelToken = new CancellationTokenSource();
+            this.StartCallerAsync = WaitNewGambling;
         }
 
         public void Close()
@@ -155,11 +155,8 @@ namespace SmartTools.Controller
 
         public void Start(List<CustomAction> actions)
         {
-            if (Status != DriverState.Open)
-                return;
-
             Status = DriverState.Start;
-            Do(actions);
+            StartCallerAsync.BeginInvoke(actions, new AsyncCallback(Do), "Async:OK!");
         }
 
         public IWebDriver CreateDrvier()
@@ -186,45 +183,68 @@ namespace SmartTools.Controller
             return Instance;
         }
 
-        public void Do(List<CustomAction> actions)
+        public List<CustomAction> WaitNewGambling(List<CustomAction> actions)
         {
             try
             {
-                if (ControllerCancelToken.IsCancellationRequested)
+                while (true)
                 {
-                    Status = DriverState.Stop;
-                    ControllerCancelToken.Reset();
-                    return;
+                    if (ControllerCancelToken.IsCancellationRequested)
+                    {
+                        Status = DriverState.Stop;
+                        ControllerCancelToken = ControllerCancelToken.Reset();
+                        return null;
+                    }
+
+                    var picBuffer = ((ITakesScreenshot)Instance).GetScreenshot().AsByteArray;
+                    MemoryStream memoryProcess = new MemoryStream(picBuffer);
+                    var bitmap_Source = new Bitmap(memoryProcess);
+                    var bitmap_Cut = new Bitmap(371, 110, PixelFormat.Format24bppRgb);
+
+                    Graphics g = Graphics.FromImage(bitmap_Cut);
+                    g.DrawImage(bitmap_Source, new Rectangle(0, 0, 371, 110), new Rectangle(609, 392, 371, 100), GraphicsUnit.Pixel);
+
+                    var page = Tesseract.Process(bitmap_Cut, PageSegMode.SingleBlock);
+                    var readByPic = page.GetText();
+
+                    // Dispose Unmanaged variable because of the calling recursive functions
+                    Array.Clear(picBuffer, 0, picBuffer.Length);
+                    page.Dispose();
+                    memoryProcess.Close();
+                    memoryProcess.Dispose();
+                    bitmap_Source.Dispose();
+                    bitmap_Cut.Dispose();
+
+                    GC.Collect();
+
+                    if (Regex.IsMatch(readByPic, "开局"))
+                    {
+                        // To call back function.
+                        break;
+                    }
+
+                    Thread.Sleep(100);
                 }
 
-                var picBuffer = ((ITakesScreenshot)Instance).GetScreenshot().AsByteArray;
-                MemoryStream memoryProcess = new MemoryStream(picBuffer);
-                var bitmap_Source = new Bitmap(memoryProcess);
-                var bitmap_Cut = new Bitmap(371, 110, PixelFormat.Format24bppRgb);
+                return actions;
+            }
+            catch (Exception e)
+            {
+                Status = DriverState.Stop;
+                LogHelper.Error(e);
+                return null;
+            }
+        }
 
-                Graphics g = Graphics.FromImage(bitmap_Cut);
-                g.DrawImage(bitmap_Source, new Rectangle(0, 0, 371, 110), new Rectangle(609, 392, 371, 100), GraphicsUnit.Pixel);
+        public void Do(IAsyncResult result)
+        {
+            var handler = (Func<List<CustomAction>, List<CustomAction>>)((AsyncResult)result).AsyncDelegate;
+            var actions = handler.EndInvoke(result);
+            if (actions == null)
+                return;
 
-                var page = Tesseract.Process(bitmap_Cut, PageSegMode.SingleBlock);
-                var readByPic = page.GetText();
-
-                // Dispose Unmanaged variable because of the calling recursive functions
-                Array.Clear(picBuffer, 0, picBuffer.Length);
-                page.Dispose();
-                memoryProcess.Close();
-                memoryProcess.Dispose();
-                bitmap_Source.Dispose();
-                bitmap_Cut.Dispose();
-
-                GC.WaitForFullGCComplete();
-
-                if (!Regex.IsMatch(readByPic, "开局"))
-                {
-                    // Call back.
-                    Do(actions);
-                    return;
-                }
-
+            try
+            {
                 // Move and Click the first chip.
                 this.Actions.MoveToElement(ActionElement, Postion.One.X, Postion.One.Y).Click().Perform();
 
@@ -250,7 +270,7 @@ namespace SmartTools.Controller
                 }
 
                 // Call back.
-                Do(actions);
+                StartCallerAsync.BeginInvoke(actions, new AsyncCallback(Do), "Async:OK!");
             }
             catch (Exception e)
             {

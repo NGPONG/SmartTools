@@ -17,9 +17,18 @@ namespace SmartTools.Utils
         public const int WM_KEYDOWN                 = 0x0100;
         public const int WM_PAINT                   = 0x000F;
 
-        // LISTVIEW
+        // LIST_VIEW
         public const int LVM_FIRST                  = 0x1000;
         public const int LVM_GETCOLUMNORDERARRAY    = Native.LVM_FIRST + 59;
+
+        // SUB_WINDOW
+        public const UInt32 SWP_NOSIZE = 0x0001;
+        public const UInt32 SWP_NOMOVE = 0x0002;
+        public const UInt32 SWP_SHOWWINDOW = 0x0040;
+        #endregion
+
+        #region Instance
+        public static readonly IntPtr HWND_TOPMOST = new IntPtr(-1);
         #endregion
 
         // 释放掉未使用的页面

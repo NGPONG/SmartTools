@@ -82,9 +82,13 @@ namespace SmartTools.Controller
             tcMaster.SelectedIndexChanged += delegate (object sender, EventArgs e)
             {
                 if ((Boolean)tcMaster.SelectedTab.Tag)
+                {
                     btnStart.Text = "停止";
+                }
                 else
+                {
                     btnStart.Text = "开始";
+                }
             };
 
             //
@@ -145,29 +149,36 @@ namespace SmartTools.Controller
             {
                 var configName = tcMaster.SelectedTab.Text;
 
-                var listView = tcMaster.SelectedTab.Controls.OfType<Control>().Where(c => c.Name == $"mlvData_{configName}").FirstOrDefault() as MaterialSkin.Controls.MaterialListView;
-                var listConfig = new List<CustomAction>();
-
-                foreach (ListViewItem item in listView.Items)
+                if (btnStart.Text == "开始")
                 {
-                    if (item.SubItems[3].Text == "0")
-                        continue;
+                    var listView = tcMaster.SelectedTab.Controls.OfType<Control>().Where(c => c.Name == $"mlvData_{configName}").FirstOrDefault() as MaterialSkin.Controls.MaterialListView;
+                    var listConfig = new List<CustomAction>();
 
-                    CustomAction customAction = new CustomAction();
-                    for (int i = 0; i < item.SubItems.Count; i++)
+                    foreach (ListViewItem item in listView.Items)
                     {
-                        customAction.ActionIndex = item.SubItems[0].Text;
-                        customAction.BetType = CustomAction.ToBet(item.SubItems[1].Text);
-                        customAction.Delay = item.SubItems[2].Text;
-                        customAction.Money = item.SubItems[3].Text;
+                        if (item.SubItems[3].Text == "0")
+                            continue;
+
+                        CustomAction customAction = new CustomAction();
+                        for (int i = 0; i < item.SubItems.Count; i++)
+                        {
+                            customAction.ActionIndex = item.SubItems[0].Text;
+                            customAction.BetType = CustomAction.ToBet(item.SubItems[1].Text);
+                            customAction.Delay = item.SubItems[2].Text;
+                            customAction.Money = item.SubItems[3].Text;
+                        }
+                        listConfig.Add(customAction);
                     }
-                    listConfig.Add(customAction);
+
+                    if (listConfig.Count == 0)
+                        return;
+
+                    AutomateController.Instance().StartAction(configName, listConfig);
                 }
-
-                if (listConfig.Count == 0)
-                    return;
-
-                AutomateController.Instance().StartAction(configName, listConfig);
+                else
+                {
+                    AutomateController.Instance().StopAction(configName);
+                }
             };
 
 
@@ -859,7 +870,6 @@ namespace SmartTools.Controller
                                 psWait_Open.Invoke(new Action(() =>
                                 {
                                     //Win32.SetActiveWindow(mainForm.Handle);
-                                    mainForm.Activate();
                                     psWait_Open.Stop();
                                     btnOpenBrowser.Text = "CLOS";
                                     btnOpenBrowser.Tag = true;
@@ -883,7 +893,7 @@ namespace SmartTools.Controller
                                     psWait_Start.Start();
                                     btnStart.Text = "停止";
                                     btnAdd.Enabled = false;
-                                    btnStart.Enabled = false;
+                                    lblMoney_Title.Tag = true;
                                 }));
                             },
                             ()=> // Stop
@@ -893,7 +903,7 @@ namespace SmartTools.Controller
                                     psWait_Start.Stop();
                                     btnStart.Text = "开始";
                                     btnAdd.Enabled = true;
-                                    btnStart.Enabled = true;
+                                    lblMoney_Title.Tag = false;
                                 }));
                             });
                         }
@@ -1099,6 +1109,7 @@ namespace SmartTools.Controller
             mainForm = new Main();
             mainForm.FormClosing += this.MainForm_FormClosing;
             InitializeComponent();
+            Win32.SetWindowPos(mainForm.Handle, Native.HWND_TOPMOST, 0, 0, 0, 0, Native.SWP_NOMOVE | Native.SWP_NOSIZE | Native.SWP_SHOWWINDOW);
             return mainForm;
         }
 
