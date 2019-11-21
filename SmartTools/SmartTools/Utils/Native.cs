@@ -22,9 +22,15 @@ namespace SmartTools.Utils
         public const int LVM_GETCOLUMNORDERARRAY    = Native.LVM_FIRST + 59;
 
         // SUB_WINDOW
-        public const UInt32 SWP_NOSIZE = 0x0001;
-        public const UInt32 SWP_NOMOVE = 0x0002;
-        public const UInt32 SWP_SHOWWINDOW = 0x0040;
+        public const uint SWP_NOSIZE = 0x0001;
+        public const uint SWP_NOMOVE = 0x0002;
+        public const uint SWP_SHOWWINDOW = 0x0040;
+
+        // SHOW_WINDOW
+        public const int SW_HIDE = 0;
+        public const int SW_MAXIMIZE = 3;
+        public const int SW_MINIMIZE = 6;
+        public const int SW_SHOW = 5;
         #endregion
 
         #region Instance

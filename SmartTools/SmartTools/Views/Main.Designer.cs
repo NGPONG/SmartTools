@@ -37,7 +37,7 @@ namespace SmartTools.Views
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(800, 59);
+            this.ClientSize = new System.Drawing.Size(640, 102);
             this.MaximizeBox = false;
             this.Name = "Main";
             this.ResumeLayout(false);

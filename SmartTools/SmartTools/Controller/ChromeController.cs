@@ -18,6 +18,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using SmartTools.Common.Helper;
 using SmartTools.Model;
+using SmartTools.Utils;
 using SmartTools.Utils.Extensions;
 using Tesseract;
 
@@ -36,11 +37,14 @@ namespace SmartTools.Controller
         private const double _thresholdMaxVal = 255;
         private DriverState _status;
         private IEnumerator<CustomAction> _actionsQueue;
+        private Rectangle _trackingArea = new Rectangle(465, 223, 128, 18);
+        private AutoResetEvent _isComplete = new AutoResetEvent(false);
         #endregion
 
         #region Property
         public string DriverDownloadURL => "http://chromedriver.storage.googleapis.com/";
         public string DriverDownloadFile => "chromedriver_win32.zip";
+        public string DriverPath => $"{AppDomain.CurrentDomain.BaseDirectory}Driver\\chromedriver.exe";
         public Actions Actions => new Actions(Instance);
         public IWebElement ActionElement
         {
@@ -147,6 +151,13 @@ namespace SmartTools.Controller
 
         public void Close()
         {
+            if (Status == DriverState.Start)
+            {
+                Stop();
+                _isComplete.WaitOne();
+                Thread.Sleep(2000);
+            }
+
             Instance.Quit();
             Status = DriverState.Close;
         }
@@ -156,8 +167,6 @@ namespace SmartTools.Controller
             ControllerCancelToken.Cancel();
             // Clear action queue
             this._actionsQueue = null;
-
-            GC.Collect();
         }
 
         public void Start()
@@ -168,7 +177,7 @@ namespace SmartTools.Controller
 
         public IWebDriver CreateDrvier()
         {
-            if (!File.Exists($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver\\chromedriver.exe"))
+            if (!File.Exists(DriverPath))
             {
                 string filePath = IOHelper.SearchFile("chrome.exe");
                 if (string.IsNullOrEmpty(filePath))
@@ -179,11 +188,18 @@ namespace SmartTools.Controller
 
             try
             {
-                Instance = new ChromeDriver($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver");
+                Instance = new ChromeDriver($"{AppDomain.CurrentDomain.BaseDirectory}Driver");
+#if !DEBUG
+                IntPtr driverHandler = Win32.FindWindow(null, DriverPath);
+                if (driverHandler != IntPtr.Zero)
+                    Win32.ShowWindow(driverHandler, Native.SW_HIDE); 
+#endif
+
             }
             catch (Exception e)
             {
                 LogHelper.Error(e);
+                Status = DriverState.Close;
                 return null;
             }
 
@@ -203,12 +219,8 @@ namespace SmartTools.Controller
                     }
 
                     var picBuffer = ((ITakesScreenshot)Instance).GetScreenshot().AsByteArray;
-                    MemoryStream memoryProcess = new MemoryStream(picBuffer);
-                    var bitmap_Source = new Bitmap(memoryProcess);
-                    var bitmap_Cut = new Bitmap(371, 110, PixelFormat.Format24bppRgb);
 
-                    Graphics g = Graphics.FromImage(bitmap_Cut);
-                    g.DrawImage(bitmap_Source, new Rectangle(0, 0, 371, 110), new Rectangle(609, 392, 371, 100), GraphicsUnit.Pixel);
+                    var bitmap_Cut = PictureHelper.ProcessImage(_trackingArea, picBuffer);
 
                     var page = Tesseract.Process(bitmap_Cut, PageSegMode.SingleBlock);
                     var readByPic = page.GetText();
@@ -216,18 +228,12 @@ namespace SmartTools.Controller
                     // Dispose Unmanaged variable because of the calling recursive functions
                     Array.Clear(picBuffer, 0, picBuffer.Length);
                     page.Dispose();
-                    memoryProcess.Close();
-                    memoryProcess.Dispose();
-                    bitmap_Source.Dispose();
-                    bitmap_Cut.Dispose();
 
                     if (Regex.IsMatch(readByPic, "开局"))
                     {
                         // To call back function.
                         break;
                     }
-
-                    Thread.Sleep(100);
 
                     GC.Collect();
                 }
@@ -246,6 +252,7 @@ namespace SmartTools.Controller
             var action = ((((AsyncResult)result).AsyncDelegate) as Func<IEnumerator<CustomAction>, CustomAction>).EndInvoke(result);
             if (action == null)
             {
+                _isComplete.Set();
                 Status = DriverState.Stop;
                 return;
             }

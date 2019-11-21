@@ -1,4 +1,6 @@
-﻿using System;
+﻿using OpenCvSharp;
+using OpenCvSharp.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -36,6 +38,20 @@ namespace SmartTools.Common.Helper
             return destImage;
         }
 
+        public static Bitmap ProcessImage(Rectangle rec_Cut, byte[] picBuffer)
+        {
+            var source = Mat.FromImageData(picBuffer, ImreadModes.AnyColor);
+            var roi = new Rect(rec_Cut.X, rec_Cut.Y, rec_Cut.Width, rec_Cut.Height);
 
+            var textRegion = new Mat(source, roi);
+
+            var gray = new Mat();
+            Cv2.CvtColor(textRegion, gray, ColorConversionCodes.BGRA2GRAY);
+
+            var threshImage = new Mat();
+            Cv2.Threshold(gray, threshImage, 80, 255, ThresholdTypes.BinaryInv);
+
+            return BitmapConverter.ToBitmap(threshImage);
+        }
     }
 }

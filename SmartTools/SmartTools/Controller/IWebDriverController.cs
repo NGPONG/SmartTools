@@ -15,6 +15,7 @@ namespace SmartTools.Controller
     {
         string DriverDownloadURL { get; }
         string DriverDownloadFile { get; }
+        string DriverPath { get; }
         DriverState Status { get; set; }
         Actions Actions { get; }
         ActionPoint Postion { get; }

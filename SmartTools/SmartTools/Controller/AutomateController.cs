@@ -75,6 +75,8 @@ namespace SmartTools.Controller
         {
             _driverHandler[configName].Close();
             _driverHandler.Remove(configName);
+
+            GC.Collect();
         }
 
         public void StartAction(string configName, List<CustomAction> actions)
