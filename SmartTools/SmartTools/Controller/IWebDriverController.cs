@@ -22,8 +22,9 @@ namespace SmartTools.Controller
         CancellationTokenSource ControllerCancelToken { get; set; }
         IWebDriver Instance { get; set; }
         IWebDriver CreateDrvier();
+        void SetEnumeratorQueue(IEnumerable<CustomAction> actions);
         void Close();
-        void Start(List<CustomAction> actions);
+        void Start();
         void Stop();
 
         event Action OnWebDriverOpened;

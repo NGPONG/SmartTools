@@ -35,6 +35,7 @@ namespace SmartTools.Controller
         private const double _thresh = 80;
         private const double _thresholdMaxVal = 255;
         private DriverState _status;
+        private IEnumerator<CustomAction> _actionsQueue;
         #endregion
 
         #region Property
@@ -129,7 +130,7 @@ namespace SmartTools.Controller
                 }
             }
         }
-        public Func<List<CustomAction>, List<CustomAction>> StartCallerAsync { get; set; }
+        public Func<IEnumerator<CustomAction>, CustomAction> StartCallerAsync { get; set; }
         #endregion
 
         public event Action OnWebDriverOpened;
@@ -153,12 +154,16 @@ namespace SmartTools.Controller
         public void Stop()
         {
             ControllerCancelToken.Cancel();
+            // Clear action queue
+            this._actionsQueue = null;
+
+            GC.Collect();
         }
 
-        public void Start(List<CustomAction> actions)
+        public void Start()
         {
             Status = DriverState.Start;
-            StartCallerAsync.BeginInvoke(actions, new AsyncCallback(Do), "Async:OK!");
+            StartCallerAsync.BeginInvoke(_actionsQueue, new AsyncCallback(Do), "Async:OK!");
         }
 
         public IWebDriver CreateDrvier()
@@ -185,7 +190,7 @@ namespace SmartTools.Controller
             return Instance;
         }
 
-        public List<CustomAction> WaitNewGambling(List<CustomAction> actions)
+        public CustomAction WaitNewGambling(IEnumerator<CustomAction> customActions)
         {
             try
             {
@@ -193,7 +198,6 @@ namespace SmartTools.Controller
                 {
                     if (ControllerCancelToken.IsCancellationRequested)
                     {
-                        Status = DriverState.Stop;
                         ControllerCancelToken = ControllerCancelToken.Reset();
                         return null;
                     }
@@ -217,8 +221,6 @@ namespace SmartTools.Controller
                     bitmap_Source.Dispose();
                     bitmap_Cut.Dispose();
 
-                    GC.Collect();
-
                     if (Regex.IsMatch(readByPic, "开局"))
                     {
                         // To call back function.
@@ -226,13 +228,14 @@ namespace SmartTools.Controller
                     }
 
                     Thread.Sleep(100);
+
+                    GC.Collect();
                 }
 
-                return actions;
+                return customActions.MoveNext<CustomAction>();
             }
             catch (Exception e)
             {
-                Status = DriverState.Stop;
                 LogHelper.Error(e);
                 return null;
             }
@@ -240,39 +243,38 @@ namespace SmartTools.Controller
 
         public void Do(IAsyncResult result)
         {
-            var handler = (Func<List<CustomAction>, List<CustomAction>>)((AsyncResult)result).AsyncDelegate;
-            var actions = handler.EndInvoke(result);
-            if (actions == null)
+            var action = ((((AsyncResult)result).AsyncDelegate) as Func<IEnumerator<CustomAction>, CustomAction>).EndInvoke(result);
+            if (action == null)
+            {
+                Status = DriverState.Stop;
                 return;
+            }
 
             try
             {
                 // Move and Click the first chip.
                 this.Actions.MoveToElement(ActionElement, Postion.One.X, Postion.One.Y).Click().Perform();
 
-                foreach (var action in actions)
+                if (action.BetType != Bet.停)
                 {
-                    if (action.BetType != Bet.停)
+                    var action_ChipCount = Math.Round(Convert.ToDouble(action.Money) / 10);
+
+                    var action_Bet = this.Actions;
+                    for (int i = 0; i < action_ChipCount; i++)
                     {
-                        var action_ChipCount = Math.Round(Convert.ToDouble(action.Money) / 10);
-
-                        var action_Bet = this.Actions;
-                        for (int i = 0; i < action_ChipCount; i++)
-                        {
-                            var postion = Postion.BetPoint(action.BetType);
-                            action_Bet.MoveToElement(ActionElement, postion.X, postion.Y).Click();
-                        }
-                        action_Bet.Perform();
-
-                        // 点击下注
-
+                        var postion = Postion.BetPoint(action.BetType);
+                        action_Bet.MoveToElement(ActionElement, postion.X, postion.Y).Click();
                     }
+                    action_Bet.Perform();
 
-                    Thread.Sleep(Convert.ToInt32(action.Delay));
+                    // 点击下注
+
                 }
 
+                Thread.Sleep(Convert.ToInt32(action.Delay));
+
                 // Call back.
-                StartCallerAsync.BeginInvoke(actions, new AsyncCallback(Do), "Async:OK!");
+                StartCallerAsync.BeginInvoke(_actionsQueue, new AsyncCallback(Do), "Async:Callback");
             }
             catch (Exception e)
             {
@@ -376,6 +378,11 @@ namespace SmartTools.Controller
             }
 
             GC.Collect();
+        }
+
+        public void SetEnumeratorQueue(IEnumerable<CustomAction> actions)
+        {
+            this._actionsQueue = actions.GetEnumerator();
         }
     }
 }

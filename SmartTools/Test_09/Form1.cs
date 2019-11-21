@@ -14,6 +14,17 @@ namespace Test_09
     {
         public Form1()
         {
+            IEnumerable<string> list = new List<string>() { "哈哈", "傻逼", "脑残" };
+            var enumerator = list.GetEnumerator();
+            while (true)
+            {
+                enumerator.MoveNext();
+                var str = enumerator.Current;
+                if (str == null)
+                    enumerator.Reset();
+            }
+
+
             InitializeComponent(); // you need to add a listView named listView1 with the designer
             listView1.FullRowSelect = true;
             ListViewExtender extender = new ListViewExtender(listView1);

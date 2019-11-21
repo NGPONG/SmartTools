@@ -84,7 +84,8 @@ namespace SmartTools.Controller
             if (driverController == null)
                 return;
 
-            driverController.Start(actions);
+            driverController.SetEnumeratorQueue(actions);
+            driverController.Start();
         }
 
         public void StopAction(string configName)

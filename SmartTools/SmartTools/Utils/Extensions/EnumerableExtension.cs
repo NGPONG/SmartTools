@@ -33,5 +33,16 @@ namespace SmartTools.Utils.Extensions
 
             return data;
         }
+
+        public static T MoveNext<T>(this IEnumerator<T> enumerator)
+        {
+            enumerator.MoveNext();
+            if (enumerator.Current == null)
+            {
+                enumerator.Reset();
+                enumerator.MoveNext();
+            }
+            return enumerator.Current;
+        }
     }
 }
