@@ -37,7 +37,7 @@ namespace SmartTools.Controller
         private const double _thresholdMaxVal = 255;
         private DriverState _status;
         private IEnumerator<CustomAction> _actionsQueue;
-        private Rectangle _trackingArea = new Rectangle(465, 223, 128, 18);
+        private Rectangle _trackingArea = new Rectangle(465, 225, 128, 18);
         private AutoResetEvent _isComplete = new AutoResetEvent(false);
         #endregion
 
@@ -177,17 +177,18 @@ namespace SmartTools.Controller
 
         public IWebDriver CreateDrvier()
         {
-            if (!File.Exists(DriverPath))
-            {
-                string filePath = IOHelper.SearchFile("chrome.exe");
-                if (string.IsNullOrEmpty(filePath))
-                    return null;
-
-                DownLoadFile(filePath);
-            }
-
             try
             {
+                if (!File.Exists(DriverPath))
+                {
+                    string filePath = IOHelper.SearchFile("chrome.exe");
+                    if (string.IsNullOrEmpty(filePath))
+                        return null;
+
+                    DownLoadFile(filePath);
+                }
+
+
                 Instance = new ChromeDriver($"{AppDomain.CurrentDomain.BaseDirectory}Driver");
 #if !DEBUG
                 IntPtr driverHandler = Win32.FindWindow(null, DriverPath);
@@ -256,6 +257,7 @@ namespace SmartTools.Controller
                 Status = DriverState.Stop;
                 return;
             }
+            Thread.Sleep(1000);
 
             try
             {
@@ -270,14 +272,17 @@ namespace SmartTools.Controller
                     for (int i = 0; i < action_ChipCount; i++)
                     {
                         var postion = Postion.BetPoint(action.BetType);
-                        action_Bet.MoveToElement(ActionElement, postion.X, postion.Y).Click();
+                        action_Bet.MoveToElement(ActionElement, postion.X, postion.Y)
+                                  .Click();
                     }
                     action_Bet.Perform();
 
-                    // 点击下注
-
+                    this.Actions.MoveToElement(ActionElement, Postion.Confirm.X, Postion.Confirm.Y)
+                                .Click()
+                                .Perform();
                 }
 
+                // Custom delay.
                 Thread.Sleep(Convert.ToInt32(action.Delay));
 
                 // Call back.
@@ -293,98 +298,105 @@ namespace SmartTools.Controller
 
         public void DownLoadFile(string filePath)
         {
-            var version = FileVersionInfo.GetVersionInfo(filePath)?.FileVersion;
-            var versionSplit = version.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
-            if (versionSplit.Length > 3)
+            try
             {
-                var masterVersion = versionSplit[0];
-                var subVersion1 = versionSplit[1];
-                var subVersion2 = versionSplit[2];
-                var subVersion3 = versionSplit[3];
-                var threeVersionNumber = $"{masterVersion}.{subVersion1}.{subVersion2}";
-
-                using (HttpClient httpClient = new HttpClient())
+                var version = FileVersionInfo.GetVersionInfo(filePath)?.FileVersion;
+                var versionSplit = version.Split(new char[] { '.' }, StringSplitOptions.RemoveEmptyEntries);
+                if (versionSplit.Length > 3)
                 {
-                    // XHR version address.
-                    var versionContent = httpClient.GetAsync($"{DriverDownloadURL}?delimiter=/&prefix=").Result.Content.ReadAsStreamAsync().Result;
-                    XmlDocument doc = new XmlDocument();
-                    doc.Load(versionContent);
+                    var masterVersion = versionSplit[0];
+                    var subVersion1 = versionSplit[1];
+                    var subVersion2 = versionSplit[2];
+                    var subVersion3 = versionSplit[3];
+                    var threeVersionNumber = $"{masterVersion}.{subVersion1}.{subVersion2}";
 
-                    var version_Nodes = doc.DocumentElement.ChildNodes.Cast<XmlNode>()
-                    .Where(x => x.Name == "CommonPrefixes"
-                                                           && x.ChildNodes[0].InnerText != "icons/"
-                                                           && x.ChildNodes[0].InnerText.Remove(x.ChildNodes[0].InnerText.LastIndexOf(".")) == threeVersionNumber) // Remove unuse elements
-                    .Select(n => n.InnerText.Remove(n.InnerText.Length - 1, 1))
-                    .OrderBy(o => o.Substring(o.LastIndexOf(".")))
-                    .ToList();
-
-                    string userfulVersion = string.Empty;
-                    for (int i = 0; i < version_Nodes.Count; i++)
+                    using (HttpClient httpClient = new HttpClient())
                     {
-                        int subVersionCompare = Convert.ToInt32(version_Nodes[i].Substring(version_Nodes[i].LastIndexOf(".") + 1));
-                        if (i == 0)
+                        // XHR version address.
+                        var versionContent = httpClient.GetAsync($"{DriverDownloadURL}?delimiter=/&prefix=").Result.Content.ReadAsStreamAsync().Result;
+                        XmlDocument doc = new XmlDocument();
+                        doc.Load(versionContent);
+
+                        var version_Nodes = doc.DocumentElement.ChildNodes.Cast<XmlNode>()
+                        .Where(x => x.Name == "CommonPrefixes"
+                                                               && x.ChildNodes[0].InnerText != "icons/"
+                                                               && x.ChildNodes[0].InnerText.Remove(x.ChildNodes[0].InnerText.LastIndexOf(".")) == threeVersionNumber) // Remove unuse elements
+                        .Select(n => n.InnerText.Remove(n.InnerText.Length - 1, 1))
+                        .OrderBy(o => o.Substring(o.LastIndexOf(".")))
+                        .ToList();
+
+                        string userfulVersion = string.Empty;
+                        for (int i = 0; i < version_Nodes.Count; i++)
                         {
-                            // 0 ~ anyversion
-                            if (Convert.ToInt32(subVersion3) < subVersionCompare)
+                            int subVersionCompare = Convert.ToInt32(version_Nodes[i].Substring(version_Nodes[i].LastIndexOf(".") + 1));
+                            if (i == 0)
                             {
-                                userfulVersion = version_Nodes[i];
-                                break;
-                            }
-                        }
-                        else
-                        {
-                            int subVersionCompareLast = Convert.ToInt32(version_Nodes[i - 1].Substring(version_Nodes[i - 1].LastIndexOf(".") + 1));
-
-                            if (i == version_Nodes.Count - 1)
-                            {
-                                userfulVersion = version_Nodes[i];
-                                break;
-                            }
-
-                            // anyversion1 ~ anyversion2
-                            if (Convert.ToInt32(subVersion3) > subVersionCompareLast && Convert.ToInt32(subVersion3) < subVersionCompare)
-                            {
-                                userfulVersion = version_Nodes[i];
-                                break;
-                            }
-                        }
-                    }
-
-                    using (var chromeDriver_Stream = httpClient.GetAsync($"{DriverDownloadURL}{userfulVersion}/{DriverDownloadFile}").Result.Content.ReadAsStreamAsync().Result)
-                    {
-                        chromeDriver_Stream.Seek(0, SeekOrigin.Begin);
-
-                        byte[] buffer = new byte[1024 * 5];
-
-                        using (ZipArchive archive = new ZipArchive(chromeDriver_Stream, ZipArchiveMode.Read))
-                        {
-                            ZipArchiveEntry entry = archive.GetEntry("chromedriver.exe");
-                            using (var entry_Stream = entry.Open())
-                            {
-                                if (!Directory.Exists($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver"))
-                                    Directory.CreateDirectory($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver");
-
-                                var output = new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver\\chromedriver.exe", FileMode.CreateNew, FileAccess.Write);
-
-                                int stream_Available;
-                                while (true)
+                                // 0 ~ anyversion
+                                if (Convert.ToInt32(subVersion3) < subVersionCompare)
                                 {
-                                    stream_Available = entry_Stream.Read(buffer, 0, buffer.Length);
-                                    if (stream_Available == 0)
-                                        break;
-                                    output.Write(buffer, 0, stream_Available);
-
-                                    Array.Clear(buffer, 0, buffer.Length);
+                                    userfulVersion = version_Nodes[i];
+                                    break;
                                 }
-                                output.Close();
-                                output.Dispose();
+                            }
+                            else
+                            {
+                                int subVersionCompareLast = Convert.ToInt32(version_Nodes[i - 1].Substring(version_Nodes[i - 1].LastIndexOf(".") + 1));
+
+                                if (i == version_Nodes.Count - 1)
+                                {
+                                    userfulVersion = version_Nodes[i];
+                                    break;
+                                }
+
+                                // anyversion1 ~ anyversion2
+                                if (Convert.ToInt32(subVersion3) > subVersionCompareLast && Convert.ToInt32(subVersion3) < subVersionCompare)
+                                {
+                                    userfulVersion = version_Nodes[i];
+                                    break;
+                                }
+                            }
+                        }
+
+                        using (var chromeDriver_Stream = httpClient.GetAsync($"{DriverDownloadURL}{userfulVersion}/{DriverDownloadFile}").Result.Content.ReadAsStreamAsync().Result)
+                        {
+                            chromeDriver_Stream.Seek(0, SeekOrigin.Begin);
+
+                            byte[] buffer = new byte[1024 * 5];
+
+                            using (ZipArchive archive = new ZipArchive(chromeDriver_Stream, ZipArchiveMode.Read))
+                            {
+                                ZipArchiveEntry entry = archive.GetEntry("chromedriver.exe");
+                                using (var entry_Stream = entry.Open())
+                                {
+                                    if (!Directory.Exists($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver"))
+                                        Directory.CreateDirectory($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver");
+
+                                    var output = new FileStream($"{AppDomain.CurrentDomain.BaseDirectory}\\Driver\\chromedriver.exe", FileMode.CreateNew, FileAccess.Write);
+
+                                    int stream_Available;
+                                    while (true)
+                                    {
+                                        stream_Available = entry_Stream.Read(buffer, 0, buffer.Length);
+                                        if (stream_Available == 0)
+                                            break;
+                                        output.Write(buffer, 0, stream_Available);
+
+                                        Array.Clear(buffer, 0, buffer.Length);
+                                    }
+                                    output.Close();
+                                    output.Dispose();
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            GC.Collect();
+                GC.Collect();
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
 
         public void SetEnumeratorQueue(IEnumerable<CustomAction> actions)

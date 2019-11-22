@@ -107,13 +107,9 @@ namespace Test_02
             //var text = new Mat(source, roi);
             //Cv2.ImShow("text", text);
             //913, 534
-            actions.MoveToElement(driver.FindElement(By.TagName("canvas")), 602, 360).Click().Perform(); // 1139,663
-            Actions actions2 = new Actions(driver);
-            actions2.Click().Perform(); // 1139,663
-            Actions actions3 = new Actions(driver);
-            actions3.Click().Perform(); // 1139,663
-            Actions actions4 = new Actions(driver);
-            actions4.Click().Perform(); // 1139,663
+            actions.MoveToElement(driver.FindElement(By.TagName("canvas")), 413, 355).Click().Perform(); // 1139,663
+
+            //new Point(509, 320)
         }
 
         private void Button6_Click(object sender, EventArgs e)
