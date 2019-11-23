@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
@@ -12,28 +13,23 @@ namespace Test_11
     {
         static void Main(string[] args)
         {
-            Action action = new Action(DoSomeThing);
-            var result = action.BeginInvoke(new AsyncCallback(CallBack), null);
+            Dictionary<string, Person> dic = new Dictionary<string, Person>();
+            dic.Add("wupeng", new Person() { Name = "wupeng", Age = 22, Address = "shenzhenlonghua" });
+            dic.Add("wupeng1", new Person() { Name = "wupeng1", Age = 21, Address = "shenzhenlonghua" });
+            dic.Add("wupeng2", new Person() { Name = "wupeng2", Age = 20, Address = "shenzhenlonghua" });
+            dic.Add("wupeng3", new Person() { Name = "wupeng3", Age = 19, Address = "shenzhenlonghua" });
 
-            result.AsyncWaitHandle.WaitOne();
-            string str = "321";
 
-            Console.ReadLine();
+            string str =  JsonConvert.SerializeObject(dic);
         }
+    }
 
-        static void DoSomeThing()
-        {
-            Thread.Sleep(4000);
-        }
-
-        static void CallBack(IAsyncResult result)
-        {
-            ((((AsyncResult)result).AsyncDelegate) as Action).EndInvoke(result);
-
-            for (int i = 0; i < 5; i++)
-            {
-                string str = "123";
-            }
-        }
+    [JsonObject(MemberSerialization.OptOut)]
+    public class Person
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+        [JsonIgnore]
+        public string Address { get; set; }
     }
 }

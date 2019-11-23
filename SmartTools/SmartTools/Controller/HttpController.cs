@@ -12,7 +12,6 @@ namespace SmartTools.Controller
     public class HttpController
     {
         public Header header;
-        public CookieContainer cookies;
 
         private HttpWebRequest requestContext;
         private HttpWebResponse responseContext;
@@ -63,12 +62,13 @@ namespace SmartTools.Controller
             requestContext.KeepAlive = false;
             requestContext.Timeout = 60000;
             requestContext.ReadWriteTimeout = 60000;
-            requestContext.Method = header.Method;
             requestContext.ContentType = header.ContentType;
             requestContext.UserAgent = header.UserAgent;
-            if (cookies != null)
-                requestContext.CookieContainer = cookies;
-            if (header.Method == "POST")
+            requestContext.Accept = header.Accept;
+            requestContext.Method = header.ConvertMethod();
+            if (!string.IsNullOrEmpty(header.cookies))
+                requestContext.Headers.Add(HttpRequestHeader.Cookie, header.cookies);
+            if (header.Method == Method.POST && header.Parameter != null)
             {
                 byte[] buffer = ASCIIEncoding.UTF8.GetBytes(header.Parameter);
                 requestContext.ContentLength = buffer.Length;

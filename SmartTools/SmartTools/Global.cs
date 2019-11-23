@@ -15,6 +15,7 @@ namespace SmartTools
         public static string __PORT;
         public static string __CONFIGFILE;
         public static string __BROWSERSUPPORT;
+        public static string __AUTHENTICATIONKEY;
         public static Size __BROWSER_WINDOWSIZE;
 
         static Global()
@@ -28,6 +29,7 @@ namespace SmartTools
             // 配置文件中配置
             __SERVERADDRESS = "127.0.0.1";
             __PORT = "9876";
+            __AUTHENTICATIONKEY = ".ASPXAUTHFORPORTAL2018";
         }
     }
 }

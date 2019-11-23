@@ -18,8 +18,6 @@ namespace SmartTools.Controller
         private static AutomateController manager = null;
         #endregion
 
-        private Dictionary<string, IWebDriverController> _driverHandler = new Dictionary<string, IWebDriverController>();
-
         public CancellationToken EngineCancelToken = new CancellationToken();
 
         private AutomateController() { }
@@ -63,7 +61,7 @@ namespace SmartTools.Controller
                 SetDriverPostion(webDriver);
                 driverController.Status = DriverState.Open;
 
-                _driverHandler[configName] = driverController;
+                ConfigurationManager.Instance().Configs[configName].DriverHandler = driverController;
             }
             catch (Exception e)
             {
@@ -73,26 +71,26 @@ namespace SmartTools.Controller
 
         public void Close(string configName)
         {
-            _driverHandler[configName].Close();
-            _driverHandler.Remove(configName);
+            ConfigurationManager.Instance().Configs[configName].DriverHandler.Close();
+            ConfigurationManager.Instance().Configs[configName].DriverHandler = null; // Remove
 
             GC.Collect();
         }
 
-        public void StartAction(string configName, List<CustomAction> actions)
+        public void StartAction(string configName)
         {
-            var driverController = _driverHandler.TryGet(configName);
+            var driverController = ConfigurationManager.Instance().Configs[configName].DriverHandler;
             // This is caused by the fact that WebDriver has not been opened yet.
             if (driverController == null)
                 return;
 
-            driverController.SetEnumeratorQueue(actions);
+            driverController.SetEnumeratorQueue(ConfigurationManager.Instance().Configs[configName].Action);
             driverController.Start();
         }
 
         public void StopAction(string configName)
         {
-            var driverController = _driverHandler.TryGet(configName);
+            var driverController = ConfigurationManager.Instance().Configs[configName].DriverHandler;
             // This is caused by the fact that WebDriver has not been opened yet.
             if (driverController == null)
                 return;
@@ -102,7 +100,7 @@ namespace SmartTools.Controller
 
         public void SetDriverPostion(IWebDriver webDriver)
         {
-            if (_driverHandler.Count == 0)
+            if (ConfigurationManager.Instance().Configs.Count == 0)
             {
                 webDriver.Manage().Window.Position = new Point(-7, 0);
             }
@@ -113,7 +111,7 @@ namespace SmartTools.Controller
 
                 int x = -7;
                 int y = 0;
-                for (int i = 1; i <= _driverHandler.Count; i++)
+                for (int i = 1; i <= ConfigurationManager.Instance().Configs.Count; i++)
                 {
                     if (i % (int)Math.Round((double)(windows_Width / Global.__BROWSER_WINDOWSIZE.Width)) == 0)
                     {

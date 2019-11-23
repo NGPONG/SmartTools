@@ -15,9 +15,6 @@ namespace MaterialSkin.Controls
     {
         [Browsable(true)]
         public new bool HideSelection { get { return base.HideSelection; } set { base.HideSelection = true; } }
-
-
-
         [Browsable(false)]
         public int Depth { get; set; }
         [Browsable(false)]
@@ -41,6 +38,8 @@ namespace MaterialSkin.Controls
 
         private Dictionary<SubItem, Control> _embeddedControls = new Dictionary<SubItem, Control>();
         #endregion
+
+        public event Action<object, EventArgs> OnCustomContolValueChanged;
 
         public class SubItem
         {
@@ -127,6 +126,7 @@ namespace MaterialSkin.Controls
                         {
                             // Save
                             this.Items[_dynamicRowIndex].SubItems[_dynamicColumnIndex].Text = textBox.Text;
+                            OnCustomContolValueChanged?.Invoke(textBox, new EventArgs());
                             HideEditControl(textBox);
                         }
                         else if (e.KeyCode == Keys.Escape)
@@ -148,7 +148,10 @@ namespace MaterialSkin.Controls
                     combo.SelectedIndexChanged += delegate (object sender, EventArgs e)
                     {
                         if (combo.SelectedIndex > -1)
+                        {
                             this.Items[_dynamicRowIndex].SubItems[_dynamicColumnIndex].Text = combo.Text; // Save
+                            OnCustomContolValueChanged?.Invoke(combo, new EventArgs());
+                        }
                     };
                     combo.KeyDown += delegate (object sender, KeyEventArgs e)
                     {
