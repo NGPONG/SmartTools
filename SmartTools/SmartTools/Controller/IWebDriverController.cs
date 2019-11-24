@@ -38,8 +38,8 @@ namespace SmartTools.Controller
 
     public enum DriverState
     {
-        Open = 0,
-        Close = 1,
+        Close = 0,
+        Open = 1,
         Start = 2,
         Stop = 3
     }

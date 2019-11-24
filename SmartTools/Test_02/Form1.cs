@@ -3,6 +3,7 @@ using OpenCvSharp.Extensions;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -37,6 +38,7 @@ namespace Test_02
 
             // 根据当前屏幕尺寸 分辨率 ddi 点距 计算出窗口的具体尺寸
             driver.Manage().Window.Size = new System.Drawing.Size(800, 600);
+            
         }
 
         private void Button2_Click(object sender, EventArgs e)
@@ -297,7 +299,7 @@ namespace Test_02
             //Cv2.ImShow("source2", source);
             //Cv2.Resize(source, source, new OpenCvSharp.Size(1482, 940),0,0,InterpolationFlags.Linear);
             //Cv2.ImShow("source", source);
-            var roi = new OpenCvSharp.Rect(465, 223, 128, 18); // 699, 435, 195, 29
+            var roi = new OpenCvSharp.Rect(465, 225, 128, 18); // 699, 435, 195, 29
             // 465, 223, 128, 18 屏占比？
             
             var text = new Mat(source, roi);
@@ -339,6 +341,21 @@ namespace Test_02
 
             // 233.52
             // 175.14
+        }
+
+        private void Button19_Click(object sender, EventArgs e)
+        {
+            var wait = new WebDriverWait(driver, new TimeSpan(0, 0, 3));
+                wait.Until<bool>((IWebDriver driver) =>
+            {
+               
+                    var count = driver.WindowHandles.Count;
+                    return false;
+                
+
+            });
+
+            //OpenQA.Selenium.WebDriverTimeoutException
         }
     }
 }

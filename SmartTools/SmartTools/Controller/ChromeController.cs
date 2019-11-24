@@ -16,6 +16,7 @@ using System.Xml;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Support.UI;
 using SmartTools.Common.Helper;
 using SmartTools.Model;
 using SmartTools.Utils;
@@ -38,8 +39,9 @@ namespace SmartTools.Controller
         private const double _thresholdMaxVal = 255;
         private DriverState _status;
         private IEnumerator<CustomAction> _actionsQueue;
-        private Rectangle _trackingArea = new Rectangle(465, 225, 128, 18);
+        private Rectangle _trackingArea = new Rectangle(465, 236, 128, 18);
         private AutoResetEvent _isComplete = new AutoResetEvent(false);
+        private Task _newTabOpenListener;
         #endregion
 
         #region Property
@@ -167,6 +169,41 @@ namespace SmartTools.Controller
             this.Tesseract = new TesseractEngine("./tessdata", "chi_sim", EngineMode.Default);
             this.ControllerCancelToken = new CancellationTokenSource();
             this.StartCallerAsync = WaitNewGambling;
+            this._newTabOpenListener = new Task(() =>
+             {
+                 var wait = new WebDriverWait(this.Instance, new TimeSpan(0, 10, 0));
+                 try
+                 {
+                     wait.Until((IWebDriver driver) =>
+                     {
+                         if (driver.WindowHandles.Count == 2)
+                         {
+                             // Close First tab and select the active tab.
+                             driver.SwitchTo().Window(driver.WindowHandles.First()).Close();
+                             driver.SwitchTo().Window(driver.WindowHandles.First());
+
+                             // Set bound.
+                             driver.Manage().Window.Size = Global.__BROWSER_WINDOWSIZE;
+                             AutomateController.Instance().SetDriverPostion(driver);
+
+                             Status = DriverState.Open;
+                             return true;
+                         }
+                         else
+                             return false;
+                     });
+                 }
+                 catch (WebDriverTimeoutException timeOutException)
+                 {
+                     LogHelper.Error(timeOutException);
+                     Status = DriverState.Close;
+                 }
+                 catch (Exception ex)
+                 {
+                     LogHelper.Error(ex);
+                     Status = DriverState.Close;
+                 }
+             });
         }
 
         public void Close()
@@ -209,13 +246,15 @@ namespace SmartTools.Controller
                 }
 
 
-                Instance = new ChromeDriver($"{AppDomain.CurrentDomain.BaseDirectory}Driver");
-#if DEBUG
+                var options = new ChromeOptions();
+                options.AddArgument("--start-maximized");
+                Instance = new ChromeDriver($"{AppDomain.CurrentDomain.BaseDirectory}Driver", options);
+#if !DEBUG
                 IntPtr driverHandler = Win32.FindWindow(null, DriverPath);
                 if (driverHandler != IntPtr.Zero)
-                    Win32.ShowWindow(driverHandler, Native.SW_HIDE); 
+                    Win32.ShowWindow(driverHandler, Native.SW_HIDE);
 #endif
-
+                _newTabOpenListener.Start();
             }
             catch (Exception e)
             {
@@ -227,6 +266,7 @@ namespace SmartTools.Controller
             return Instance;
         }
 
+        int index = 1;
         public CustomAction WaitNewGambling(IEnumerator<CustomAction> customActions)
         {
             try
@@ -242,7 +282,6 @@ namespace SmartTools.Controller
                     var picBuffer = ((ITakesScreenshot)Instance).GetScreenshot().AsByteArray;
 
                     var bitmap_Cut = PictureHelper.ProcessImage(_trackingArea, picBuffer);
-
                     var page = Tesseract.Process(bitmap_Cut, PageSegMode.SingleBlock);
                     var readByPic = page.GetText();
 
@@ -320,6 +359,8 @@ namespace SmartTools.Controller
                                   .Click();
                     }
                     action_Bet.Perform();
+
+                    Thread.Sleep(1000);
 
                     this.Actions.MoveToElement(ActionElement, Postion.Confirm.X, Postion.Confirm.Y)
                                 .Click()

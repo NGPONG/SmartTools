@@ -61,10 +61,11 @@ namespace SmartTools.Controller
                 var webDriver = driverController.CreateDrvier();
                 if (webDriver == null)
                     throw new Exception("驱动启动失败!检查日志");
-                webDriver.Manage().Window.Size = Global.__BROWSER_WINDOWSIZE;
+
                 webDriver.Url = url;
-                SetDriverPostion(webDriver);
-                driverController.Status = DriverState.Open;
+
+                // SetDriverPostion(webDriver);
+                // driverController.Status = DriverState.Open;
 
                 _driverHandler[configName] = driverController;
             }
@@ -106,6 +107,9 @@ namespace SmartTools.Controller
             if (driverController == null)
                 return;
 
+            if (driverController.Status != DriverState.Open && driverController.Status != DriverState.Stop)
+                return;
+
             driverController.SetEnumeratorQueue(ConfigurationManager.Instance().Configs[configName].Action);
             driverController.Start();
         }
@@ -122,31 +126,26 @@ namespace SmartTools.Controller
 
         public void SetDriverPostion(IWebDriver webDriver)
         {
-            if (_driverHandler.Count == 0)
-            {
-                webDriver.Manage().Window.Position = new Point(-7, 0);
-            }
-            else
-            {
-                int windows_Height = Screen.PrimaryScreen.Bounds.Height;
-                int windows_Width = Screen.PrimaryScreen.Bounds.Width;
+            int windows_Height = Screen.PrimaryScreen.Bounds.Height;
+            int windows_Width = Screen.PrimaryScreen.Bounds.Width;
 
-                int x = -7;
-                int y = 0;
-                for (int i = 1; i <= _driverHandler.Count; i++)
+            int x = -7;
+            int y = 0;
+            for (int i = 1; i <= _driverHandler.Count; i++)
+            {
+                if (i == 1)
+                    break;
+                if (i % (int)Math.Round((double)(windows_Width / Global.__BROWSER_WINDOWSIZE.Width)) == 0)
                 {
-                    if (i % (int)Math.Round((double)(windows_Width / Global.__BROWSER_WINDOWSIZE.Width)) == 0)
-                    {
-                        x = -7;
-                        y += Global.__BROWSER_WINDOWSIZE.Height;
-                        continue;
-                    }
-
-                    x += (Global.__BROWSER_WINDOWSIZE.Width - 9);
+                    x = -7;
+                    y += Global.__BROWSER_WINDOWSIZE.Height;
+                    continue;
                 }
 
-                webDriver.Manage().Window.Position = new Point(x, y);
+                x += (Global.__BROWSER_WINDOWSIZE.Width - 9);
             }
+
+            webDriver.Manage().Window.Position = new Point(x, y);
         }
     }
 }

@@ -65,6 +65,7 @@ namespace SmartTools.Controller
                             AutomateController.Instance().CloseAll(()=>
                             {
                                 FormManager.Instance().Close();
+                                Application.Exit();
                             });
                         }))
                     });

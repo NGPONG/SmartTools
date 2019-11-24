@@ -1105,7 +1105,8 @@ namespace SmartTools.Controller
         {
             mainForm.Visible = false;
             e.Cancel = true;
-            ConfigurationManager.Instance().SaveConfig();
+            ConfigurationManager.Instance().ConvertAllControlToConfigs(mainForm.Controls)
+                                           .SaveConfig();
             OnMainFormClosing?.Invoke();
         }
 #endregion
