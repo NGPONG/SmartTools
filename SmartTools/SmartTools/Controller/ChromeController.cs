@@ -32,6 +32,7 @@ namespace SmartTools.Controller
         private IWebElement _actionElement;
         private ActionPoint _postion;
         private TesseractEngine _tesseract;
+        private string _configName;
         private CancellationTokenSource _controllerCancelToken;
         private const double _thresh = 80;
         private const double _thresholdMaxVal = 255;
@@ -134,6 +135,24 @@ namespace SmartTools.Controller
                 }
             }
         }
+        public string ConfigName
+        {
+            get
+            {
+                return _configName;
+            }
+            set
+            {
+                _configName = value;
+            }
+        }
+        public Configuration Config
+        {
+            get
+            {
+                return ConfigurationManager.Instance().Configs[ConfigName];
+            }
+        }
         public Func<IEnumerator<CustomAction>, CustomAction> StartCallerAsync { get; set; }
         #endregion
 
@@ -141,6 +160,7 @@ namespace SmartTools.Controller
         public event Action OnWebDriverClosed;
         public event Action OnWebDriverStarted;
         public event Action OnWebDriverStopped;
+        public event Action<string> OnProcessing;
 
         public ChromeController()
         {
@@ -190,7 +210,7 @@ namespace SmartTools.Controller
 
 
                 Instance = new ChromeDriver($"{AppDomain.CurrentDomain.BaseDirectory}Driver");
-#if !DEBUG
+#if DEBUG
                 IntPtr driverHandler = Win32.FindWindow(null, DriverPath);
                 if (driverHandler != IntPtr.Zero)
                     Win32.ShowWindow(driverHandler, Native.SW_HIDE); 
@@ -232,6 +252,13 @@ namespace SmartTools.Controller
 
                     if (Regex.IsMatch(readByPic, "开局"))
                     {
+                        double balance;
+                        var response = Config.GetBalanceAsync();
+                        var isMatch = double.TryParse(response.Result, out balance); // Return HTML code maybe.                        
+                        if (isMatch)
+                        {
+                            OnProcessing.Invoke(balance.ToString()); // Update GUI balance display.
+                        }
                         // To call back function.
                         break;
                     }
@@ -257,7 +284,6 @@ namespace SmartTools.Controller
                 Status = DriverState.Stop;
                 return;
             }
-            Thread.Sleep(1000);
 
             try
             {
@@ -266,6 +292,24 @@ namespace SmartTools.Controller
 
                 if (action.BetType != Bet.停)
                 {
+                    double balance = -1;
+                    // Check if the user's balance has reached the maximum threshold.
+                    if (Config.IsMoneyWarning && !string.IsNullOrEmpty(Config.StopMoney))
+                    {
+                        var response = Config.GetBalanceAsync();
+
+                        var isMatch = double.TryParse(response.Result, out balance); // Return HTML code maybe.                        
+                        if (isMatch)
+                        {
+                            if (balance - Convert.ToDouble(action.Money) < Convert.ToDouble(Config.StopMoney))
+                            {
+                                _isComplete.Set();
+                                Status = DriverState.Stop;
+                                return;
+                            }
+                        }
+                    }
+
                     var action_ChipCount = Math.Round(Convert.ToDouble(action.Money) / 10);
 
                     var action_Bet = this.Actions;

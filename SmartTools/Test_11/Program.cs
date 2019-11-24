@@ -11,25 +11,44 @@ namespace Test_11
 {
     class Program
     {
+        private static object _locker = new object();
+        public static event Action Event1;
+        public static event Action Event2;
         static void Main(string[] args)
         {
-            Dictionary<string, Person> dic = new Dictionary<string, Person>();
-            dic.Add("wupeng", new Person() { Name = "wupeng", Age = 22, Address = "shenzhenlonghua" });
-            dic.Add("wupeng1", new Person() { Name = "wupeng1", Age = 21, Address = "shenzhenlonghua" });
-            dic.Add("wupeng2", new Person() { Name = "wupeng2", Age = 20, Address = "shenzhenlonghua" });
-            dic.Add("wupeng3", new Person() { Name = "wupeng3", Age = 19, Address = "shenzhenlonghua" });
+            Event1 += Program_Event1;
+            Event1 += Program_Event11;
+            Event2 += Program_Event2;
+            //Event2 = Event1;
+            Event2();
 
-
-            string str =  JsonConvert.SerializeObject(dic);
+            Console.ReadKey();
         }
-    }
 
-    [JsonObject(MemberSerialization.OptOut)]
-    public class Person
-    {
-        public string Name { get; set; }
-        public int Age { get; set; }
-        [JsonIgnore]
-        public string Address { get; set; }
+        private static void Program_Event2()
+        {
+            Console.WriteLine("Event2");
+        }
+
+        private static void Program_Event11()
+        {
+            Console.WriteLine("Event11");
+        }
+
+        private static void Program_Event1()
+        {
+            Console.WriteLine("Event1");
+        }
+
+        
+
+        static async Task<string> GetResultAsync()
+        {
+            return await Task.Run(()=> 
+            {
+                Thread.Sleep(5000);
+                return "123";
+            });
+        }
     }
 }

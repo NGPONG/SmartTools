@@ -82,7 +82,6 @@ namespace SmartTools.Controller
         public ConfigurationManager AddConfig(TabPage page)
         {
             var subControls = page.Controls.OfType<Control>();
-
             var config = new Configuration()
             {
                 ConfigurationName = page.Text,
@@ -97,6 +96,8 @@ namespace SmartTools.Controller
                 StopMoney = subControls.Where(c => c.Name == $"txtMoneyWarning_{page.Text}")
                                        .Select(c => c.Text)
                                        .FirstOrDefault(),
+                IsMoneyWarning = (subControls.Where(c => c.Name == $"cbMoneyWarning_{page.Text}")
+                                             .FirstOrDefault() as MaterialSkin.Controls.MaterialCheckBox).Checked,
                 IsCycle = (subControls.Where(c => c.Name == $"cblblIsCycle_{page.Text}")
                                       .FirstOrDefault() as MaterialSkin.Controls.MaterialCheckBox).Checked,
                 Proxy = new Proxy()
@@ -135,7 +136,6 @@ namespace SmartTools.Controller
             }
 
             this.Configs[page.Text] = config;
-
             return this;
         }
 

@@ -47,11 +47,14 @@ namespace SmartTools.Controller
 
         public void Close() { this.requestContext?.Abort(); this.responseContext?.Close(); this.responseContext?.Dispose(); }
 
-        public HttpWebRequest Init()
+        private HttpWebRequest Init()
         {
             if (header.Address.StartsWith("https", StringComparison.OrdinalIgnoreCase))
             {
-                ServicePointManager.ServerCertificateValidationCallback = (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors) => { return true; };
+                ServicePointManager.ServerCertificateValidationCallback = (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors) => 
+                {
+                    return true;
+                };
                 requestContext = WebRequest.Create(header.Address) as HttpWebRequest;
                 requestContext.ProtocolVersion = HttpVersion.Version10;
             }
@@ -65,6 +68,7 @@ namespace SmartTools.Controller
             requestContext.ContentType = header.ContentType;
             requestContext.UserAgent = header.UserAgent;
             requestContext.Accept = header.Accept;
+            requestContext.ContentLength = header.ContentLength;
             requestContext.Method = header.ConvertMethod();
             if (!string.IsNullOrEmpty(header.cookies))
                 requestContext.Headers.Add(HttpRequestHeader.Cookie, header.cookies);

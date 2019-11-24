@@ -13,6 +13,7 @@ namespace SmartTools.Model
         public Method Method { get; set; }
         public string Parameter { get; set; }
         public string cookies { get; set; }
+        public int ContentLength { get; set; } = 0;
         public virtual string Accept
         {
             get

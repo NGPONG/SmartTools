@@ -1,4 +1,5 @@
-﻿using SmartTools.Controller;
+﻿using SmartTools.Common.Helper;
+using SmartTools.Controller;
 using SmartTools.Utils;
 using SmartTools.Views;
 using System;
@@ -30,7 +31,6 @@ namespace SmartTools
 
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
-                Application.ApplicationExit += Application_ApplicationExit;
                 Application.ThreadException += Application_ThreadException;
                 AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
@@ -46,10 +46,7 @@ namespace SmartTools
 
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
-        }
-
-        private static void Application_ApplicationExit(object sender, EventArgs e)
-        {
+            LogHelper.Error(e.Exception);
         }
     }
 }

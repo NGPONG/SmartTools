@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SmartTools.Utils.Extensions;
 using Tesseract;
+using SmartTools.Utils;
 
 namespace SmartTools.Controller
 {
@@ -16,6 +17,7 @@ namespace SmartTools.Controller
         #region member
         private static object locker = new object();
         private static AutomateController manager = null;
+        private Dictionary<string, IWebDriverController> _driverHandler = new Dictionary<string, IWebDriverController>();
         #endregion
 
         public CancellationToken EngineCancelToken = new CancellationToken();
@@ -43,7 +45,8 @@ namespace SmartTools.Controller
                          Action OnWebDriverOpened = null,
                          Action OnWebDriverClosed = null,
                          Action OnWebDriverStarted = null,
-                         Action OnWebDriverStopped = null)
+                         Action OnWebDriverStopped = null,
+                         Action<string> OnProcessing = null)
         {
             try
             {
@@ -52,6 +55,8 @@ namespace SmartTools.Controller
                 driverController.OnWebDriverClosed += OnWebDriverClosed;
                 driverController.OnWebDriverStarted += OnWebDriverStarted;
                 driverController.OnWebDriverStopped += OnWebDriverStopped;
+                driverController.OnProcessing += OnProcessing;
+                driverController.ConfigName = configName;
 
                 var webDriver = driverController.CreateDrvier();
                 if (webDriver == null)
@@ -61,7 +66,7 @@ namespace SmartTools.Controller
                 SetDriverPostion(webDriver);
                 driverController.Status = DriverState.Open;
 
-                ConfigurationManager.Instance().Configs[configName].DriverHandler = driverController;
+                _driverHandler[configName] = driverController;
             }
             catch (Exception e)
             {
@@ -71,15 +76,32 @@ namespace SmartTools.Controller
 
         public void Close(string configName)
         {
-            ConfigurationManager.Instance().Configs[configName].DriverHandler.Close();
-            ConfigurationManager.Instance().Configs[configName].DriverHandler = null; // Remove
+            _driverHandler[configName].Close();
+            _driverHandler.Remove(configName);
 
             GC.Collect();
         }
 
+        public async void CloseAll(Action OnClosed = null)
+        {
+            await Task.Run(() =>
+            {
+                foreach (KeyValuePair<string, IWebDriverController> dirverHandler in _driverHandler)
+                {
+                    dirverHandler.Value.Close();
+                }
+                _driverHandler.Clear();
+
+                // Make sure all drivers were exited
+                Native.FindWindowAndClose($"{AppDomain.CurrentDomain.BaseDirectory}Driver\\chromedriver.exe");
+
+                OnClosed?.Invoke();
+            });
+        }
+
         public void StartAction(string configName)
         {
-            var driverController = ConfigurationManager.Instance().Configs[configName].DriverHandler;
+            var driverController = _driverHandler.TryGet(configName);
             // This is caused by the fact that WebDriver has not been opened yet.
             if (driverController == null)
                 return;
@@ -90,7 +112,7 @@ namespace SmartTools.Controller
 
         public void StopAction(string configName)
         {
-            var driverController = ConfigurationManager.Instance().Configs[configName].DriverHandler;
+            var driverController = _driverHandler.TryGet(configName);
             // This is caused by the fact that WebDriver has not been opened yet.
             if (driverController == null)
                 return;
@@ -100,7 +122,7 @@ namespace SmartTools.Controller
 
         public void SetDriverPostion(IWebDriver webDriver)
         {
-            if (ConfigurationManager.Instance().Configs.Count == 0)
+            if (_driverHandler.Count == 0)
             {
                 webDriver.Manage().Window.Position = new Point(-7, 0);
             }
@@ -111,7 +133,7 @@ namespace SmartTools.Controller
 
                 int x = -7;
                 int y = 0;
-                for (int i = 1; i <= ConfigurationManager.Instance().Configs.Count; i++)
+                for (int i = 1; i <= _driverHandler.Count; i++)
                 {
                     if (i % (int)Math.Round((double)(windows_Width / Global.__BROWSER_WINDOWSIZE.Width)) == 0)
                     {
