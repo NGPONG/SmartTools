@@ -32,7 +32,9 @@ namespace Test_02
         IWebDriver driver;
         private void Button1_Click(object sender, EventArgs e)
         {
-            driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory + "\\Resources");
+            var options = new ChromeOptions();
+            options.AddExcludedArguments(new string[] { "enable-automation" });
+            driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory + "\\Resources", options);
             driver.Url = "http://gci.epda866.com:81/agingame/pcv1/index.jsp?";
             driver.Manage().Window.Position = new System.Drawing.Point(-7, 0);
 
@@ -109,7 +111,15 @@ namespace Test_02
             //var text = new Mat(source, roi);
             //Cv2.ImShow("text", text);
             //913, 534
-            actions.MoveToElement(driver.FindElement(By.TagName("canvas")), 413, 355).Click().Perform(); // 1139,663
+            try
+            {
+                actions.MoveToElement(driver.FindElement(By.TagName("canvas")), Convert.ToInt32(textBox1.Text), Convert.ToInt32(textBox2.Text)).Click().Perform(); // 1139,663
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
 
             //new Point(509, 320)
         }
@@ -356,6 +366,26 @@ namespace Test_02
             });
 
             //OpenQA.Selenium.WebDriverTimeoutException
+        }
+
+        private void Button20_Click(object sender, EventArgs e)
+        {
+            this.textBox1.Text = (Convert.ToInt32(textBox1.Text) + 5).ToString();
+        }
+
+        private void Button21_Click(object sender, EventArgs e)
+        {
+            this.textBox2.Text = (Convert.ToInt32(textBox2.Text) + 5).ToString();
+        }
+
+        private void Button23_Click(object sender, EventArgs e)
+        {
+            this.textBox1.Text = (Convert.ToInt32(textBox1.Text) - 5).ToString();
+        }
+
+        private void Button22_Click(object sender, EventArgs e)
+        {
+            this.textBox2.Text = (Convert.ToInt32(textBox2.Text) - 5).ToString();
         }
     }
 }

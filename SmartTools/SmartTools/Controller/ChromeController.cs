@@ -39,7 +39,7 @@ namespace SmartTools.Controller
         private const double _thresholdMaxVal = 255;
         private DriverState _status;
         private IEnumerator<CustomAction> _actionsQueue;
-        private Rectangle _trackingArea = new Rectangle(465, 236, 128, 18);
+        private Rectangle _trackingArea = new Rectangle(444, 235, 168, 66); // 465, 225, 128, 18
         private AutoResetEvent _isComplete = new AutoResetEvent(false);
         private Task _newTabOpenListener;
         #endregion
@@ -248,6 +248,7 @@ namespace SmartTools.Controller
 
                 var options = new ChromeOptions();
                 options.AddArgument("--start-maximized");
+                options.AddExcludedArguments(new string[] { "enable-automation" });
                 Instance = new ChromeDriver($"{AppDomain.CurrentDomain.BaseDirectory}Driver", options);
 #if !DEBUG
                 IntPtr driverHandler = Win32.FindWindow(null, DriverPath);
@@ -266,7 +267,7 @@ namespace SmartTools.Controller
             return Instance;
         }
 
-        int index = 1;
+        int index = 0;
         public CustomAction WaitNewGambling(IEnumerator<CustomAction> customActions)
         {
             try
@@ -282,6 +283,7 @@ namespace SmartTools.Controller
                     var picBuffer = ((ITakesScreenshot)Instance).GetScreenshot().AsByteArray;
 
                     var bitmap_Cut = PictureHelper.ProcessImage(_trackingArea, picBuffer);
+                    //bitmap_Cut.Save($@"C:\Users\NGPONG\Desktop\SmartTools\SmartTools\SmartTools\bin\Release\image\image_{(index++).ToString()}.png");
                     var page = Tesseract.Process(bitmap_Cut, PageSegMode.SingleBlock);
                     var readByPic = page.GetText();
 
@@ -360,11 +362,11 @@ namespace SmartTools.Controller
                     }
                     action_Bet.Perform();
 
-                    Thread.Sleep(1000);
+                    //Thread.Sleep(3000);
 
-                    this.Actions.MoveToElement(ActionElement, Postion.Confirm.X, Postion.Confirm.Y)
-                                .Click()
-                                .Perform();
+                    //this.Actions.MoveToElement(ActionElement, Postion.Confirm.X, Postion.Confirm.Y)
+                    //            .Click()
+                    //            .Perform();
                 }
 
                 // Custom delay.
