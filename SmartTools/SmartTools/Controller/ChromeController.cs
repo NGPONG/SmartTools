@@ -267,7 +267,6 @@ namespace SmartTools.Controller
             return Instance;
         }
 
-        int index = 0;
         public CustomAction WaitNewGambling(IEnumerator<CustomAction> customActions)
         {
             try
@@ -362,11 +361,9 @@ namespace SmartTools.Controller
                     }
                     action_Bet.Perform();
 
-                    //Thread.Sleep(3000);
-
-                    //this.Actions.MoveToElement(ActionElement, Postion.Confirm.X, Postion.Confirm.Y)
-                    //            .Click()
-                    //            .Perform();
+                    this.Actions.MoveToElement(ActionElement, Postion.Confirm.X, Postion.Confirm.Y)
+                                .Click()
+                                .Perform();
                 }
 
                 // Custom delay.
