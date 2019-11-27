@@ -44,6 +44,7 @@ namespace SmartTools.Controller
 
         private void InitializeComponent()
         {
+            //HttpController http = new HttpController() { header=new Header() { Method = Method.POST,Address= @"https://98613p.com/Account/GetMyBalance",ContentType= } }
             #region Init control
             var tcMaster = new MaterialSkin.Controls.MaterialTabControl();
             var tsMaster = new MaterialSkin.Controls.MaterialTabSelector();
@@ -106,28 +107,19 @@ namespace SmartTools.Controller
             // Configs
             //
             var configs = ConfigurationManager.Instance().Load().GetUserConfigs();
-            if (configs == null || configs.Count == 0)
+            foreach (KeyValuePair<string,Configuration> config in configs)
             {
-                CreateConfigControls("默认配置",
+                CreateConfigControls(config.Key,
                                      tsMaster,
                                      tcMaster,
-                                     btnStart);
-            }
-            else
-            {
-                foreach (var config in configs)
-                {
-                    CreateConfigControls(config.ConfigurationName,
-                                         tsMaster,
-                                         tcMaster,
-                                         btnStart,
-                                         config.Authentication,
-                                         config.Url,
-                                         config.StopMoney,
-                                         config.IsCycle,
-                                         config.Proxy,
-                                         config.Action);
-                }
+                                     btnStart,
+                                     config.Value.Authentication,
+                                     config.Value.Url,
+                                     config.Value.StopMoney,
+                                     config.Value.IsCycle,
+                                     config.Value.IsMoneyWarning,
+                                     config.Value.Proxy,
+                                     config.Value.Action);
             }
 
             // 
@@ -151,29 +143,7 @@ namespace SmartTools.Controller
 
                 if (btnStart.Text == "开始")
                 {
-                    var listView = tcMaster.SelectedTab.Controls.OfType<Control>().Where(c => c.Name == $"mlvData_{configName}").FirstOrDefault() as MaterialSkin.Controls.MaterialListView;
-                    var listConfig = new List<CustomAction>();
-
-                    foreach (ListViewItem item in listView.Items)
-                    {
-                        if (item.SubItems[3].Text == "0")
-                            continue;
-
-                        CustomAction customAction = new CustomAction();
-                        for (int i = 0; i < item.SubItems.Count; i++)
-                        {
-                            customAction.ActionIndex = item.SubItems[0].Text;
-                            customAction.BetType = CustomAction.ToBet(item.SubItems[1].Text);
-                            customAction.Delay = item.SubItems[2].Text;
-                            customAction.Money = item.SubItems[3].Text;
-                        }
-                        listConfig.Add(customAction);
-                    }
-
-                    if (listConfig.Count == 0)
-                        return;
-
-                    AutomateController.Instance().StartAction(configName, listConfig);
+                    AutomateController.Instance().StartAction(configName);
                 }
                 else
                 {
@@ -226,15 +196,15 @@ namespace SmartTools.Controller
             {
                 btnDeleteConfig.Enabled = false;
 
-                var activeIndex = tcMaster.SelectedIndex;
-                if (tcMaster.TabPages[activeIndex].Text == "默认配置")
+                var activePage = tcMaster.TabPages[tcMaster.SelectedIndex];
+                if (activePage.Text == "默认配置")
                 {
                     btnDeleteConfig.Enabled = true;
                     MessageBoxExt.Show("无法删除默认配置", MessageboxType.Info);
                     return;
                 }
 
-                tcMaster.SelectedIndex = activeIndex - 1;
+                tcMaster.SelectedIndex -= 1;
                 tsMaster.Invalidate();
                 Application.DoEvents();
 
@@ -243,7 +213,8 @@ namespace SmartTools.Controller
                     Thread.Sleep(250);
                     mainForm.Invoke(new Action(() =>
                     {
-                        tcMaster.TabPages.Remove(tcMaster.TabPages[activeIndex]);
+                        tcMaster.TabPages.Remove(activePage);
+                        ConfigurationManager.Instance().RemoveConfig(activePage.Text);
                         btnDeleteConfig.Enabled = true;
                     }));
                 });
@@ -288,6 +259,7 @@ namespace SmartTools.Controller
                                           string Url = "",
                                           string StopMoney = "",
                                           bool IsCycle = false,
+                                          bool IsMoneyWarning = false,
                                           Proxy proxy = null,
                                           List<CustomAction> source = null)
         {
@@ -398,6 +370,11 @@ namespace SmartTools.Controller
             cbIsCycle.TabIndex = 17;
             cbIsCycle.Checked = IsCycle;
             cbIsCycle.UseVisualStyleBackColor = true;
+            cbIsCycle.Checked = true;
+            cbIsCycle.CheckedChanged += delegate (object sender, EventArgs e)
+            {
+                ConfigurationManager.Instance().AddConfig(lblMoney_Title);
+            };
 
             // 
             // Column Header
@@ -439,6 +416,10 @@ namespace SmartTools.Controller
             mlvData.TabIndex = 16;
             mlvData.UseCompatibleStateImageBehavior = false;
             mlvData.View = System.Windows.Forms.View.Details;
+            mlvData.OnCustomContolValueChanged += delegate (object sender, EventArgs args)
+            {
+                ConfigurationManager.Instance().AddConfig(lblMoney_Title);
+            };
 
             // 
             // txtPort
@@ -458,6 +439,10 @@ namespace SmartTools.Controller
             txtPort.TabStop = false;
             txtPort.Text = proxy == null || (string.IsNullOrEmpty(proxy.IP) && string.IsNullOrEmpty(proxy.Port)) ? string.Empty : proxy.Port.ToString();
             txtPort.UseSystemPasswordChar = false;
+            txtPort.Leave += delegate (object sender, EventArgs e)
+            {
+                ConfigurationManager.Instance().AddConfig(lblMoney_Title);
+            };
 
             // 
             // txtIP
@@ -477,6 +462,10 @@ namespace SmartTools.Controller
             txtIP.TabStop = false;
             txtIP.Text = proxy == null || (string.IsNullOrEmpty(proxy.IP) && string.IsNullOrEmpty(proxy.Port)) ? string.Empty : proxy.IP.ToString();
             txtIP.UseSystemPasswordChar = false;
+            txtIP.Leave += delegate (object sender, EventArgs e)
+            {
+                ConfigurationManager.Instance().AddConfig(lblMoney_Title);
+            };
 
             // 
             // lblPort
@@ -600,7 +589,7 @@ namespace SmartTools.Controller
             // txtMoneyWarning
             // 
             txtMoneyWarning.Depth = 0;
-            txtMoneyWarning.Enabled = false;
+            txtMoneyWarning.Enabled = true;
             txtMoneyWarning.Hint = "";
             txtMoneyWarning.Location = new System.Drawing.Point(616, 129);
             txtMoneyWarning.MaxLength = 32767;
@@ -615,6 +604,10 @@ namespace SmartTools.Controller
             txtMoneyWarning.TabStop = false;
             txtMoneyWarning.UseSystemPasswordChar = false;
             txtMoneyWarning.Text = StopMoney;
+            txtMoneyWarning.Leave += delegate (object sender, EventArgs e)
+            {
+                ConfigurationManager.Instance().AddConfig(lblMoney_Title);
+            };
 
             // 
             // cbMoneyWarning
@@ -632,10 +625,12 @@ namespace SmartTools.Controller
             cbMoneyWarning.Ripple = true;
             cbMoneyWarning.Size = new System.Drawing.Size(26, 30);
             cbMoneyWarning.TabIndex = 9;
+            cbMoneyWarning.Checked = IsMoneyWarning;
             cbMoneyWarning.UseVisualStyleBackColor = true;
+
             cbMoneyWarning.CheckedChanged += delegate (object sender, EventArgs e)
             {
-                txtMoneyWarning.Enabled = !cbMoneyWarning.Checked;
+                ConfigurationManager.Instance().AddConfig(lblMoney_Title);
             };
 
             // 
@@ -668,6 +663,10 @@ namespace SmartTools.Controller
             txtMoney.TabIndex = 7;
             txtMoney.TabStop = false;
             txtMoney.UseSystemPasswordChar = false;
+            txtMoney.Leave += delegate (object sender, EventArgs e)
+            {
+                ConfigurationManager.Instance().AddConfig(lblMoney_Title);
+            };
 
             // 
             // lblMoney
@@ -722,6 +721,8 @@ namespace SmartTools.Controller
             {
                 txtConfigName.Enabled = !cbConfigLock.Checked;
                 txtConfigName.Invalidate();
+
+                ConfigurationManager.Instance().AddConfig(lblMoney_Title);
             };
 
             // 
@@ -763,6 +764,10 @@ namespace SmartTools.Controller
                 lblMoney_Title.Text = txtConfigName.Text;
                 tsMaster.Invalidate();
             };
+            txtConfigName.Leave += delegate (object sender, EventArgs e)
+            {
+                ConfigurationManager.Instance().AddConfig(lblMoney_Title);
+            };
 
             // 
             // txtAuthentication
@@ -782,6 +787,18 @@ namespace SmartTools.Controller
             txtAuthentication.TabStop = false;
             txtAuthentication.Text = Authentication;
             txtAuthentication.UseSystemPasswordChar = false;
+            txtAuthentication.Leave += async delegate (object sender, EventArgs e)
+            {
+                var response = await ConfigurationManager.Instance().AddConfig(lblMoney_Title)
+                                                                    .Configs[ConfigurationName]
+                                                                    .GetBalanceAsync();
+                double balance;
+                var isMatch = double.TryParse(response, out balance);
+                if (isMatch)
+                {
+                    txtMoney.Text = balance.ToString();
+                }
+            };
 
             // 
             // lblAuthentication
@@ -816,6 +833,10 @@ namespace SmartTools.Controller
             txtUrl.TabStop = false;
             txtUrl.UseSystemPasswordChar = false;
             txtUrl.Text = Url;
+            txtUrl.Leave += delegate (object sender, EventArgs e)
+            {
+                ConfigurationManager.Instance().AddConfig(lblMoney_Title);
+            };
 
             // 
             // lblUrl
@@ -905,11 +926,22 @@ namespace SmartTools.Controller
                                     btnAdd.Enabled = true;
                                     lblMoney_Title.Tag = false;
                                 }));
+                            },
+                            (string balance)=> 
+                            {
+                                if (Convert.ToDouble(balance) > 0)
+                                    txtMoney.Invoke(new Action(() =>
+                                    {
+                                        txtMoney.Text = balance;
+                                    }));
                             });
                         }
                         catch (Exception ex)
                         {
-                            MessageBoxExt.Show(ex.Message, MessageboxType.Error);
+                            mainForm.Invoke(new Action(() =>
+                            {
+                                MessageBoxExt.Show(ex.Message, MessageboxType.Error);
+                            }));
                         }
                     }, TaskCreationOptions.LongRunning);
                 }
@@ -962,7 +994,10 @@ namespace SmartTools.Controller
                 mlvData.AddEmbeddedButton(delegate (object o, EventArgs args)
                 {
                     mlvData.RemoveActiveItem(o as MaterialSkin.Controls.MaterialFlatButton);
+                    ConfigurationManager.Instance().AddConfig(lblMoney_Title);
                 });
+
+                ConfigurationManager.Instance().AddConfig(lblMoney_Title);
             };
 
             // 
@@ -1021,66 +1056,12 @@ namespace SmartTools.Controller
             lblMoney_Title.PerformLayout();
             pnlProxy.ResumeLayout(false);
             pnlProxy.PerformLayout();
-        }
 
-        private void ConvertControlToList()
-        {
-            ConfigurationManager.Instance().Configs.Clear();
-
-            var tabControl = this.mainForm.Controls["tcMaster"] as MaterialSkin.Controls.MaterialTabControl;
-            if (tabControl == null)
-                return;
-
-            foreach (TabPage page in tabControl.TabPages)
+            if (!ConfigurationManager.Instance().Configs.ContainsKey(ConfigurationName))
             {
-                var subControls = page.Controls.OfType<Control>();
-
-                var config = new Configuration()
-                {
-                    ConfigurationName = page.Text,
-                    Authentication = subControls.Where(c => c.Name == $"txtAuthentication_{page.Text}").Select(c => c.Text).FirstOrDefault(),
-                    Url = subControls.Where(c => c.Name == $"txtUrl_{page.Text}").Select(c => c.Text).FirstOrDefault(),
-                    StopMoney = subControls.Where(c => c.Name == $"txtMoneyWarning_{page.Text}").Select(c => c.Text).FirstOrDefault(),
-                    IsCycle = (subControls.Where(c => c.Name == $"cblblIsCycle_{page.Text}").FirstOrDefault() as MaterialSkin.Controls.MaterialCheckBox).Checked,
-                    Proxy = new Proxy()
-                    {
-                        IP = subControls.Where(c => c.Name == $"pnlProxy_{page.Text}")
-                                        .Select(c => c.Controls)
-                                        .FirstOrDefault()
-                                        .OfType<System.Windows.Forms.Control>()
-                                        .Where(c => c.Name == $"txtIP_{page.Text}")
-                                        .Select(c => c.Text).FirstOrDefault(),
-                        Port = subControls.Where(c => c.Name == $"pnlProxy_{page.Text}")
-                                          .Select(c => c.Controls)
-                                          .FirstOrDefault()
-                                          .OfType<System.Windows.Forms.Control>()
-                                          .Where(c => c.Name == $"txtPort_{page.Text}")
-                                          .Select(c => c.Text).FirstOrDefault()
-                    },
-                    Action = new List<CustomAction>()
-                };
-
-                var listView = subControls.Where(c => c.Name == $"mlvData_{page.Text}").FirstOrDefault() as MaterialSkin.Controls.MaterialListView;
-                if (listView != null)
-                {
-                    foreach (ListViewItem item in listView.Items)
-                    {
-                        CustomAction action = new CustomAction()
-                        {
-                            ActionIndex = item.SubItems[0].Text,
-                            BetType = CustomAction.ToBet(item.SubItems[1].Text),
-                            Delay = item.SubItems[2].Text,
-                            Money = item.SubItems[3].Text
-                        };
-                        config.Action.Add(action);
-                    }
-                }
-
-
-                ConfigurationManager.Instance().Configs.Add(config);
+                ConfigurationManager.Instance().Configs[ConfigurationName] = Configuration.CreateDefualtConfig(ConfigurationName);
             }
         }
-
         private bool VerifyURLValidity(string url)
         {
             if (string.IsNullOrEmpty(url))
@@ -1100,8 +1081,11 @@ namespace SmartTools.Controller
 
         public void Close()
         {
-            ConvertControlToList();
-            ConfigurationManager.Instance().SaveConfig();
+            mainForm.FormClosing -= MainForm_FormClosing;
+            mainForm.Invoke(new Action(() =>
+            {
+                mainForm.Close();
+            }));
         }
 
         public Main GetDefaultMainForm()
@@ -1109,19 +1093,22 @@ namespace SmartTools.Controller
             mainForm = new Main();
             mainForm.FormClosing += this.MainForm_FormClosing;
             InitializeComponent();
+#if !DEBUG
             Win32.SetWindowPos(mainForm.Handle, Native.HWND_TOPMOST, 0, 0, 0, 0, Native.SWP_NOMOVE | Native.SWP_NOSIZE | Native.SWP_SHOWWINDOW);
+#endif
             return mainForm;
         }
 
-        #region Event Handler
+#region Event Handler
         public event Action OnMainFormClosing;
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             mainForm.Visible = false;
             e.Cancel = true;
-            Close();
+            ConfigurationManager.Instance().ConvertAllControlToConfigs(mainForm.Controls)
+                                           .SaveConfig();
             OnMainFormClosing?.Invoke();
         }
-        #endregion
+#endregion
     }
 }

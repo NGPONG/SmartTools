@@ -9,15 +9,13 @@ namespace SmartTools.Model
     public class UserInfo : Header
     {
         public bool DefaultModel = true;
-        public override string ContentType { get => DefaultModel ? base.ContentType : this.ContentType; set => this.ContentType = value; }
-        public override string UserAgent { get => DefaultModel ? base.UserAgent : this.UserAgent; set => this.UserAgent = value; }
 
         public object Login(string parameter)
         {
             try
             {
                 Address = $"http://{Global.__SERVERADDRESS}:{Global.__PORT}/UserInfo/Login";
-                Method = "POST";
+                Method = Method.POST;
                 Parameter = parameter;
 
                 HttpController controller = new HttpController() { header = this };
@@ -47,7 +45,7 @@ namespace SmartTools.Model
             try
             {
                 Address = $"http://{Global.__SERVERADDRESS}:{Global.__PORT}/UserInfo/Register";
-                Method = "POST";
+                Method = Method.POST;
                 Parameter = parameter;
 
                 HttpController controller = new HttpController() { header = this };

@@ -5,6 +5,7 @@ using SmartTools.Utils;
 using SmartTools.Views;
 using System;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SmartTools.Controller
@@ -54,7 +55,21 @@ namespace SmartTools.Controller
             if (!visible)
             {
                 if (this._notifyIcon == null)
+                {
                     this._notifyIcon = new NotifyIcon();
+                    this._notifyIcon.ContextMenu = new ContextMenu(new MenuItem[]
+                    {
+                        new MenuItem("退出",new EventHandler((object sender,EventArgs args) =>
+                        {
+                            this._notifyIcon.Visible = false;
+                            AutomateController.Instance().CloseAll(()=>
+                            {
+                                FormManager.Instance().Close();
+                                Application.Exit();
+                            });
+                        }))
+                    });
+                }
                 this._notifyIcon.Visible = visible;
                 this._notifyIcon.Text = "Smart Tool ✔";
                 this._notifyIcon.Icon = Icon.FromHandle(Resources.Sleep.GetHicon());
@@ -159,6 +174,7 @@ namespace SmartTools.Controller
         {
             if (e.Button == MouseButtons.Left)
             {
+                _notifyIcon.Visible = false;
                 FormManager.Instance().Show();
             }
         }

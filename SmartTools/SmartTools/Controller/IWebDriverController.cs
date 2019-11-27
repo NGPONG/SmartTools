@@ -16,6 +16,7 @@ namespace SmartTools.Controller
         string DriverDownloadURL { get; }
         string DriverDownloadFile { get; }
         string DriverPath { get; }
+        string ConfigName { get; set; }
         DriverState Status { get; set; }
         Actions Actions { get; }
         ActionPoint Postion { get; }
@@ -32,12 +33,13 @@ namespace SmartTools.Controller
         event Action OnWebDriverClosed;
         event Action OnWebDriverStarted;
         event Action OnWebDriverStopped;
+        event Action<string> OnProcessing;
     }
 
     public enum DriverState
     {
-        Open = 0,
-        Close = 1,
+        Close = 0,
+        Open = 1,
         Start = 2,
         Stop = 3
     }

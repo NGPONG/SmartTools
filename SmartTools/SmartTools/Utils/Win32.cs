@@ -103,5 +103,22 @@ namespace SmartTools.Utils
         /// <returns></returns>
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindow(string className, string windowTitle);
+
+        /// <summary>
+        /// https://docs.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocessid
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <returns></returns>
+        [DllImport("kernel32.dll")]
+        public static extern int GetProcessId(IntPtr handle);
+
+        /// <summary>
+        /// https://docs.microsoft.com/en-us/windows/win32/api/handleapi/nf-handleapi-closehandle
+        /// </summary>
+        /// <param name="hObject"></param>
+        /// <returns></returns>
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool CloseHandle(IntPtr hObject);
     }
 }

@@ -16,21 +16,22 @@ namespace SmartTools.Utils
         public const int WM_MOUSEWHEEL              = 0x020A;
         public const int WM_KEYDOWN                 = 0x0100;
         public const int WM_PAINT                   = 0x000F;
+        public const int WM_CLOSE                   = 0x0010;
 
         // LIST_VIEW
         public const int LVM_FIRST                  = 0x1000;
         public const int LVM_GETCOLUMNORDERARRAY    = Native.LVM_FIRST + 59;
 
         // SUB_WINDOW
-        public const uint SWP_NOSIZE = 0x0001;
-        public const uint SWP_NOMOVE = 0x0002;
-        public const uint SWP_SHOWWINDOW = 0x0040;
+        public const uint SWP_NOSIZE                = 0x0001;
+        public const uint SWP_NOMOVE                = 0x0002;
+        public const uint SWP_SHOWWINDOW            = 0x0040;
 
         // SHOW_WINDOW
-        public const int SW_HIDE = 0;
-        public const int SW_MAXIMIZE = 3;
-        public const int SW_MINIMIZE = 6;
-        public const int SW_SHOW = 5;
+        public const int SW_HIDE                    = 0;
+        public const int SW_MAXIMIZE                = 3;
+        public const int SW_MINIMIZE                = 6;
+        public const int SW_SHOW                    = 5;
         #endregion
 
         #region Instance
@@ -137,6 +138,35 @@ namespace SmartTools.Utils
             catch // can't track
             {
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// 根据句柄返回Process
+        /// </summary>
+        /// <param name="yourHandle"></param>
+        /// <returns></returns>
+        public static Process FindProcess(IntPtr driverHandler)
+        {
+            foreach (Process p in Process.GetProcesses())
+            {
+                if (p.Handle == driverHandler)
+                {
+                    return p;
+                }
+            }
+
+            return null;
+        }
+
+        public static void FindWindowAndClose(string path)
+        {
+            while (true)
+            {
+                IntPtr driverHandler = Win32.FindWindow(null, path);
+                if (driverHandler == IntPtr.Zero)
+                    break;
+                Win32.SendMessage(driverHandler, Native.WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
         }
     }
