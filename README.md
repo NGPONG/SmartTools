@@ -1,4 +1,4 @@
 # SmartTools
 
 ### What can it do?
-百家乐自动刷流水，功能自个看着用吧，不多介绍了
+This is just a simple example, intended to implement crawling of web data, but there's a lot of work waiting to be done at the moment :)
